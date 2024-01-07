@@ -286,6 +286,15 @@ public class SwerveSubsystem extends SubsystemBase {
     return PARAMETERS.getRotationalConstraints();
   }
 
+   /**
+   * Return the wheel base radius in meters.
+   * 
+   * @return The wheel base radius in meters.
+   */
+  public double getWheelBaseRadius(){
+    return PARAMETERS.getWheelBaseRadius();
+  }
+
   /**
    * Creates a HolonomicDriveController for the subsystem.
    * 

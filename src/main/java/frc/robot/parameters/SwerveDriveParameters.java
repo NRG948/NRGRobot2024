@@ -261,6 +261,7 @@ public enum SwerveDriveParameters {
     return this.maxRotationalSpeed;
   }
 
+
   /**
    * Returns the maximum rotational acceleration of the robot in rad/s^2.
    * 
@@ -268,6 +269,18 @@ public enum SwerveDriveParameters {
    */
   public double getMaxRotationalAcceleration() {
     return this.maxRotationalAcceleration;
+  }
+
+  /**
+   * Return the wheel base radius in meters.
+   * 
+   * @return The wheel base radius in meters.
+   */
+  public double getWheelBaseRadius(){
+    double halfWheelDistanceX = wheelDistanceX/2;
+    double halfWheelDistanceY = wheelDistanceY/2;
+
+    return Math.sqrt(halfWheelDistanceX*halfWheelDistanceX +halfWheelDistanceY*halfWheelDistanceY);
   }
 
   /**

@@ -4,6 +4,11 @@
 
 package frc.robot;
 
+import com.pathplanner.lib.auto.AutoBuilder;
+import com.pathplanner.lib.util.HolonomicPathFollowerConfig;
+import com.pathplanner.lib.util.PIDConstants;
+import com.pathplanner.lib.util.ReplanningConfig;
+
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
@@ -33,6 +38,20 @@ public class RobotContainer {
   /** The container for the robot. Contains subsystems, OI devices, and commands. */
   public RobotContainer() {
     m_driveTrain.setDefaultCommand(new DriveUsingController(m_driveTrain, m_driverController));
+
+    AutoBuilder.configureHolonomic(
+          m_driveTrain::getPosition,
+          m_driveTrain::resetPosition,
+          m_driveTrain::getChassisSpeeds,
+          m_driveTrain::setChassisSpeeds,
+          new HolonomicPathFollowerConfig(
+            new PIDConstants(1.0, 0, 0), 
+            new PIDConstants(1.0,0,0),
+            m_driveTrain.getMaxSpeed(),
+            m_driveTrain.getWheelBaseRadius(),
+            new ReplanningConfig()
+          ),
+          m_driveTrain);
     
     // Configure the trigger bindings
     configureBindings();
