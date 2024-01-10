@@ -51,6 +51,7 @@ public class RobotContainer {
             m_driveTrain.getWheelBaseRadius(),
             new ReplanningConfig()
           ),
+          () -> false,
           m_driveTrain);
     
     // Configure the trigger bindings
