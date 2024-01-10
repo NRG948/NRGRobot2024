@@ -169,13 +169,13 @@ public class SwerveSubsystem extends SubsystemBase {
     return new SwerveModule(
         PARAMETERS,
         driveMotor,
-        () -> driveMotor.getPosition().getValueAsDouble() / drivePulsesPerMeter,
+        () -> driveMotor.getPosition().refresh().getValueAsDouble() / drivePulsesPerMeter,
         // The TalonFX reports the velocity in pulses per 100ms, so we need to
         // multiply by 10 to convert to pulses per second.
-        () -> driveMotor.getVelocity().getValueAsDouble() / drivePulsesPerMeter,
+        () -> driveMotor.getVelocity().refresh().getValueAsDouble() / drivePulsesPerMeter,
         steeringMotor,
-        () -> Rotation2d.fromDegrees(wheelAngle.getAbsolutePosition().getValueAsDouble()),
-        () -> Math.toRadians(wheelAngle.getVelocity().getValueAsDouble()),
+        () -> Rotation2d.fromDegrees(wheelAngle.getAbsolutePosition().refresh().getValueAsDouble()*360.0),
+        () -> Math.toRadians(wheelAngle.getVelocity().refresh().getValueAsDouble()),
         name);
   }
 
