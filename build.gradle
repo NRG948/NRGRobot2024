@@ -10,11 +10,19 @@ buildscript {
 plugins {
     id "java"
     id "edu.wpi.first.GradleRIO" version "2024.2.1"
+    id "com.diffplug.spotless"  version "6.25.0"
 }
 
 java {
     sourceCompatibility = JavaVersion.VERSION_17
     targetCompatibility = JavaVersion.VERSION_17
+}
+
+spotless {
+    java {
+        googleJavaFormat()
+        licenseHeaderFile  "./.styleguide-license"
+    }
 }
 
 def ROBOT_MAIN_CLASS = "frc.robot.Main"
@@ -146,6 +154,9 @@ task generateReflectionsMetadata {
             .save("${project.sourceSets.main.output.classesDirs.asPath}/META-INF/reflections/${project.archivesBaseName}-reflections.xml")
     }
 }
+
+// Reformat Java files before compiing the robot code.
+compileJava.dependsOn 'spotlessApply'
 
 // Generate the NRG Common Library metadata when the robot code is built.
 jar.dependsOn generateReflectionsMetadata
