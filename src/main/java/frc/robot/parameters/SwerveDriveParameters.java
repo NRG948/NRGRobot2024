@@ -38,6 +38,7 @@ public enum SwerveDriveParameters {
       NeoV1_1,
       new int[] { 2, 3, 4, 5, 6, 7, 8, 9 }, // drive, steer motor controller CAN IDs
       new int[] { 12, 14, 16, 18 }, // CANCoder CAN IDs
+      new double[] {144.23, 26.02, 201.18, 202.59},
       0.15,
       0.15);
 
@@ -57,6 +58,7 @@ public enum SwerveDriveParameters {
   private final MotorParameters steeringMotor;
   private final int[] motorIds;
   private final int[] angleEncoderIds;
+  private final double[] angleOffset;
 
   private final double maxDriveSpeed;
   private final double maxDriveAcceleration;
@@ -127,6 +129,7 @@ public enum SwerveDriveParameters {
       MotorParameters steeringMotor,
       int[] motorIds,
       int[] angleEncoderIds,
+      double[] angleOffset,
       FeedforwardConstants driveFeedForward,
       FeedforwardConstants steeringFeedForward
       ) {
@@ -138,6 +141,7 @@ public enum SwerveDriveParameters {
     this.steeringMotor = steeringMotor;
     this.motorIds = motorIds;
     this.angleEncoderIds = angleEncoderIds;
+    this.angleOffset = angleOffset;
     this.driveFeedforward = driveFeedForward;
     this.steeringFeedforward = steeringFeedForward;
     
@@ -221,6 +225,7 @@ public enum SwerveDriveParameters {
       MotorParameters steeringMotor,
       int[] motorIds,
       int[] angleEncoderIds,
+      double[] angleOffset,
       double drivekS,
       double steeringkS) {
     this(
@@ -232,6 +237,7 @@ public enum SwerveDriveParameters {
         steeringMotor,
         motorIds,
         angleEncoderIds,
+        angleOffset,
         
         new CalculatedFeedforwardConstants(
             drivekS,
@@ -360,6 +366,15 @@ public enum SwerveDriveParameters {
   public int getAngleEncoderId(SwerveAngleEncoder angleEncoder) {
     return this.angleEncoderIds[angleEncoder.getIndex()];
   }
+
+  /**
+   * Returns the angle offsets for the specified module.
+   * 
+   * @return the angle offsets for the specified module.
+   */
+   public double getAngleOffset(SwerveAngleEncoder angleEncoder) {
+    return this.angleOffset[angleEncoder.getIndex()];
+   }
 
   /**
    * Returns the maximum drive speed in m/s of a swerve module.
