@@ -166,15 +166,15 @@ public class SwerveSubsystem extends SubsystemBase {
     wheelAngleConfig.MagnetSensor.MagnetOffset = angleOffset/360.0;
     wheelAngleConfigurator.apply(wheelAngleConfig);
 
-    final double drivePulsesPerMeter = PARAMETERS.getDrivePulsesPerMeter();
+    final double metersPerRotation = (PARAMETERS.getWheelDiameter() * Math.PI) / PARAMETERS.getDriveGearRatio();
 
     return new SwerveModule(
         PARAMETERS,
         driveMotor,
-        () -> driveMotor.getPosition().refresh().getValueAsDouble() / drivePulsesPerMeter,
+        () -> driveMotor.getPosition().refresh().getValueAsDouble() * metersPerRotation,
         // The TalonFX reports the velocity in pulses per 100ms, so we need to
         // multiply by 10 to convert to pulses per second.
-        () -> driveMotor.getVelocity().refresh().getValueAsDouble() / drivePulsesPerMeter,
+        () -> driveMotor.getVelocity().refresh().getValueAsDouble() * metersPerRotation,
         steeringMotor,
         () -> Rotation2d.fromDegrees(wheelAngle.getAbsolutePosition().refresh().getValueAsDouble()*360.0),
         () -> Math.toRadians(wheelAngle.getVelocity().refresh().getValueAsDouble()),

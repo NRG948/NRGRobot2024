@@ -330,6 +330,24 @@ public enum SwerveDriveParameters {
   }
 
   /**
+   * Returns the wheel diameter in meters.
+   * 
+   * @return The wheel diameter in meters.
+   */
+  public double getWheelDiameter() {
+    return this.swerveModule.getWheelDiameter();
+  }
+
+  /**
+   * Returns the drive gear ratio.
+   * 
+   * @return The drive gear ratio.
+   */
+  public double getDriveGearRatio() {
+    return this.swerveModule.getDriveGearRation();
+  }
+
+  /**
    * Returns the swerve module used by the robot.
    * 
    * @return The swerve module used by the robot.
