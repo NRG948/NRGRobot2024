@@ -98,13 +98,13 @@ public class SwerveSubsystem extends SubsystemBase {
       PARAMETERS.getAngleEncoderId(SwerveAngleEncoder.BackRight));
 
   private final SwerveModule frontLeftModule = createSwerveModule(
-      frontLeftDriveMotor, frontLeftSteeringMotor, frontLeftAngle, "Front Left");
+      frontLeftDriveMotor, frontLeftSteeringMotor, frontLeftAngle, PARAMETERS.getAngleOffset(SwerveAngleEncoder.FrontLeft), "Front Left");
   private final SwerveModule frontRightModule = createSwerveModule(
-      frontRightDriveMotor, frontRightSteeringMotor, frontRightAngle, "Front Right");
+      frontRightDriveMotor, frontRightSteeringMotor, frontRightAngle,PARAMETERS.getAngleOffset(SwerveAngleEncoder.FrontRight),  "Front Right");
   private final SwerveModule backLeftModule = createSwerveModule(
-      backLeftDriveMotor, backLeftSteeringMotor, backLeftAngle, "Back Left");
+      backLeftDriveMotor, backLeftSteeringMotor, backLeftAngle, PARAMETERS.getAngleOffset(SwerveAngleEncoder.BackLeft), "Back Left");
   private final SwerveModule backRightModule = createSwerveModule(
-      backRightDriveMotor, backRightSteeringMotor, backRightAngle, "Back Right");
+      backRightDriveMotor, backRightSteeringMotor, backRightAngle, PARAMETERS.getAngleOffset(SwerveAngleEncoder.BackRight), "Back Right");
 
   private final SwerveModule[] modules = { frontLeftModule, frontRightModule, backLeftModule, backRightModule };
 
@@ -153,6 +153,7 @@ public class SwerveSubsystem extends SubsystemBase {
       TalonFX driveMotor,
       CANSparkMax steeringMotor,
       CANcoder wheelAngle,
+      double angleOffset,
       String name) {
 
     driveMotor.setNeutralMode(NeutralModeValue.Brake);
@@ -162,6 +163,7 @@ public class SwerveSubsystem extends SubsystemBase {
     CANcoderConfiguration wheelAngleConfig = new CANcoderConfiguration();
 
     wheelAngleConfig.MagnetSensor.AbsoluteSensorRange = AbsoluteSensorRangeValue.Signed_PlusMinusHalf;
+    wheelAngleConfig.MagnetSensor.MagnetOffset = angleOffset/360.0;
     wheelAngleConfigurator.apply(wheelAngleConfig);
 
     final double drivePulsesPerMeter = PARAMETERS.getDrivePulsesPerMeter();
