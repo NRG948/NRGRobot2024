@@ -128,7 +128,7 @@ public class SwerveModule {
     this.steeringFeedForward = new SimpleMotorFeedforward(
         parameters.getSteeringKs(), parameters.getSteeringKv(), parameters.getSteeringKa());
 
-    this.drivePID = new PIDController(4.0, 0, 0.0);
+    this.drivePID = new PIDController(0, 0, 0.0);
 
     this.steeringPID = new ProfiledPIDController(7.0, 0, 0.0, parameters.getSteeringConstraints());
     this.steeringPID.enableContinuousInput(-Math.PI, Math.PI);
