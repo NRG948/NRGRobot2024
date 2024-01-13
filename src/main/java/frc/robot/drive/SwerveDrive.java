@@ -219,6 +219,19 @@ public class SwerveDrive extends RobotDriveBase {
 
     return velocities;
   }
+  
+  /**
+   * Gets the module motor voltages.
+   * 
+   * @return The module motor
+   */
+  public SwerveModuleVoltages[] getModuleVoltages(){
+    SwerveModuleVoltages[] motorVoltages = new SwerveModuleVoltages[modules.length];
+    for (int i = 0; i < modules.length; i++) {
+      motorVoltages[i] = modules[i].getMotorVoltages();
+    }
+    return motorVoltages;
+  }
 
   /**
    * Sets the module motor voltages.

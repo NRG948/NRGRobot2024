@@ -20,6 +20,7 @@ import edu.wpi.first.util.datalog.DoubleLogEntry;
 import edu.wpi.first.util.sendable.Sendable;
 import edu.wpi.first.util.sendable.SendableBuilder;
 import edu.wpi.first.wpilibj.DataLogManager;
+import edu.wpi.first.wpilibj.RobotController;
 import edu.wpi.first.wpilibj.motorcontrol.MotorController;
 import edu.wpi.first.wpilibj.shuffleboard.BuiltInLayouts;
 import edu.wpi.first.wpilibj.shuffleboard.BuiltInWidgets;
@@ -210,6 +211,18 @@ public class SwerveModule {
   }
 
   /**
+   * Get the drive and steering motor voltages. 
+   * 
+   * @return The motor voltages.
+   */
+  public SwerveModuleVoltages getMotorVoltages(){
+    double driveVoltage = this.driveMotor.get() * RobotController.getBatteryVoltage();
+    double steeringVoltage = this.steeringMotor.get() * RobotController.getBatteryVoltage();
+
+    return new SwerveModuleVoltages(driveVoltage, steeringVoltage);
+  }
+
+  /**
    * Sets the drive and steering motor voltages.
    * 
    * @param driveVoltage    The drive motor voltage.
@@ -219,6 +232,7 @@ public class SwerveModule {
     this.driveMotor.setVoltage(driveVoltage);
     this.steeringMotor.setVoltage(steeringVoltage);
   }
+
 
   /**
    * Sets the drive and steering motor voltages.
