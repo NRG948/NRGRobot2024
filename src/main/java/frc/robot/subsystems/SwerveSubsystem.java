@@ -390,6 +390,15 @@ public class SwerveSubsystem extends SubsystemBase {
   }
 
   /**
+   * Gets the module motor voltages.
+   * 
+   * @return The module motor
+   */
+  public SwerveModuleVoltages[] getModuleVoltages() {
+    return drivetrain.getModuleVoltages();
+  }
+
+  /**
    * Sets the module motor voltages.
    * 
    * @param moduleVoltages The module motor voltages.
