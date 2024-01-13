@@ -19,6 +19,7 @@ import frc.robot.commands.Autos;
 import frc.robot.commands.DriveUsingController;
 import frc.robot.commands.ExampleCommand;
 import frc.robot.subsystems.ExampleSubsystem;
+import frc.robot.subsystems.Subsystems;
 import frc.robot.subsystems.SwerveSubsystem;
 
 /**
@@ -33,7 +34,7 @@ import frc.robot.subsystems.SwerveSubsystem;
 public class RobotContainer {
   // The robot's subsystems and commands are defined here...
   private final ExampleSubsystem m_exampleSubsystem = new ExampleSubsystem();
-  private final SwerveSubsystem m_driveTrain = new SwerveSubsystem();
+  private final Subsystems m_subsystems = new Subsystems();
 
   // Replace with CommandPS4Controller or CommandJoystick if needed
   private final CommandXboxController m_driverController = new CommandXboxController(
@@ -43,18 +44,18 @@ public class RobotContainer {
    * The container for the robot. Contains subsystems, OI devices, and commands.
    */
   public RobotContainer() {
-    m_driveTrain.setDefaultCommand(new DriveUsingController(m_driveTrain, m_driverController));
+    m_subsystems.drivetrain.setDefaultCommand(new DriveUsingController(m_subsystems.drivetrain, m_driverController));
 
     AutoBuilder.configureHolonomic(
-        m_driveTrain::getPosition,
-        m_driveTrain::resetPosition,
-        m_driveTrain::getChassisSpeeds,
-        m_driveTrain::setChassisSpeeds,
+        m_subsystems.drivetrain::getPosition,
+        m_subsystems.drivetrain::resetPosition,
+        m_subsystems.drivetrain::getChassisSpeeds,
+        m_subsystems.drivetrain::setChassisSpeeds,
         new HolonomicPathFollowerConfig(
             new PIDConstants(1.0, 0, 0),
             new PIDConstants(1.0, 0, 0),
-            m_driveTrain.getMaxSpeed(),
-            m_driveTrain.getWheelBaseRadius(),
+            m_subsystems.drivetrain.getMaxSpeed(),
+            m_subsystems.drivetrain.getWheelBaseRadius(),
             new ReplanningConfig()),
         () -> {
           // Boolean supplier that controls when the path will be mirrored for the red
@@ -68,12 +69,12 @@ public class RobotContainer {
           }
           return false;
         },
-        m_driveTrain);
+        m_subsystems.drivetrain);
 
     // Configure the trigger bindings
     configureBindings();
 
-    m_driveTrain.addShuffleboardTab();
+    m_subsystems.drivetrain.addShuffleboardTab();
   }
 
   /**
@@ -99,7 +100,7 @@ public class RobotContainer {
     // pressed,
     // cancelling on release.
     m_driverController.b().whileTrue(m_exampleSubsystem.exampleMethodCommand());
-    m_driverController.start().onTrue(Commands.runOnce(() -> m_driveTrain.resetOrientation(), m_driveTrain));
+    m_driverController.start().onTrue(Commands.runOnce(() -> m_subsystems.drivetrain.resetOrientation(), m_subsystems.drivetrain));
   }
 
   /**
