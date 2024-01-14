@@ -7,8 +7,6 @@ package frc.robot.parameters;
 import static frc.robot.parameters.MotorParameters.Falcon500;
 import static frc.robot.parameters.MotorParameters.NeoV1_1;
 import static frc.robot.parameters.SwerveModuleParameters.MK4Standard;
-import static frc.robot.parameters.SwerveModuleParameters.MK4Fast;
-
 
 import edu.wpi.first.math.controller.ProfiledPIDController;
 import edu.wpi.first.math.geometry.Translation2d;
