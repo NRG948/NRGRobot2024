@@ -70,10 +70,8 @@ public abstract class PhotonVisionSubsystemBase extends SubsystemBase {
    * target pose.
    * 
    * @param estimator  The pose estimator.
-   * @param targetPose The expected pose of the target in the field of vision. The
-   *                   pose is specified in field-relative coordinates.
    */
-  public abstract void updatePoseEstimate(SwerveDrivePoseEstimator estimator, Pose3d targetPose);
+  public abstract void updatePoseEstimate(SwerveDrivePoseEstimator estimator);
 
   /**
    * Returns the transform from the camera to center of the robot.
