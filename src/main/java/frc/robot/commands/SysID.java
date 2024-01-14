@@ -41,7 +41,7 @@ public class SysID {
      * @return The commands to characterize the swerve drive.
      */
     @AutonomousCommandGenerator
-    public Collection<LabelValue<String, Command>> getSwerveDriveCharacterizationCommands(Subsystems subsystems) {
+    public static Collection<LabelValue<String, Command>> getSwerveDriveCharacterizationCommands(Subsystems subsystems) {
         SysIdRoutine.Config routineConfig = new SysIdRoutine.Config();
         SysIdRoutine.Mechanism mechanism = new SysIdRoutine.Mechanism(
             (Measure<Voltage> volts) -> {
