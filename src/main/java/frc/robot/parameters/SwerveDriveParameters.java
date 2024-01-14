@@ -6,6 +6,7 @@ package frc.robot.parameters;
 
 import static frc.robot.parameters.MotorParameters.Falcon500;
 import static frc.robot.parameters.MotorParameters.NeoV1_1;
+import static frc.robot.parameters.SwerveModuleParameters.MK4IFast;
 import static frc.robot.parameters.SwerveModuleParameters.MK4Standard;
 
 import edu.wpi.first.math.controller.ProfiledPIDController;
@@ -38,7 +39,19 @@ public enum SwerveDriveParameters {
       new int[] { 12, 14, 16, 18 }, // CANCoder CAN IDs
       new double[] {144.23, 26.02, 201.18, 202.59},
       0.15,
-      0.15);
+      0.15),
+  PracticeBase2024(
+    67.6853,
+    Units.inchesToMeters(22.55),
+    Units.inchesToMeters(22.55),
+    MK4IFast,
+    Falcon500,
+    NeoV1_1,
+    new int[] { 2, 3, 4, 5, 6, 7, 8, 9 }, // drive, steer motor controller CAN IDs
+    new int[] { 12, 14, 16, 18 }, // CANCoder CAN IDs
+    new double[] {144.23, 26.02, 201.18, 202.59},
+    0.15,
+    0.15);
 
   public static class Constants {
     /**

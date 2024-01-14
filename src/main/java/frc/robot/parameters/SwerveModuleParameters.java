@@ -33,7 +33,16 @@ public enum SwerveModuleParameters {
   MK4VeryFast(Units.inchesToMeters(Constants.RobotConstants.WHEEL_DIAMETER_INCHES), 6.12, 12.8),
 
   /** An MK4 Swerve Module in the L4 - Too Fast configuration. */
-  MK4TooFast(Units.inchesToMeters(Constants.RobotConstants.WHEEL_DIAMETER_INCHES), 5.14, 12.8);
+  MK4TooFast(Units.inchesToMeters(Constants.RobotConstants.WHEEL_DIAMETER_INCHES), 5.14, 12.8),
+
+  /** An MK4I Swerve Module in the L1 - Standard configuration. */
+  MK4IStandard(Units.inchesToMeters(Constants.RobotConstants.WHEEL_DIAMETER_INCHES), 8.14, 150.0/7.0),
+
+  /** An MK4I Swerve Module in the L2 - Fast configuration. */
+  MK4IFast(Units.inchesToMeters(Constants.RobotConstants.WHEEL_DIAMETER_INCHES), 6.75, 150.0/7.0),
+
+  /** An MK4I Swerve Module in the L3 - Very Fast configuration. */
+  MK4IVeryFast(Units.inchesToMeters(Constants.RobotConstants.WHEEL_DIAMETER_INCHES), 6.12, 150.0/7.0);
 
   /**
    *
