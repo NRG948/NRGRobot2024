@@ -87,7 +87,8 @@ public class RobotContainer {
     m_autonomous.addShuffleboardLayout(operatorTab);
 
     RobotPreferences.addShuffleBoardTab();
-
+    
     m_subsystems.drivetrain.addShuffleboardTab();
+    m_subsystems.aprilTag.addShuffleboardTab();
   }
 }
