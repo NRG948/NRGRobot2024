@@ -178,4 +178,5 @@ logs/
 ctre_sim/
 
 networktables.json
+networktables.json.bck
 simgui*.json

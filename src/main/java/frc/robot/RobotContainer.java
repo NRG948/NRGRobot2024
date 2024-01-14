@@ -4,6 +4,9 @@
 
 package frc.robot;
 
+import com.nrg948.preferences.RobotPreferences;
+import com.nrg948.preferences.RobotPreferencesLayout;
+
 import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
 import edu.wpi.first.wpilibj2.command.Command;
@@ -23,6 +26,7 @@ import frc.robot.subsystems.Subsystems;
  * the robot (including
  * subsystems, commands, and trigger mappings) should be declared here.
  */
+@RobotPreferencesLayout(groupName = "Preferences", column = 0, row = 0, width = 2, height = 1)
 public class RobotContainer {
   // The robot's subsystems and commands are defined here...
   private final Subsystems m_subsystems = new Subsystems();
@@ -81,6 +85,8 @@ public class RobotContainer {
     ShuffleboardTab operatorTab = Shuffleboard.getTab("Operator");
     
     m_autonomous.addShuffleboardLayout(operatorTab);
+
+    RobotPreferences.addShuffleBoardTab();
 
     m_subsystems.drivetrain.addShuffleboardTab();
   }
