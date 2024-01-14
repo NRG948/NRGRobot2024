@@ -10,6 +10,8 @@ import com.pathplanner.lib.util.PIDConstants;
 import com.pathplanner.lib.util.ReplanningConfig;
 
 import edu.wpi.first.wpilibj.DriverStation;
+import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
+import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
@@ -33,6 +35,9 @@ public class RobotContainer {
   // The robot's subsystems and commands are defined here...
   private final Subsystems m_subsystems = new Subsystems();
 
+  // Robot autonomous must be initialized after the subsystems
+  private final RobotAutonomous m_autonomous = new RobotAutonomous(m_subsystems);
+
   // Replace with CommandPS4Controller or CommandJoystick if needed
   private final CommandXboxController m_driverController = new CommandXboxController(
       OperatorConstants.XboxControllerPort.DRIVER);
@@ -42,36 +47,11 @@ public class RobotContainer {
    */
   public RobotContainer() {
     m_subsystems.drivetrain.setDefaultCommand(new DriveUsingController(m_subsystems.drivetrain, m_driverController));
-
-    AutoBuilder.configureHolonomic(
-        m_subsystems.drivetrain::getPosition,
-        m_subsystems.drivetrain::resetPosition,
-        m_subsystems.drivetrain::getChassisSpeeds,
-        m_subsystems.drivetrain::setChassisSpeeds,
-        new HolonomicPathFollowerConfig(
-            new PIDConstants(1.0, 0, 0),
-            new PIDConstants(1.0, 0, 0),
-            m_subsystems.drivetrain.getMaxSpeed(),
-            m_subsystems.drivetrain.getWheelBaseRadius(),
-            new ReplanningConfig()),
-        () -> {
-          // Boolean supplier that controls when the path will be mirrored for the red
-          // alliance
-          // This will flip the path being followed to the red side of the field.
-          // THE ORIGIN WILL REMAIN ON THE BLUE SIDE
-
-          var alliance = DriverStation.getAlliance();
-          if (alliance.isPresent()) {
-            return alliance.get() == DriverStation.Alliance.Red;
-          }
-          return false;
-        },
-        m_subsystems.drivetrain);
-
+    
     // Configure the trigger bindings
     configureBindings();
 
-    m_subsystems.drivetrain.addShuffleboardTab();
+    initShuffleboard();
   }
 
   /**
@@ -102,8 +82,14 @@ public class RobotContainer {
    * @return the command to run in autonomous
    */
   public Command getAutonomousCommand() {
-    // An example command will be run in autonomous
-    return Autos.exampleAuto(m_subsystems);
+    return m_autonomous.getAutonomousCommand();
+  }
 
+  public void initShuffleboard(){
+    ShuffleboardTab operatorTab = Shuffleboard.getTab("Operator");
+    
+    m_autonomous.addShuffleboardLayout(operatorTab);
+
+    m_subsystems.drivetrain.addShuffleboardTab();
   }
 }

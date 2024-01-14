@@ -6,12 +6,14 @@ package frc.robot.commands;
 
 import frc.robot.subsystems.Subsystems;
 
+import com.nrg948.autonomous.AutonomousCommandMethod;
 import com.pathplanner.lib.commands.PathPlannerAuto;
 
 import edu.wpi.first.wpilibj2.command.Command;
 
 public final class Autos {
   /** Example static factory for an autonomous command. */
+  @AutonomousCommandMethod(name = "Award Winning Auto", isDefault = true)
   public static Command exampleAuto(Subsystems subsystem) {
     return new PathPlannerAuto("Award winning auto");
   }

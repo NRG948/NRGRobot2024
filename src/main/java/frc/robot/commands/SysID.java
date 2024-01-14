@@ -14,6 +14,8 @@ import java.util.List;
 
 import org.javatuples.LabelValue;
 
+import com.nrg948.autonomous.AutonomousCommandGenerator;
+
 import edu.wpi.first.units.Distance;
 import edu.wpi.first.units.Measure;
 import edu.wpi.first.units.MutableMeasure;
@@ -39,6 +41,7 @@ public class SysID {
      * @param subsystems The subsystems container.
      * @return The commands to characterize the swerve drive.
      */
+    @AutonomousCommandGenerator
     public Collection<LabelValue<String, Command>> getSwerveDriveCharacterizationCommands(Subsystems subsystems) {
         SysIdRoutine.Config routineConfig = new SysIdRoutine.Config();
         SysIdRoutine.Mechanism mechanism = new SysIdRoutine.Mechanism(
