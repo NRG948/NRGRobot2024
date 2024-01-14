@@ -50,11 +50,12 @@ public class AprilTagSubsystem extends PhotonVisionSubsystemBase {
 
   /** Creates a new PhotonVisionSubsystem. */
   public AprilTagSubsystem() {
-    super("AprilTagCamera", RobotConstants.APRILTAG_CAMERA_TO_ROBOT);
+    super("948Mono001", RobotConstants.APRILTAG_CAMERA_TO_ROBOT);
 
     for (int i = 1; i <= 16; i++) {
       aprilTagIdChooser.addOption(String.valueOf(i), i);
     }
+    aprilTagIdChooser.setDefaultOption("1", 1);
   }
 
   @Override
@@ -142,7 +143,7 @@ public class AprilTagSubsystem extends PhotonVisionSubsystemBase {
     targetLayout.addDouble("Distance", () -> getDistanceToTarget(aprilTagIdChooser.getSelected()));
     targetLayout.addDouble("Angle", () -> getAngleToTarget(aprilTagIdChooser.getSelected()));
 
-    VideoSource video = new HttpCamera("photonvision_Port_1182_MJPEG_Server", "http://10.9.48.11:1182/?action=stream",
+    VideoSource video = new HttpCamera("photonvision_Port_1182_Output_MJPEG_Server", "http://photonvision.local:1182/?action=stream",
         HttpCameraKind.kMJPGStreamer);
     visionTab.add("April Tag", video)
         .withWidget(BuiltInWidgets.kCameraStream)
