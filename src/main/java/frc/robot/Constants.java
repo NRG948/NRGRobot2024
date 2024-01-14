@@ -4,6 +4,8 @@
 
 package frc.robot;
 
+import edu.wpi.first.math.geometry.Transform3d;
+
 /**
  * The Constants class provides a convenient place for teams to hold robot-wide
  * numerical or boolean
@@ -30,6 +32,8 @@ public final class Constants {
      * Wheel diameter.
      */
     public static final double WHEEL_DIAMETER_INCHES = 4.0;
+
+    public static final Transform3d APRILTAG_CAMERA_TO_ROBOT = new Transform3d();
 
  
   /**

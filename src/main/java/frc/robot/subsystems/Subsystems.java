@@ -7,5 +7,5 @@ package frc.robot.subsystems;
 /** Add your docs here. */
 public class Subsystems {
     public SwerveSubsystem drivetrain = new SwerveSubsystem();
-    
+    public AprilTagSubsystem aprilTag = new AprilTagSubsystem();
 }
