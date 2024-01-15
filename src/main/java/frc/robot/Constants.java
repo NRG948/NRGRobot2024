@@ -44,12 +44,24 @@ public final class Constants {
     /**
      * Defines the port numbers of the Xbox controllers.
      */
+
+
+
     public static class XboxControllerPort {
 
       public static final int DRIVER = 0;
       public static final int MANIPULATOR = 1;
+      
 
     }
   }
+
+  public final class ManipulatorConstants {
+      public static final int kShooterMotorPort = 11;
+  }
+  
+    
+  
+
 }
 }
