@@ -7,6 +7,8 @@ package frc.robot.commands;
 import static edu.wpi.first.units.MutableMeasure.mutable;
 import static edu.wpi.first.units.Units.Meters;
 import static edu.wpi.first.units.Units.MetersPerSecond;
+import static edu.wpi.first.units.Units.Radians;
+import static edu.wpi.first.units.Units.RadiansPerSecond;
 import static edu.wpi.first.units.Units.Volts;
 
 import java.util.Collection;
@@ -17,6 +19,8 @@ import org.javatuples.LabelValue;
 
 import com.nrg948.autonomous.AutonomousCommandGenerator;
 
+import edu.wpi.first.math.kinematics.SwerveModuleState;
+import edu.wpi.first.units.Angle;
 import edu.wpi.first.units.Distance;
 import edu.wpi.first.units.Measure;
 import edu.wpi.first.units.MutableMeasure;
@@ -28,6 +32,7 @@ import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine;
 import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine.Direction;
 import frc.robot.subsystems.Subsystems;
+import frc.robot.util.SwerveModuleVelocities;
 import frc.robot.util.SwerveModuleVoltages;
 
 /** A utility class to create SysID logging commands. */
@@ -35,6 +40,8 @@ public class SysID {
     private static final MutableMeasure<Voltage> appliedVoltage = mutable(Volts.of(0));
     private static final MutableMeasure<Distance> distance = mutable(Meters.of(0));
     private static final MutableMeasure<Velocity<Distance>> velocity = mutable(MetersPerSecond.of(0));
+    private static final MutableMeasure<Angle> angle = mutable(Radians.of(0));
+    private static final MutableMeasure<Velocity<Angle>> angularVelocity = mutable(RadiansPerSecond.of(0));
     private static int currentTest = 0;
 
     /**
@@ -103,4 +110,62 @@ public class SysID {
 
     }
 
+    public static Collection<LabelValue<String, Command>> getSwerveSteeringCharacterizationCommands(
+            Subsystems subsystems, int module) {
+        String moduleName = "Module " + module;
+        SysIdRoutine.Config routineConfig = new SysIdRoutine.Config();
+        SysIdRoutine.Mechanism mechanism = new SysIdRoutine.Mechanism(
+                (Measure<Voltage> volts) -> {
+                    SwerveModuleVoltages voltages = new SwerveModuleVoltages(0.0, volts.in(Volts));
+                    SwerveModuleVoltages[] moduleVoltages = new SwerveModuleVoltages[] {
+                            voltages, voltages, voltages, voltages
+                    };
+                    subsystems.drivetrain.setModuleVoltages(moduleVoltages);
+                    appliedVoltage.mut_replace(volts);
+                },
+                (SysIdRoutineLog log) -> {
+                    SwerveModuleState state = subsystems.drivetrain.getModuleStates()[module];
+                    SwerveModuleVelocities velocities = subsystems.drivetrain.getModuleVelocities()[module];
+                    log.motor(moduleName)
+                            .voltage(appliedVoltage)
+                            .angularPosition(angle.mut_replace(state.angle.getRadians(), Radians))
+                            .angularVelocity(angularVelocity.mut_replace(
+                                    velocities.steeringVelocity, RadiansPerSecond));
+
+                },
+                subsystems.drivetrain);
+        SysIdRoutine routine = new SysIdRoutine(routineConfig, mechanism);
+        return List.of(
+                new LabelValue<String, Command>("Swerve " + moduleName + " Quasistatic Forward",
+                        routine.quasistatic(Direction.kForward)),
+                new LabelValue<String, Command>("Swerve " + moduleName + " Quasistatic Reverse",
+                        routine.quasistatic(Direction.kReverse)),
+                new LabelValue<String, Command>("Swerve " + moduleName + " Dynamic Forward",
+                        routine.dynamic(Direction.kForward)),
+                new LabelValue<String, Command>("Swerve " + moduleName + " Dynamic Reverse",
+                        routine.dynamic(Direction.kReverse)));
+    }
+
+    public static Command getSwerveSteeringCharacterizationSequence(Subsystems subsystems, int module) {
+        Command[] testCommands = getSwerveSteeringCharacterizationCommands(subsystems, module)
+                .stream()
+                .map(lv -> lv.getValue())
+                .toArray(Command[]::new);
+
+        Command testSequence = Commands.select(
+                Map.of(
+                        0, testCommands[0],
+                        1, testCommands[1],
+                        2, testCommands[2],
+                        3, testCommands[3]),
+                () -> {
+                    int testIndex = currentTest++;
+                    if (currentTest >= 4) {
+                        currentTest = 0;
+                    }
+                    return testIndex;
+                });
+        return testSequence;
+
+    }
 }
