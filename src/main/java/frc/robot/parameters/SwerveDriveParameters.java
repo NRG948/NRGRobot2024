@@ -40,6 +40,19 @@ public enum SwerveDriveParameters {
       new double[] {144.23, 26.02, 201.18, 202.59},
       0.15,
       0.15),
+  RookieBase2023Characterized(
+      67.5853,
+      Units.inchesToMeters(22.729),
+      Units.inchesToMeters(19.39),
+      MK4Standard,
+      Falcon500,
+      NeoV1_1,
+      new int[] { 2, 3, 4, 5, 6, 7, 8, 9 }, // drive, steer motor controller CAN IDs
+      new int[] { 12, 14, 16, 18 }, // CANCoder CAN IDs
+      new double[] {144.23, 26.02, 201.18, 202.59},
+      new FeedforwardConstants(0.13638, 2.3316, 0.058878),
+      new FeedforwardConstants(0.13638, 2.3316, 0.058878) //TODO; characterize steering
+  ),
   PracticeBase2024(
     67.6853,
     Units.inchesToMeters(22.55),
