@@ -4,22 +4,35 @@
 
 package frc.robot.commands;
 
+import java.util.Optional;
+
+import org.photonvision.targeting.PhotonTrackedTarget;
+
 import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
+import frc.robot.subsystems.AprilTagSubsystem;
+import frc.robot.subsystems.Subsystems;
 import frc.robot.subsystems.SwerveSubsystem;
+import frc.robot.Constants.RobotConstants;
 
 public class DriveUsingController extends Command {
-  private final double DEADBAND = 0.05;
+  private static final double DEADBAND = 0.05;
+  private static final double kP = 1 / RobotConstants.CAMERA_FOV;
 
-  private final SwerveSubsystem m_driveTrain;
+  private final SwerveSubsystem m_drivetrain;
+  private final AprilTagSubsystem m_aprilTag;
   private final CommandXboxController m_xboxController;
+
+ 
+
   /** Creates a new DriveUsingController. */
-  public DriveUsingController(SwerveSubsystem driveTrain, CommandXboxController xboxController) {
+  public DriveUsingController(Subsystems subsystems, CommandXboxController xboxController) {
     // Use addRequirements() here to declare subsystem dependencies.
-    m_driveTrain = driveTrain;
+    m_drivetrain = subsystems.drivetrain;
+    m_aprilTag = subsystems.aprilTag;
     m_xboxController = xboxController;
-    addRequirements(driveTrain);
+    addRequirements(m_drivetrain, m_aprilTag);
   }
 
   // Called when the command is initially scheduled.
@@ -29,29 +42,42 @@ public class DriveUsingController extends Command {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
+    double rSpeed;
     double xSpeed = -m_xboxController.getLeftY();
     double ySpeed = -m_xboxController.getLeftX();
-    double rSpeed = -m_xboxController.getRightX();
     double inputScalar = Math.max(1.0-m_xboxController.getRightTriggerAxis(), 0.15);
 
-    // Applies deadbands to x, y, and rotation joystick values and multiples all
-    // values with inputSalar whihc allows finer driving control.
+    // Applies deadbands to x and y joystick values and multiples all
+    // values with inputScalar whihc allows finer driving control.
     xSpeed = MathUtil.applyDeadband(xSpeed, DEADBAND) * inputScalar;
     ySpeed = MathUtil.applyDeadband(ySpeed, DEADBAND) * inputScalar;
-    rSpeed = MathUtil.applyDeadband(rSpeed, DEADBAND) * inputScalar;
 
-    m_driveTrain.drive(
+    boolean aimAtAprilTag = false;
+    Optional<PhotonTrackedTarget> optionalTarget = Optional.empty();
+    if (m_xboxController.rightBumper().getAsBoolean()) {
+      optionalTarget = m_aprilTag.getTarget(4); //TODO (AprilTagSubsystem.getSpeakerCenterApriltagId());
+      aimAtAprilTag = !optionalTarget.isEmpty();
+    }
+
+    if (aimAtAprilTag) {
+      var angleToTarget = optionalTarget.get().getYaw();
+      rSpeed = angleToTarget * kP;
+    } else {
+      rSpeed = -m_xboxController.getRightX();
+      rSpeed = MathUtil.applyDeadband(rSpeed, DEADBAND) * inputScalar;
+    } 
+
+    m_drivetrain.drive(
       xSpeed,
       ySpeed,
       rSpeed,
       true);
-
   }
 
   // Called once the command ends or is interrupted.
   @Override
   public void end(boolean interrupted) {
-    m_driveTrain.stopMotors();
+    m_drivetrain.stopMotors();
   }
 
   // Returns true when the command should end.
