@@ -111,8 +111,7 @@ public class SysID {
     }
 
     public static Collection<LabelValue<String, Command>> getSwerveSteeringCharacterizationCommands(
-            Subsystems subsystems, int module) {
-        String moduleName = "Module " + module;
+            Subsystems subsystems) {
         SysIdRoutine.Config routineConfig = new SysIdRoutine.Config();
         SysIdRoutine.Mechanism mechanism = new SysIdRoutine.Mechanism(
                 (Measure<Voltage> volts) -> {
@@ -124,30 +123,33 @@ public class SysID {
                     appliedVoltage.mut_replace(volts);
                 },
                 (SysIdRoutineLog log) -> {
-                    SwerveModuleState state = subsystems.drivetrain.getModuleStates()[module];
-                    SwerveModuleVelocities velocities = subsystems.drivetrain.getModuleVelocities()[module];
-                    log.motor(moduleName)
-                            .voltage(appliedVoltage)
-                            .angularPosition(angle.mut_replace(state.angle.getRadians(), Radians))
-                            .angularVelocity(angularVelocity.mut_replace(
-                                    velocities.steeringVelocity, RadiansPerSecond));
+                    SwerveModuleState[] state = subsystems.drivetrain.getModuleStates();
+                    SwerveModuleVelocities[] velocities = subsystems.drivetrain.getModuleVelocities();
+                    for (int i = 0; i < 4; i++) {
+                        String moduleName = "Module " + i;
+                        log.motor(moduleName)
+                                .voltage(appliedVoltage)
+                                .angularPosition(angle.mut_replace(state[i].angle.getRadians(), Radians))
+                                .angularVelocity(angularVelocity.mut_replace(
+                                        velocities[i].steeringVelocity, RadiansPerSecond));
+                    }
 
                 },
                 subsystems.drivetrain);
         SysIdRoutine routine = new SysIdRoutine(routineConfig, mechanism);
         return List.of(
-                new LabelValue<String, Command>("Swerve " + moduleName + " Quasistatic Forward",
+                new LabelValue<String, Command>("Swerve Steering Quasistatic Forward",
                         routine.quasistatic(Direction.kForward)),
-                new LabelValue<String, Command>("Swerve " + moduleName + " Quasistatic Reverse",
+                new LabelValue<String, Command>("Swerve Steering Quasistatic Reverse",
                         routine.quasistatic(Direction.kReverse)),
-                new LabelValue<String, Command>("Swerve " + moduleName + " Dynamic Forward",
+                new LabelValue<String, Command>("Swerve Steering Dynamic Forward",
                         routine.dynamic(Direction.kForward)),
-                new LabelValue<String, Command>("Swerve " + moduleName + " Dynamic Reverse",
+                new LabelValue<String, Command>("Swerve Steering Dynamic Reverse",
                         routine.dynamic(Direction.kReverse)));
     }
 
-    public static Command getSwerveSteeringCharacterizationSequence(Subsystems subsystems, int module) {
-        Command[] testCommands = getSwerveSteeringCharacterizationCommands(subsystems, module)
+    public static Command getSwerveSteeringCharacterizationSequence(Subsystems subsystems) {
+        Command[] testCommands = getSwerveSteeringCharacterizationCommands(subsystems)
                 .stream()
                 .map(lv -> lv.getValue())
                 .toArray(Command[]::new);
