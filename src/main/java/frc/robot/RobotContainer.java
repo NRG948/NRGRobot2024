@@ -72,6 +72,7 @@ public class RobotContainer {
     // cancelling on release.
     m_driverController.start().onTrue(Commands.runOnce(() -> m_subsystems.drivetrain.resetOrientation(), m_subsystems.drivetrain));
     m_driverController.back().whileTrue(SysID.getSwerveDriveCharacterizationSequence(m_subsystems));
+    m_driverController.leftBumper().whileTrue(SysID.getSwerveSteeringCharacterizationSequence(m_subsystems));
   }
 
   /**
