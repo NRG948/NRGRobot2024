@@ -17,8 +17,6 @@ import java.util.Map;
 
 import org.javatuples.LabelValue;
 
-import com.nrg948.autonomous.AutonomousCommandGenerator;
-
 import edu.wpi.first.math.kinematics.SwerveModuleState;
 import edu.wpi.first.units.Angle;
 import edu.wpi.first.units.Distance;

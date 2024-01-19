@@ -13,20 +13,19 @@ import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.math.trajectory.TrapezoidProfile;
 import edu.wpi.first.wpilibj.Timer;
-import edu.wpi.first.wpilibj2.command.CommandBase;
+import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.subsystems.SwerveSubsystem;
 
 /**
  * A command to drive the robot on a straight line in using trapezoidal motion
  * profiling.
  */
-public class DriveStraight extends CommandBase {
+public class DriveStraight extends Command {
   private final SwerveSubsystem drivetrain;
   private final HolonomicDriveController controller;
   private final Supplier<Translation2d> translationSupplier;
   private final double maxSpeed;
   private final Supplier<Rotation2d> orientationSupplier;
-  private final double goalSpeed;
   private final Timer timer = new Timer();
   private Pose2d initialPose;
   private double distance;
@@ -45,7 +44,7 @@ public class DriveStraight extends CommandBase {
    *                    position.
    */
   public DriveStraight(SwerveSubsystem drivetrain, Translation2d translation) {
-    this(drivetrain, () -> translation, drivetrain.getMaxSpeed(), () -> drivetrain.getPosition().getRotation(), 0);
+    this(drivetrain, () -> translation, drivetrain.getMaxSpeed(), () -> drivetrain.getPosition().getRotation());
   }
 
   /**
@@ -60,23 +59,7 @@ public class DriveStraight extends CommandBase {
    * @param maxSpeed    The maximum speed at which to travel.
    */
   public DriveStraight(SwerveSubsystem drivetrain, Translation2d translation, double maxSpeed) {
-    this(drivetrain, () -> translation, maxSpeed, () -> drivetrain.getPosition().getRotation(), 0);
-  }
-
-  /**
-   * Creates a new DriveStraight that drives robot along the specified vector and
-   * speed while maintaining the current orientation of the robot.
-   * 
-   * @param drivetrain  The {@link SwerveSubsystem} representing the robot
-   *                    drivetrain.
-   * @param translation A {@link Translation2d} instance describing the line on
-   *                    which to travel. This is a vector relative to the current
-   *                    position.
-   * @param maxSpeed    The maximum speed at which to travel.
-   * @param goalSpeed   The speed at the goal position.
-   */
-  public DriveStraight(SwerveSubsystem drivetrain, Translation2d translation, double maxSpeed, double goalSpeed) {
-    this(drivetrain, () -> translation, maxSpeed, () -> drivetrain.getPosition().getRotation(), goalSpeed);
+    this(drivetrain, () -> translation, maxSpeed, () -> drivetrain.getPosition().getRotation());
   }
 
   /**
@@ -96,7 +79,7 @@ public class DriveStraight extends CommandBase {
       Translation2d translation,
       double maxSpeed,
       Rotation2d orientation) {
-    this(drivetrain, () -> translation, maxSpeed, () -> orientation, 0);
+    this(drivetrain, () -> translation, maxSpeed, () -> orientation);
   }
 
   /**
@@ -114,8 +97,7 @@ public class DriveStraight extends CommandBase {
         drivetrain,
         () -> position.getTranslation().minus(drivetrain.getPosition().getTranslation()),
         maxSpeed,
-        () -> position.getRotation(),
-        0);
+        () -> position.getRotation());
   }
 
   /**
@@ -135,14 +117,12 @@ public class DriveStraight extends CommandBase {
       SwerveSubsystem drivetrain,
       Supplier<Translation2d> translationSupplier,
       double maxSpeed,
-      Supplier<Rotation2d> orientationSupplier,
-      double goalSpeed) {
+      Supplier<Rotation2d> orientationSupplier) {
     this.drivetrain = drivetrain;
     this.translationSupplier = translationSupplier;
     this.controller = drivetrain.createDriveController();
     this.maxSpeed = maxSpeed;
     this.orientationSupplier = orientationSupplier;
-    this.goalSpeed = goalSpeed;
 
     addRequirements(drivetrain);
   }

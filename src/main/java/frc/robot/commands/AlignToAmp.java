@@ -9,14 +9,13 @@ import edu.wpi.first.math.geometry.Transform3d;
 import edu.wpi.first.math.geometry.Translation3d;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
-import edu.wpi.first.wpilibj2.command.Subsystem;
 import frc.robot.Constants.RobotConstants;
 import frc.robot.subsystems.AprilTagSubsystem;
 import frc.robot.subsystems.Subsystems;
 
 public final class AlignToAmp {
   /** Returns a Command that drives to speaker shooting position. */
-  public static Command DriveToAmp(Subsystems subsystems) {
+  public static Command driveToAmp(Subsystems subsystems) {
      
     var drivetrain = subsystems.drivetrain;
     var aprilTag = subsystems.aprilTag;
@@ -47,23 +46,5 @@ public final class AlignToAmp {
 
     return Commands.sequence(
         new DriveStraight(drivetrain, goalPose, drivetrain.getMaxSpeed() * 0.5));
-  }
-
-  // Called when the command is initially scheduled.
-  @Override
-  public void initialize() {}
-
-  // Called every time the scheduler runs while the command is scheduled.
-  @Override
-  public void execute() {}
-
-  // Called once the command ends or is interrupted.
-  @Override
-  public void end(boolean interrupted) {}
-
-  // Returns true when the command should end.
-  @Override
-  public boolean isFinished() {
-    return false;
   }
 }
