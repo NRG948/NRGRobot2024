@@ -26,7 +26,6 @@ import edu.wpi.first.math.geometry.Translation3d;
 import edu.wpi.first.util.datalog.DoubleLogEntry;
 import edu.wpi.first.wpilibj.DataLogManager;
 import edu.wpi.first.wpilibj.DriverStation;
-import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import edu.wpi.first.wpilibj.shuffleboard.BuiltInLayouts;
 import edu.wpi.first.wpilibj.shuffleboard.BuiltInWidgets;
 import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
@@ -142,16 +141,6 @@ public class AprilTagSubsystem extends PhotonVisionSubsystemBase {
       return 0.0;
     }
     return target.get().getYaw();
-  }
-
-  public static int getSpeakerCenterAprilTagID(){
-    var alliance =  DriverStation.getAlliance().get();
-    return alliance==Alliance.Red ? 4 : 7; 
-  }
-
-  public static int getAmpAprilTagID(){ 
-    var alliance =  DriverStation.getAlliance().get();
-    return alliance==Alliance.Red ? 5 : 6; 
   }
 
     /**
