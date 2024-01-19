@@ -52,14 +52,12 @@ public class DriveUsingController extends Command {
     xSpeed = MathUtil.applyDeadband(xSpeed, DEADBAND) * inputScalar;
     ySpeed = MathUtil.applyDeadband(ySpeed, DEADBAND) * inputScalar;
 
-    boolean aimAtAprilTag = false;
     Optional<PhotonTrackedTarget> optionalTarget = Optional.empty();
     if (m_xboxController.rightBumper().getAsBoolean()) {
       optionalTarget = m_aprilTag.getTarget(4); //TODO (AprilTagSubsystem.getSpeakerCenterApriltagId());
-      aimAtAprilTag = !optionalTarget.isEmpty();
     }
 
-    if (aimAtAprilTag) {
+    if (optionalTarget.isPresent()) {
       var angleToTarget = optionalTarget.get().getYaw();
       rSpeed = angleToTarget * kP;
     } else {
