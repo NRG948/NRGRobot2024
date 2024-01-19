@@ -42,7 +42,8 @@ public class SysID {
     private static final MutableMeasure<Velocity<Distance>> velocity = mutable(MetersPerSecond.of(0));
     private static final MutableMeasure<Angle> angle = mutable(Radians.of(0));
     private static final MutableMeasure<Velocity<Angle>> angularVelocity = mutable(RadiansPerSecond.of(0));
-    private static int currentTest = 0;
+    private static int currentDriveTest = 0;
+    private static int currentSteeringTest = 0;
 
     /**
      * Returns the commands to characterize the swerve drive.
@@ -100,9 +101,9 @@ public class SysID {
                         2, testCommands[2],
                         3, testCommands[3]),
                 () -> {
-                    int testIndex = currentTest++;
-                    if (currentTest >= 4) {
-                        currentTest = 0;
+                    int testIndex = currentDriveTest++;
+                    if (currentDriveTest >= 4) {
+                        currentDriveTest = 0;
                     }
                     return testIndex;
                 });
@@ -161,9 +162,9 @@ public class SysID {
                         2, testCommands[2],
                         3, testCommands[3]),
                 () -> {
-                    int testIndex = currentTest++;
-                    if (currentTest >= 4) {
-                        currentTest = 0;
+                    int testIndex = currentSteeringTest++;
+                    if (currentSteeringTest >= 4) {
+                        currentSteeringTest = 0;
                     }
                     return testIndex;
                 });
