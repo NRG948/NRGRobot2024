@@ -62,7 +62,7 @@ public enum SwerveDriveParameters {
     NeoV1_1,
     new int[] {6, 7, 19, 18, 8, 9, 13, 14}, // drive, steer motor controller CAN IDs
     new int[] {31, 32, 33, 34}, // CANCoder CAN IDs
-    new double[] {0.09, 247.85, 348.49, 199.86},
+    new double[] {186.5, 69.61, 172.62, 21.27},
     0.15,
     0.15);
 
@@ -186,10 +186,10 @@ public enum SwerveDriveParameters {
     this.maxRotationalAcceleration = this.maxDriveAcceleration / wheelTrackRadius;
 
     this.wheelPositions = new Translation2d[] {
-        new Translation2d(this.wheelDistanceX / 2.0, this.wheelDistanceY / 2),
-        new Translation2d(this.wheelDistanceX / 2.0, -this.wheelDistanceY / 2),
-        new Translation2d(-this.wheelDistanceX / 2.0, this.wheelDistanceY / 2),
-        new Translation2d(-this.wheelDistanceX / 2.0, -this.wheelDistanceY / 2),
+        new Translation2d(this.wheelDistanceX / 2.0, this.wheelDistanceY / 2.0),
+        new Translation2d(this.wheelDistanceX / 2.0, -this.wheelDistanceY / 2.0),
+        new Translation2d(-this.wheelDistanceX / 2.0, this.wheelDistanceY / 2.0),
+        new Translation2d(-this.wheelDistanceX / 2.0, -this.wheelDistanceY / 2.0),
     };
 
     this.kinematics = new SwerveDriveKinematics(wheelPositions);
