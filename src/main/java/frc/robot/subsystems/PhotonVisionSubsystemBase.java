@@ -11,7 +11,6 @@ import org.photonvision.targeting.PhotonPipelineResult;
 import org.photonvision.targeting.PhotonTrackedTarget;
 
 import edu.wpi.first.math.estimator.SwerveDrivePoseEstimator;
-import edu.wpi.first.math.geometry.Pose3d;
 import edu.wpi.first.math.geometry.Transform3d;
 import edu.wpi.first.util.datalog.BooleanLogEntry;
 import edu.wpi.first.util.datalog.DoubleLogEntry;
@@ -70,10 +69,8 @@ public abstract class PhotonVisionSubsystemBase extends SubsystemBase {
    * target pose.
    * 
    * @param estimator  The pose estimator.
-   * @param targetPose The expected pose of the target in the field of vision. The
-   *                   pose is specified in field-relative coordinates.
    */
-  public abstract void updatePoseEstimate(SwerveDrivePoseEstimator estimator, Pose3d targetPose);
+  public abstract void updatePoseEstimate(SwerveDrivePoseEstimator estimator);
 
   /**
    * Returns the transform from the camera to center of the robot.

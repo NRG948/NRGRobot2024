@@ -4,6 +4,7 @@
 
 package frc.robot.subsystems;
 
+import java.io.IOException;
 import java.util.Optional;
 
 import org.photonvision.targeting.PhotonTrackedTarget;
@@ -12,6 +13,8 @@ import com.nrg948.preferences.RobotPreferences;
 import com.nrg948.preferences.RobotPreferencesLayout;
 import com.nrg948.preferences.RobotPreferencesValue;
 
+import edu.wpi.first.apriltag.AprilTagFieldLayout;
+import edu.wpi.first.apriltag.AprilTagFields;
 import edu.wpi.first.cscore.HttpCamera;
 import edu.wpi.first.cscore.HttpCamera.HttpCameraKind;
 import edu.wpi.first.cscore.VideoSource;
@@ -22,6 +25,8 @@ import edu.wpi.first.math.geometry.Transform3d;
 import edu.wpi.first.math.geometry.Translation3d;
 import edu.wpi.first.util.datalog.DoubleLogEntry;
 import edu.wpi.first.wpilibj.DataLogManager;
+import edu.wpi.first.wpilibj.DriverStation;
+import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import edu.wpi.first.wpilibj.shuffleboard.BuiltInLayouts;
 import edu.wpi.first.wpilibj.shuffleboard.BuiltInWidgets;
 import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
@@ -47,6 +52,7 @@ public class AprilTagSubsystem extends PhotonVisionSubsystemBase {
   private DoubleLogEntry targetAngleLogger = new DoubleLogEntry(DataLogManager.getLog(), "AprilTag/Target Angle");
 
   private SendableChooser<Integer> aprilTagIdChooser = new SendableChooser<Integer>();
+  private AprilTagFieldLayout aprilTagLayout;
 
   /** Creates a new PhotonVisionSubsystem. */
   public AprilTagSubsystem() {
@@ -56,11 +62,24 @@ public class AprilTagSubsystem extends PhotonVisionSubsystemBase {
       aprilTagIdChooser.addOption(String.valueOf(i), i);
     }
     aprilTagIdChooser.setDefaultOption("1", 1);
+    try {
+      aprilTagLayout = AprilTagFieldLayout.loadFromResource(AprilTagFields.k2024Crescendo.m_resourceFile);
+    }
+    catch (IOException e) {
+      DriverStation.reportError("Couldn't load apriltag field layout", true);
+    }
+    
   }
 
   @Override
-  public void updatePoseEstimate(SwerveDrivePoseEstimator estimator, Pose3d targetPose) {
+  public void updatePoseEstimate(SwerveDrivePoseEstimator estimator) {
     if (hasTargets()) {
+      var bestTarget = getBestTarget();
+      var targetPoseOptional = aprilTagLayout.getTagPose(bestTarget.getFiducialId());
+      if (targetPoseOptional.isEmpty()) {
+        return;
+      }
+      var targetPose = targetPoseOptional.get();
       Transform3d cameraToRobot = getCameraToRobotTransform();
       Transform3d targetToCamera = new Transform3d(
           new Translation3d(
@@ -71,11 +90,10 @@ public class AprilTagSubsystem extends PhotonVisionSubsystemBase {
       Pose3d robotPose = cameraPose.transformBy(cameraToRobot);
 
       estimator.addVisionMeasurement(robotPose.toPose2d(), getTargetTimestamp());
+      targetXLogger.append(targetPose.getX());
+      targetYLogger.append(targetPose.getY());
+      targetAngleLogger.append(Math.toRadians(targetPose.getRotation().getAngle()));
     }
-
-    targetXLogger.append(targetPose.getX());
-    targetYLogger.append(targetPose.getY());
-    targetAngleLogger.append(Math.toRadians(targetPose.getRotation().getAngle()));
   }
 
   /**
@@ -124,6 +142,16 @@ public class AprilTagSubsystem extends PhotonVisionSubsystemBase {
       return 0.0;
     }
     return target.get().getYaw();
+  }
+
+  public static int getSpeakerCenterAprilTagID(){
+    var alliance =  DriverStation.getAlliance().get();
+    return alliance==Alliance.Red ? 4 : 7; 
+  }
+
+  public static int getAmpAprilTagID(){ 
+    var alliance =  DriverStation.getAlliance().get();
+    return alliance==Alliance.Red ? 5 : 6; 
   }
 
     /**

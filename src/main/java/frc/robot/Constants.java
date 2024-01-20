@@ -5,6 +5,7 @@
 package frc.robot;
 
 import edu.wpi.first.math.geometry.Transform3d;
+import edu.wpi.first.math.util.Units;
 
 /**
  * The Constants class provides a convenient place for teams to hold robot-wide
@@ -28,14 +29,22 @@ public final class Constants {
      */
     public static final double MAX_BATTERY_VOLTAGE = 12.0;
 
+    public static final double ROBOT_LENGTH = Units.inchesToMeters(39);
+
     /**
      * Wheel diameter.
      */
     public static final double WHEEL_DIAMETER_INCHES = 4.0;
 
+    /** 3d transforms that moves the camera to the center of the robot. */
     public static final Transform3d APRILTAG_CAMERA_TO_ROBOT = new Transform3d();
 
- 
+    /** Distance robot should be from speaker to score. */
+    public static final double SCORING_DISTANCE_FROM_SPEAKER = Units.inchesToMeters(100);
+    
+       /** Distance robot should be from amp to score. */
+    public static final double SCORING_DISTANCE_FROM_AMP = Units.inchesToMeters(20);
+    
   /**
    * Defines operator (i.e. driver and manipulator) constants.
    */
