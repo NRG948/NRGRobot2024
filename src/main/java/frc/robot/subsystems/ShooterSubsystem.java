@@ -23,29 +23,27 @@ import frc.robot.Constants.RobotConstants;
 import frc.robot.Constants.RobotConstants.ManipulatorConstants;
 import frc.robot.parameters.MotorParameters;
 
-
 public class ShooterSubsystem extends SubsystemBase {
   /** Creates a new ShooterSubsystem. */
   private static final double KS = 0.15;
   private static final double KV = (RobotConstants.MAX_BATTERY_VOLTAGE - KS) * 3
       / MotorParameters.NeoV1_1.getFreeSpeedRPM();
-  public enum GoalShooterRPM {
-    // TODO: get real RPMs
-    STOP(0.0, "0. Stop"),
-    SHOOTING(69, "1. Shooting"); // 69 is a placeholder RPM
-  
-    private final double rpm;
-    private final String name;
-    private static final ArrayList<GoalShooterRPM> RPMList = new ArrayList<>(EnumSet.allOf(GoalShooterRPM.class));
 
-    GoalShooterRPM(double rpm, String name) {
+  public enum GoalShooterRPM {
+    STOP(0.0),
+    SHOOTING(69); // TODO: Get Real RPM
+
+    private final double rpm;
+    
+    GoalShooterRPM(double rpm) {
       this.rpm = rpm;
-      this.name = name;
     }
+
     private double getRPM() {
       return rpm;
     }
   }
+
   private final CANSparkFlex shooterMotor = new CANSparkFlex(ManipulatorConstants.kShooterMotorPort,
       MotorType.kBrushless);
 
@@ -62,12 +60,11 @@ public class ShooterSubsystem extends SubsystemBase {
   private BooleanLogEntry enabledLogger = new BooleanLogEntry(DataLogManager.getLog(), "/Shooter/Enabled");
   private DoubleLogEntry goalRPMLogger = new DoubleLogEntry(DataLogManager.getLog(), "/Shooter/Goal RPM");
   private DoubleLogEntry shooterRPMLogger = new DoubleLogEntry(DataLogManager.getLog(), "/Shooter/Shooter RPM");
-
+  
+  /** Creates ShooterSubsystem. */
   public ShooterSubsystem() {
     shooterMotor.setIdleMode(IdleMode.kCoast);
-
     shooterEncoder.setVelocityConversionFactor(0.333);
-
   }
 
   private void setGoalRPMInternal(GoalShooterRPM goalRPM) {
@@ -75,7 +72,7 @@ public class ShooterSubsystem extends SubsystemBase {
     shooterPIDController.setSetpoint(goalRPM.getRPM());
     goalRPMLogger.append(currentGoalRPM.getRPM());
   }
-  
+
   public void setGoalRPM(GoalShooterRPM goalShooterRPM) {
     if (!isEnabled) {
       enabledLogger.append(true);
@@ -85,6 +82,7 @@ public class ShooterSubsystem extends SubsystemBase {
     setGoalRPMInternal(goalShooterRPM);
   }
 
+  /** Disables the Shooter PID controller and stops the motor. */
   public void disable() {
     if (isEnabled) {
       enabledLogger.append(false);
@@ -96,6 +94,8 @@ public class ShooterSubsystem extends SubsystemBase {
     shooterPIDController.reset();
     currentGoalRPM = GoalShooterRPM.STOP;
   }
+
+  /** Stops Shooter Motor. */
   public void stopMotor() {
     shooterMotor.stopMotor();
   }
@@ -134,9 +134,4 @@ public class ShooterSubsystem extends SubsystemBase {
     }
     shooterRPMLogger.append(currentShooterRPM);
   }
-
-  /**
-   * todo
-   */
-
 }
