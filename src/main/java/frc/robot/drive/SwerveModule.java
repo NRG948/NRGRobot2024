@@ -179,25 +179,15 @@ public class SwerveModule {
    * Sets the desired state for the module.
    * 
    * @param newState         The desired state w/ speed and angle
-   * @param adjustForGravity If true, use the tilt angle to adjust feedforward for
-   *                         the effects of gravity.
-   * @param tilt             The robot base tilt angle.
    */
-  public void setState(SwerveModuleState newState, boolean adjustForGravity, Rotation2d tilt) {
+  public void setState(SwerveModuleState newState) {
     // Optimize the state to avoid spinning further than 90 degrees
     Rotation2d currentAngle = getWheelRotation2d();
     newState = SwerveModuleState.optimize(newState, currentAngle);
 
-    // Adjust for the effects of gravity on the drivetrain, if needed.
-    double acceleration = 0.0;
-
-    if (adjustForGravity) {
-      acceleration = 9.81 * Math.cos(Math.PI / 2 - tilt.getRadians());
-    }
-
     // Calculate the drive motor voltage using PID and FeedForward
     double driveOutput = drivePID.calculate(state.speedMetersPerSecond, newState.speedMetersPerSecond);
-    double driveFeedForward = this.driveFeedForward.calculate(newState.speedMetersPerSecond, acceleration);
+    double driveFeedForward = this.driveFeedForward.calculate(newState.speedMetersPerSecond);
 
     // Calculate the steering motor voltage using PID and FeedForward
     double steeringOutput = steeringPID.calculate(currentAngle.getRadians(), newState.angle.getRadians());

@@ -129,18 +129,11 @@ public class SwerveSubsystem extends SubsystemBase {
   // The current sensor state updated by the periodic method.
   private Rotation2d rawOrientation;
   private Rotation2d rawOrientationOffset = new Rotation2d();
-  private Rotation2d rawTilt;
-  private Rotation2d tiltOffset;
-  private double tiltVelocity;
-  private boolean wasNavXCalibrating;
 
   private DoubleLogEntry rawOrientationLog = new DoubleLogEntry(DataLogManager.getLog(),
       "/SwerveSubsystem/rawOrientation");
   private DoubleLogEntry rawOrientationOffsetLog = new DoubleLogEntry(DataLogManager.getLog(),
       "/SwerveSubsystem/rawOrientationOffset");
-  private DoubleLogEntry rawTiltLog = new DoubleLogEntry(DataLogManager.getLog(), "/SwerveSubsystem/rawTilt");
-  private DoubleLogEntry tiltOffsetLog = new DoubleLogEntry(DataLogManager.getLog(), "/SwerveSubsystem/tiltOffset");
-  private DoubleLogEntry tiltVelocityLog = new DoubleLogEntry(DataLogManager.getLog(), "/SwerveSubsystem/tiltVelocity");
   private DoubleLogEntry poseXLog = new DoubleLogEntry(DataLogManager.getLog(), "/SwerveSubsystem/Pose X");
   private DoubleLogEntry poseYLog = new DoubleLogEntry(DataLogManager.getLog(), "/SwerveSubsystem/Pose Y");
   private DoubleLogEntry poseAngleLog = new DoubleLogEntry(DataLogManager.getLog(), "/SwerveSubsystem/Pose Angle");
@@ -210,10 +203,7 @@ public class SwerveSubsystem extends SubsystemBase {
    */
   private void initializeSensorState() {
     ahrs.reset();
-    wasNavXCalibrating = true;
-
     updateSensorState();
-    tiltOffset = Rotation2d.fromDegrees(-3.5); // For 2022 robot
   }
 
   /**
@@ -224,21 +214,7 @@ public class SwerveSubsystem extends SubsystemBase {
    */
   private void updateSensorState() {
     rawOrientation = !isSimulation ? Rotation2d.fromDegrees(-ahrs.getAngle()) : simOrientation;
-    rawTilt = Rotation2d.fromDegrees(ahrs.getRoll());
-
-    if (wasNavXCalibrating && !ahrs.isCalibrating()) {
-      tiltOffset = rawTilt;
-      System.out.println("Tilt offset: " + tiltOffset.getDegrees());
-      wasNavXCalibrating = false;
-      tiltOffsetLog.append(tiltOffset.getDegrees());
-    }
-
-    tiltVelocity = ahrs.getRawGyroY();
-
     rawOrientationLog.append(rawOrientation.getDegrees());
-    rawTiltLog.append(rawTilt.getDegrees());
-    tiltVelocityLog.append(tiltVelocity);
-
   }
 
   /**
@@ -344,21 +320,8 @@ public class SwerveSubsystem extends SubsystemBase {
    * 
    * @param speeds The chassis speeds.
    */
-
   public void setChassisSpeeds(ChassisSpeeds speeds) {
-    setChassisSpeeds(speeds, false);
-  }
-
-  /**
-   * Sets the current module's states based on the chassis speed.
-   * 
-   * @param speeds           The chassis speeds.
-   * @param adjustForGravity If true, use the tilt angle to adjust feedforward for
-   *                         the effects of gravity.
-   * @param tilt             The robot base tilt angle.
-   */
-  public void setChassisSpeeds(ChassisSpeeds speeds, boolean adjustForGravity) {
-    drivetrain.setChassisSpeeds(speeds, adjustForGravity, getTilt());
+    drivetrain.setChassisSpeeds(speeds);
   }
 
   /**
@@ -395,11 +358,7 @@ public class SwerveSubsystem extends SubsystemBase {
    */
 
   public void setModuleStates(SwerveModuleState[] states) {
-    setModuleStates(states, false);
-  }
-
-  public void setModuleStates(SwerveModuleState[] states, boolean adjustForGravity) {
-    drivetrain.setModuleStates(states, adjustForGravity, getTilt());
+    setModuleStates(states);
   }
 
   /**
@@ -479,25 +438,6 @@ public class SwerveSubsystem extends SubsystemBase {
     return rawOrientation.plus(rawOrientationOffset);
   }
 
-  /**
-   * Returns the corrected tilt of the robot as a {@link Rotation2d} object.
-   * 
-   * @return Gets the tilt of the robot (positive is nose up, negative is nose
-   *         down).
-   */
-  public Rotation2d getTilt() {
-    return rawTilt.minus(tiltOffset);
-  }
-
-  /**
-   * Returns the tilt velocity of the robot in degrees per second per second.
-   * 
-   * @return Gets the tilt velocity of the robot.
-   */
-  public double getTiltVelocity() {
-    return tiltVelocity;
-  }
-
   @Override
   public void periodic() {
     // Read sensors to update subsystem state.
@@ -570,10 +510,6 @@ public class SwerveSubsystem extends SubsystemBase {
           .withPosition(0, 0);
       positionLayout.addDouble("Y", () -> odometry.getEstimatedPosition().getY())
           .withPosition(1, 0);
-      positionLayout.addDouble("Tilt", () -> getTilt().getDegrees())
-          .withPosition(2, 0);
-      positionLayout.addDouble("Tilt Velocity", () -> getTiltVelocity())
-          .withPosition(3, 0);
     }
 
     if (ENABLE_FIELD_TAB) {
