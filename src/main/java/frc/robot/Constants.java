@@ -41,24 +41,35 @@ public final class Constants {
 
     /** Distance robot should be from speaker to score. */
     public static final double SCORING_DISTANCE_FROM_SPEAKER = Units.inchesToMeters(100);
-    
-       /** Distance robot should be from amp to score. */
+
+    /** Distance robot should be from amp to score. */
     public static final double SCORING_DISTANCE_FROM_AMP = Units.inchesToMeters(20);
-    
-  /**
-   * Defines operator (i.e. driver and manipulator) constants.
-   */
-  public static class OperatorConstants {
 
     /**
-     * Defines the port numbers of the Xbox controllers.
+     * CAN Ids
      */
-    public static class XboxControllerPort {
+    public static class CAN {
+      public static class SparkFlex {
+        public static final int INTAKE_PORT = 17; // Port Number Still Unknown (to be replaced)
 
-      public static final int DRIVER = 0;
-      public static final int MANIPULATOR = 1;
+      }
 
     }
+
+    /**
+     * Defines operator (i.e. driver and manipulator) constants.
+     */
+    public static class OperatorConstants {
+
+      /**
+       * Defines the port numbers of the Xbox controllers.
+       */
+      public static class XboxControllerPort {
+
+        public static final int DRIVER = 0;
+        public static final int MANIPULATOR = 1;
+
+      }
+    }
   }
-}
 }
