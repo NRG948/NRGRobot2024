@@ -21,8 +21,6 @@ import frc.robot.util.SwerveModuleVoltages;
 
 /** SwerveDrive implements swerve drive control. */
 public class SwerveDrive extends RobotDriveBase {
-  private static final Rotation2d ZERO_TILT = new Rotation2d(0);
-
   private static final ChassisSpeeds ZERO_SPEEDS = new ChassisSpeeds();
 
   private final SwerveModule[] modules;
@@ -89,15 +87,12 @@ public class SwerveDrive extends RobotDriveBase {
    * @param states           An array of four {@link SwerveModuleState} objects in
    *                         the
    *                         order: front left, front right, back left, back right
-   * @param adjustForGravity If true, use the tilt angle to adjust feedforward for
-   *                         the effects of gravity.
-   * @param tilt             The robot base tilt angle.
    */
-  public void setModuleStates(SwerveModuleState[] states, boolean adjustForGravity, Rotation2d tilt) {
+  public void setModuleStates(SwerveModuleState[] states) {
     SwerveDriveKinematics.desaturateWheelSpeeds(states, maxDriveSpeed);
 
     for (int i = 0; i < modules.length; ++i) {
-      modules[i].setState(states[i], adjustForGravity, tilt);
+      modules[i].setState(states[i]);
     }
 
     // Reset the motor watchdog timer.
@@ -106,7 +101,7 @@ public class SwerveDrive extends RobotDriveBase {
 
   @Override
   public void stopMotor() {
-    setChassisSpeeds(ZERO_SPEEDS, false, ZERO_TILT);
+    setChassisSpeeds(ZERO_SPEEDS);
 
     for (SwerveModule module : modules) {
       module.stopMotors();
@@ -145,7 +140,7 @@ public class SwerveDrive extends RobotDriveBase {
         ? ChassisSpeeds.fromFieldRelativeSpeeds(xSpeed, ySpeed, rSpeed, orientation)
         : new ChassisSpeeds(xSpeed, ySpeed, rSpeed);
 
-    setChassisSpeeds(speeds, false, ZERO_TILT);
+    setChassisSpeeds(speeds);
   }
 
   /**
@@ -167,18 +162,15 @@ public class SwerveDrive extends RobotDriveBase {
    * Sets the current module's states based on the chassis speed.
    * 
    * @param speeds           The chassis speeds.
-   * @param adjustForGravity If true, use the tilt angle to adjust feedforward for
-   *                         the effects of gravity.
-   * @param tilt             The robot base tilt angle.
    */
-  public void setChassisSpeeds(ChassisSpeeds speeds, boolean adjustForGravity, Rotation2d tilt) {
+  public void setChassisSpeeds(ChassisSpeeds speeds) {
     xSpeedLog.append(speeds.vxMetersPerSecond);
     ySpeedLog.append(speeds.vyMetersPerSecond);
     omegaSpeedLog.append(Math.toDegrees(speeds.omegaRadiansPerSecond));
 
     SwerveModuleState[] states = kinematics.toSwerveModuleStates(speeds);
 
-    setModuleStates(states, adjustForGravity, tilt);
+    setModuleStates(states);
   }
 
   /**
