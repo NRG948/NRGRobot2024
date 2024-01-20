@@ -7,6 +7,7 @@ package frc.robot.subsystems;
 import java.util.ArrayList;
 import java.util.Map;
 
+import com.ctre.phoenix6.StatusSignal;
 import com.ctre.phoenix6.configs.CANcoderConfiguration;
 import com.ctre.phoenix6.configs.CANcoderConfigurator;
 import com.ctre.phoenix6.hardware.CANcoder;
@@ -60,8 +61,8 @@ import frc.robot.util.SwerveModuleVoltages;
 @RobotPreferencesLayout(groupName = "Drive", column = 0, row = 1, width = 2, height = 3)
 public class SwerveSubsystem extends SubsystemBase {
   @RobotPreferencesValue
-  public static RobotPreferences.EnumValue<SwerveDriveParameters> PARAMETERS = 
-  new RobotPreferences.EnumValue<SwerveDriveParameters>("Drive", "Robot Base", SwerveDriveParameters.PracticeBase2024);
+  public static RobotPreferences.EnumValue<SwerveDriveParameters> PARAMETERS = new RobotPreferences.EnumValue<SwerveDriveParameters>(
+      "Drive", "Robot Base", SwerveDriveParameters.PracticeBase2024);
 
   public static boolean ENABLE_DRIVE_TAB = true;
 
@@ -103,13 +104,17 @@ public class SwerveSubsystem extends SubsystemBase {
       PARAMETERS.getValue().getAngleEncoderId(SwerveAngleEncoder.BackRight));
 
   private final SwerveModule frontLeftModule = createSwerveModule(
-      frontLeftDriveMotor, frontLeftSteeringMotor, frontLeftAngle, PARAMETERS.getValue().getAngleOffset(SwerveAngleEncoder.FrontLeft), "Front Left");
+      frontLeftDriveMotor, frontLeftSteeringMotor, frontLeftAngle,
+      PARAMETERS.getValue().getAngleOffset(SwerveAngleEncoder.FrontLeft), "Front Left");
   private final SwerveModule frontRightModule = createSwerveModule(
-      frontRightDriveMotor, frontRightSteeringMotor, frontRightAngle,PARAMETERS.getValue().getAngleOffset(SwerveAngleEncoder.FrontRight),  "Front Right");
+      frontRightDriveMotor, frontRightSteeringMotor, frontRightAngle,
+      PARAMETERS.getValue().getAngleOffset(SwerveAngleEncoder.FrontRight), "Front Right");
   private final SwerveModule backLeftModule = createSwerveModule(
-      backLeftDriveMotor, backLeftSteeringMotor, backLeftAngle, PARAMETERS.getValue().getAngleOffset(SwerveAngleEncoder.BackLeft), "Back Left");
+      backLeftDriveMotor, backLeftSteeringMotor, backLeftAngle,
+      PARAMETERS.getValue().getAngleOffset(SwerveAngleEncoder.BackLeft), "Back Left");
   private final SwerveModule backRightModule = createSwerveModule(
-      backRightDriveMotor, backRightSteeringMotor, backRightAngle, PARAMETERS.getValue().getAngleOffset(SwerveAngleEncoder.BackRight), "Back Right");
+      backRightDriveMotor, backRightSteeringMotor, backRightAngle,
+      PARAMETERS.getValue().getAngleOffset(SwerveAngleEncoder.BackRight), "Back Right");
 
   private final SwerveModule[] modules = { frontLeftModule, frontRightModule, backLeftModule, backRightModule };
 
@@ -172,17 +177,20 @@ public class SwerveSubsystem extends SubsystemBase {
     wheelAngleConfigurator.apply(wheelAngleConfig);
 
     final double metersPerRotation = (PARAMETERS.getValue().getWheelDiameter() * Math.PI) / PARAMETERS.getValue().getDriveGearRatio();
-
+    
+    StatusSignal<Double> drivePosition = driveMotor.getPosition();
+    StatusSignal<Double> driveVelocity = driveMotor.getVelocity();
+    StatusSignal<Double> wheelOrientation = wheelAngle.getAbsolutePosition();
+    StatusSignal<Double> angularVelocity = wheelAngle.getVelocity();
+    
     return new SwerveModule(
         PARAMETERS.getValue(),
         driveMotor,
-        () -> driveMotor.getPosition().refresh().getValueAsDouble() * metersPerRotation,
-        // The TalonFX reports the velocity in pulses per 100ms, so we need to
-        // multiply by 10 to convert to pulses per second.
-        () -> driveMotor.getVelocity().refresh().getValueAsDouble() * metersPerRotation,
+        () -> drivePosition.refresh().getValueAsDouble() * metersPerRotation,
+        () -> driveVelocity.refresh().getValueAsDouble() * metersPerRotation,
         steeringMotor,
-        () -> Rotation2d.fromDegrees(wheelAngle.getAbsolutePosition().refresh().getValueAsDouble()*360.0),
-        () -> Math.toRadians(wheelAngle.getVelocity().refresh().getValueAsDouble()),
+        () -> Rotation2d.fromDegrees(wheelOrientation.refresh().getValueAsDouble()*360.0),
+        () -> Math.toRadians(angularVelocity.refresh().getValueAsDouble()),
         name);
   }
 
@@ -293,12 +301,12 @@ public class SwerveSubsystem extends SubsystemBase {
     return PARAMETERS.getValue().getRotationalConstraints();
   }
 
-   /**
+  /**
    * Return the wheel base radius in meters.
    * 
    * @return The wheel base radius in meters.
    */
-  public double getWheelBaseRadius(){
+  public double getWheelBaseRadius() {
     return PARAMETERS.getValue().getWheelBaseRadius();
   }
 
