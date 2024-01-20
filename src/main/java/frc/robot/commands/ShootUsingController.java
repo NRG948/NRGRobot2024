@@ -10,7 +10,7 @@ import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import frc.robot.Constants.RobotConstants;
 import frc.robot.subsystems.ShooterSubsystem;
 
-public class ShootByController extends Command {
+public class ShootUsingController extends Command {
   /** Creates a new ShootByController. */
 
   private ShooterSubsystem shooterSubsystem;
@@ -22,7 +22,7 @@ public class ShootByController extends Command {
 
 
 
-  public ShootByController(ShooterSubsystem shooterSubsystem, CommandXboxController controller) {
+  public ShootUsingController(ShooterSubsystem shooterSubsystem, CommandXboxController controller) {
     // Use addRequirements() here to declare subsystem dependencies.
     this.controller = controller;
     this.shooterSubsystem = shooterSubsystem;
