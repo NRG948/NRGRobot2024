@@ -22,8 +22,6 @@ import edu.wpi.first.math.util.Units;
  */
 public enum SwerveDriveParameters {
 
-  
-
   /**
    * The 2022 competition robot using feedforward constants calculated from
    * theoretical maximums.
@@ -37,7 +35,7 @@ public enum SwerveDriveParameters {
       NeoV1_1,
       new int[] { 2, 3, 4, 5, 6, 7, 8, 9 }, // drive, steer motor controller CAN IDs
       new int[] { 12, 14, 16, 18 }, // CANCoder CAN IDs
-      new double[] {144.23, 26.02, 201.18, 202.59},
+      new double[] { 144.23, 26.02, 201.18, 202.59 },
       0.15,
       0.15),
   RookieBase2023Characterized(
@@ -49,22 +47,22 @@ public enum SwerveDriveParameters {
       NeoV1_1,
       new int[] { 2, 3, 4, 5, 6, 7, 8, 9 }, // drive, steer motor controller CAN IDs
       new int[] { 12, 14, 16, 18 }, // CANCoder CAN IDs
-      new double[] {144.23, 26.02, 201.18, 202.59},
+      new double[] { 144.23, 26.02, 201.18, 202.59 },
       new FeedforwardConstants(0.13638, 2.3316, 0.058878),
-      new FeedforwardConstants(0.13638, 2.3316, 0.058878) //TODO; characterize steering
+      new FeedforwardConstants(0.13638, 2.3316, 0.058878) // TODO; characterize steering
   ),
   PracticeBase2024(
-    24.2,
-    Units.inchesToMeters(22.55),
-    Units.inchesToMeters(22.55),
-    MK4IFast,
-    Falcon500,
-    NeoV1_1,
-    new int[] {6, 7, 19, 18, 8, 9, 13, 14}, // drive, steer motor controller CAN IDs
-    new int[] {31, 32, 33, 34}, // CANCoder CAN IDs
-    new double[] {186.5, 69.61, 172.62, 21.27},
-    0.15,
-    0.15);
+      24.2,
+      Units.inchesToMeters(22.55),
+      Units.inchesToMeters(22.55),
+      MK4IFast,
+      Falcon500,
+      NeoV1_1,
+      new int[] { 6, 7, 19, 18, 8, 9, 13, 14 }, // drive, steer motor controller CAN IDs
+      new int[] { 31, 32, 33, 34 }, // CANCoder CAN IDs
+      new double[] { 186.5, 69.61, 172.62, 21.27 },
+      0.15,
+      0.15); // changed from 0.15
 
   public static class Constants {
     /**
@@ -131,8 +129,10 @@ public enum SwerveDriveParameters {
    * @param wheelDistanceY      The distance between the wheels along the Y axis
    *                            in meters.
    * @param swerveModule        The swerve module used by the robot.
-   * @param driveMotor          The motor used by swerve module drive on the robot.
-   * @param steeringMotor       The motor used by the swerve module steering on the robot.
+   * @param driveMotor          The motor used by swerve module drive on the
+   *                            robot.
+   * @param steeringMotor       The motor used by the swerve module steering on
+   *                            the robot.
    * @param motorIds            An array containing the CAN IDs of the swerve
    *                            module drive motors in the order front left drive
    *                            and steering, front right drive and steering, back
@@ -155,8 +155,7 @@ public enum SwerveDriveParameters {
       int[] angleEncoderIds,
       double[] angleOffset,
       FeedforwardConstants driveFeedForward,
-      FeedforwardConstants steeringFeedForward
-      ) {
+      FeedforwardConstants steeringFeedForward) {
     this.robotMass = robotMass;
     this.wheelDistanceX = wheelDistanceX;
     this.wheelDistanceY = wheelDistanceY;
@@ -168,7 +167,6 @@ public enum SwerveDriveParameters {
     this.angleOffset = angleOffset;
     this.driveFeedforward = driveFeedForward;
     this.steeringFeedforward = steeringFeedForward;
-    
 
     double scaleFactor = Constants.SCALE_FACTOR;
 
@@ -228,8 +226,9 @@ public enum SwerveDriveParameters {
    * @param wheelDistanceY  The distance between the wheels along the Y axis in
    *                        meters
    * @param swerveModule    The swerve module used by the robot.
-   * @param driveMotor          The motor used by swerve module drive on the robot.
-   * @param steeringMotor       The motor used by the swerve module steering on the robot.
+   * @param driveMotor      The motor used by swerve module drive on the robot.
+   * @param steeringMotor   The motor used by the swerve module steering on the
+   *                        robot.
    * @param motorIds        An array containing the CAN IDs of the swerve module
    *                        drive motors in the order front left drive and
    *                        steering, front right drive and steering, back left
@@ -262,7 +261,7 @@ public enum SwerveDriveParameters {
         motorIds,
         angleEncoderIds,
         angleOffset,
-        
+
         new CalculatedFeedforwardConstants(
             drivekS,
             () -> swerveModule.calculateMaxDriveSpeed(driveMotor),
@@ -291,7 +290,6 @@ public enum SwerveDriveParameters {
     return this.maxRotationalSpeed;
   }
 
-
   /**
    * Returns the maximum rotational acceleration of the robot in rad/s^2.
    * 
@@ -306,11 +304,11 @@ public enum SwerveDriveParameters {
    * 
    * @return The wheel base radius in meters.
    */
-  public double getWheelBaseRadius(){
-    double halfWheelDistanceX = wheelDistanceX/2;
-    double halfWheelDistanceY = wheelDistanceY/2;
+  public double getWheelBaseRadius() {
+    double halfWheelDistanceX = wheelDistanceX / 2;
+    double halfWheelDistanceY = wheelDistanceY / 2;
 
-    return Math.sqrt(halfWheelDistanceX*halfWheelDistanceX +halfWheelDistanceY*halfWheelDistanceY);
+    return Math.sqrt(halfWheelDistanceX * halfWheelDistanceX + halfWheelDistanceY * halfWheelDistanceY);
   }
 
   /**
@@ -414,9 +412,9 @@ public enum SwerveDriveParameters {
    * 
    * @return the angle offsets for the specified module.
    */
-   public double getAngleOffset(SwerveAngleEncoder angleEncoder) {
+  public double getAngleOffset(SwerveAngleEncoder angleEncoder) {
     return this.angleOffset[angleEncoder.getIndex()];
-   }
+  }
 
   /**
    * Returns the maximum drive speed in m/s of a swerve module.
@@ -573,5 +571,14 @@ public enum SwerveDriveParameters {
    */
   public TrapezoidProfile.Constraints getSteeringConstraints() {
     return steeringConstraints;
+  }
+
+  /**
+   * Returns true if the steering motor is inverted.
+   * 
+   * @return Whether the steering motor is inverted.
+   */
+  public boolean isSteeringInverted() {
+    return swerveModule.isSteeringInverted();
   }
 }

@@ -161,28 +161,30 @@ public class SwerveSubsystem extends SubsystemBase {
 
     driveMotor.setNeutralMode(NeutralModeValue.Brake);
     steeringMotor.setIdleMode(IdleMode.kBrake);
+    steeringMotor.setInverted(PARAMETERS.getValue().isSteeringInverted());
 
     CANcoderConfigurator wheelAngleConfigurator = wheelAngle.getConfigurator();
     CANcoderConfiguration wheelAngleConfig = new CANcoderConfiguration();
 
     wheelAngleConfig.MagnetSensor.AbsoluteSensorRange = AbsoluteSensorRangeValue.Signed_PlusMinusHalf;
-    wheelAngleConfig.MagnetSensor.MagnetOffset = angleOffset/360.0;
+    wheelAngleConfig.MagnetSensor.MagnetOffset = angleOffset / 360.0;
     wheelAngleConfigurator.apply(wheelAngleConfig);
 
-    final double metersPerRotation = (PARAMETERS.getValue().getWheelDiameter() * Math.PI) / PARAMETERS.getValue().getDriveGearRatio();
-    
+    final double metersPerRotation = (PARAMETERS.getValue().getWheelDiameter() * Math.PI)
+        / PARAMETERS.getValue().getDriveGearRatio();
+
     StatusSignal<Double> drivePosition = driveMotor.getPosition();
     StatusSignal<Double> driveVelocity = driveMotor.getVelocity();
     StatusSignal<Double> wheelOrientation = wheelAngle.getAbsolutePosition();
     StatusSignal<Double> angularVelocity = wheelAngle.getVelocity();
-    
+
     return new SwerveModule(
         PARAMETERS.getValue(),
         driveMotor,
         () -> drivePosition.refresh().getValueAsDouble() * metersPerRotation,
         () -> driveVelocity.refresh().getValueAsDouble() * metersPerRotation,
         steeringMotor,
-        () -> Rotation2d.fromDegrees(wheelOrientation.refresh().getValueAsDouble()*360.0),
+        () -> Rotation2d.fromDegrees(wheelOrientation.refresh().getValueAsDouble() * 360.0),
         () -> Math.toRadians(angularVelocity.refresh().getValueAsDouble()),
         name);
   }
