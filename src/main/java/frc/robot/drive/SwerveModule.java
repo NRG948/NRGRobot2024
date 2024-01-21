@@ -70,10 +70,14 @@ public class SwerveModule {
   private SwerveModulePosition position;
   private SwerveModuleVelocities velocities;
 
-  private DoubleLogEntry driveSpeedLog;
-  private DoubleLogEntry positionLog;
-  private DoubleLogEntry wheelAngleLog;
-  private DoubleLogEntry wheelAngleVelocityLog;
+  private final DoubleLogEntry driveSpeedLog;
+  private final DoubleLogEntry positionLog;
+  private final DoubleLogEntry wheelAngleLog;
+  private final DoubleLogEntry wheelAngleVelocityLog;
+  private final DoubleLogEntry stateVelocityLog;
+  private final DoubleLogEntry stateWheelAngleLog;
+  private final DoubleLogEntry driveVoltageLog;
+  private final DoubleLogEntry steeringVoltageLog;
 
   // Simulation support.
   private double simVelocity;
@@ -122,6 +126,10 @@ public class SwerveModule {
     this.positionLog = new DoubleLogEntry(DataLogManager.getLog(), String.format("/SwerveModule/%s/position", name));
     this.wheelAngleLog = new DoubleLogEntry(DataLogManager.getLog(), String.format("/SwerveModule/%s/wheelAngle", name));
     this.wheelAngleVelocityLog = new DoubleLogEntry(DataLogManager.getLog(), String.format("/SwerveModule/%s/wheelAngleVelocity", name));
+    this.stateVelocityLog = new DoubleLogEntry(DataLogManager.getLog(), String.format("/SwerveModule/%s/stateVelocity", name));
+    this.stateWheelAngleLog = new DoubleLogEntry(DataLogManager.getLog(), String.format("/SwerveModule/%s/stateWheelAngle", name));
+    this.driveVoltageLog = new DoubleLogEntry(DataLogManager.getLog(), String.format("/SwerveModule/%s/driveVoltage", name));
+    this.steeringVoltageLog = new DoubleLogEntry(DataLogManager.getLog(), String.format("SwerveModule/%s/steeringVoltage", name));
     initializeSuppliedState();
 
     this.driveFeedForward = new SimpleMotorFeedforward(
@@ -131,7 +139,7 @@ public class SwerveModule {
 
     this.drivePID = new PIDController(0, 0, 0.0);
 
-    this.steeringPID = new ProfiledPIDController(0, 0, 0.0, parameters.getSteeringConstraints());
+    this.steeringPID = new ProfiledPIDController(3.5, 0, 0.0, parameters.getSteeringConstraints());
     this.steeringPID.enableContinuousInput(-Math.PI, Math.PI);
     this.steeringPID.setTolerance(Math.toRadians(1.0));
     this.steeringPID.reset(getPosition().angle.getRadians());
@@ -185,6 +193,9 @@ public class SwerveModule {
     Rotation2d currentAngle = getWheelRotation2d();
     newState = SwerveModuleState.optimize(newState, currentAngle);
 
+    stateVelocityLog.append(newState.speedMetersPerSecond);
+    stateWheelAngleLog.append(newState.angle.getDegrees());
+
     // Calculate the drive motor voltage using PID and FeedForward
     double driveOutput = drivePID.calculate(state.speedMetersPerSecond, newState.speedMetersPerSecond);
     double driveFeedForward = this.driveFeedForward.calculate(newState.speedMetersPerSecond);
@@ -221,6 +232,8 @@ public class SwerveModule {
   public void setMotorVoltages(double driveVoltage, double steeringVoltage) {
     this.driveMotor.setVoltage(driveVoltage);
     this.steeringMotor.setVoltage(steeringVoltage);
+    this.driveVoltageLog.append(driveVoltage);
+    this.steeringVoltageLog.append(steeringVoltage);
   }
 
 
