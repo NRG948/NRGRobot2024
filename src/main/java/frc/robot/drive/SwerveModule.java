@@ -131,7 +131,7 @@ public class SwerveModule {
 
     this.drivePID = new PIDController(0, 0, 0.0);
 
-    this.steeringPID = new ProfiledPIDController(7.0, 0, 0.0, parameters.getSteeringConstraints());
+    this.steeringPID = new ProfiledPIDController(0, 0, 0.0, parameters.getSteeringConstraints());
     this.steeringPID.enableContinuousInput(-Math.PI, Math.PI);
     this.steeringPID.setTolerance(Math.toRadians(1.0));
     this.steeringPID.reset(getPosition().angle.getRadians());
@@ -328,6 +328,8 @@ public class SwerveModule {
         .withPosition(0, 0);
     translationLayout.addDouble("Velocity", () -> getState().speedMetersPerSecond)
         .withPosition(0, 1);
+    translationLayout.addDouble("Angular Velocity", () -> getVelocities().steeringVelocity)
+        .withPosition(0, 2);
 
     return moduleLayout;
   }
