@@ -62,7 +62,19 @@ public enum SwerveDriveParameters {
       new int[] { 31, 32, 33, 34 }, // CANCoder CAN IDs
       new double[] { 186.5, 69.61, 172.62, 21.27 },
       0.15,
-      0.15); // changed from 0.15
+      0.15),
+  PracticeBase2024Characterized(
+      24.2,
+      Units.inchesToMeters(22.55),
+      Units.inchesToMeters(22.55),
+      MK4IFast,
+      Falcon500,
+      NeoV1_1,
+      new int[] { 6, 7, 19, 18, 8, 9, 13, 14 }, // drive, steer motor controller CAN IDs
+      new int[] { 31, 32, 33, 34 }, // CANCoder CAN IDs
+      new double[] { 186.5, 69.61, 172.62, 21.27 },
+      new FeedforwardConstants(0.14566, 2.3072, 0.0393),
+      new FeedforwardConstants(0.11411975, 157.9575, 10.1638)); // TODO: Redo characterization 
 
   public static class Constants {
     /**
