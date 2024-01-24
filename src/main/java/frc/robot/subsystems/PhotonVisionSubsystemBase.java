@@ -7,6 +7,7 @@ package frc.robot.subsystems;
 import java.util.List;
 
 import org.photonvision.PhotonCamera;
+import org.photonvision.targeting.PNPResult;
 import org.photonvision.targeting.PhotonPipelineResult;
 import org.photonvision.targeting.PhotonTrackedTarget;
 
@@ -68,7 +69,7 @@ public abstract class PhotonVisionSubsystemBase extends SubsystemBase {
    * Updates the pose estimate based on vision information using the expected
    * target pose.
    * 
-   * @param estimator  The pose estimator.
+   * @param estimator The pose estimator.
    */
   public abstract void updatePoseEstimate(SwerveDrivePoseEstimator estimator);
 
@@ -151,5 +152,9 @@ public abstract class PhotonVisionSubsystemBase extends SubsystemBase {
    */
   public List<PhotonTrackedTarget> getTargets() {
     return result.getTargets();
+  }
+
+  public PNPResult getEstimatedPose() {
+    return result.getMultiTagResult().estimatedPose;
   }
 }
