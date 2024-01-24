@@ -192,6 +192,7 @@ public class SwerveModule {
     // Optimize the state to avoid spinning further than 90 degrees
     Rotation2d currentAngle = getWheelRotation2d();
     newState = SwerveModuleState.optimize(newState, currentAngle);
+    newState.speedMetersPerSecond *= newState.angle.minus(currentAngle).getCos();
 
     stateVelocityLog.append(newState.speedMetersPerSecond);
     stateWheelAngleLog.append(newState.angle.getDegrees());
