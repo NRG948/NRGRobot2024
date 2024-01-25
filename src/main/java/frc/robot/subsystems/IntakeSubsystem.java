@@ -18,7 +18,7 @@ import frc.robot.Constants.RobotConstants.CAN;
 public class IntakeSubsystem extends SubsystemBase {
   private static final double INTAKE_POWER = 0.3; // moving this
 
-  private final CANSparkFlex motor = new CANSparkFlex(CAN.SparkFlex.INTAKE_PORT, MotorType.kBrushless);
+  private final CANSparkFlex motor = new CANSparkFlex(CAN.SparkMax.INTAKE_PORT, MotorType.kBrushless);
   private boolean isEnabled = false;
   private double motorPower;
 
