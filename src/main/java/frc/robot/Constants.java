@@ -50,6 +50,7 @@ public final class Constants {
      */
     public static class CAN {
       public static class SparkMax {
+        public static final int SHOOTER_PORT = 16;
         public static final int INTAKE_PORT = 17; // TODO assign actual port
         public static final int ARM_LEFT_PORT = 18; // TODO assign actual port
         public static final int ARM_RIGHT_PORT = 19; // TODO assign actual port
@@ -71,10 +72,6 @@ public final class Constants {
     }
   }
 
-  public final class ManipulatorConstants {
-      public static final int kShooterMotorPort = 11;
-  }
-  
     
   
 

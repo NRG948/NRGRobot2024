@@ -1,9 +1,6 @@
 
 package frc.robot.subsystems;
 
-import java.util.ArrayList;
-import java.util.EnumSet;
-
 import com.revrobotics.CANSparkBase.IdleMode;
 import com.revrobotics.CANSparkFlex;
 
@@ -14,13 +11,9 @@ import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.controller.SimpleMotorFeedforward;
 import edu.wpi.first.util.datalog.BooleanLogEntry;
 import edu.wpi.first.util.datalog.DoubleLogEntry;
-import edu.wpi.first.wpilibj.CAN;
 import edu.wpi.first.wpilibj.DataLogManager;
-import edu.wpi.first.wpilibj.motorcontrol.PWMSparkFlex;
-import edu.wpi.first.wpilibj.motorcontrol.PWMSparkMax;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants.RobotConstants;
-import frc.robot.Constants.RobotConstants.ManipulatorConstants;
 import frc.robot.parameters.MotorParameters;
 
 public class ShooterSubsystem extends SubsystemBase {
@@ -34,7 +27,7 @@ public class ShooterSubsystem extends SubsystemBase {
     SHOOTING(69); // TODO: Get Real RPM
 
     private final double rpm;
-    
+
     GoalShooterRPM(double rpm) {
       this.rpm = rpm;
     }
@@ -44,8 +37,8 @@ public class ShooterSubsystem extends SubsystemBase {
     }
   }
 
-  private final CANSparkFlex shooterMotor = new CANSparkFlex(ManipulatorConstants.kShooterMotorPort,
-      MotorType.kBrushless);
+  private final CANSparkFlex shooterMotor = new CANSparkFlex(
+      RobotConstants.CAN.SparkMax.SHOOTER_PORT, MotorType.kBrushless);
 
   private double currentShooterRPM;
   private GoalShooterRPM currentGoalRPM = GoalShooterRPM.STOP;
@@ -60,7 +53,7 @@ public class ShooterSubsystem extends SubsystemBase {
   private BooleanLogEntry enabledLogger = new BooleanLogEntry(DataLogManager.getLog(), "/Shooter/Enabled");
   private DoubleLogEntry goalRPMLogger = new DoubleLogEntry(DataLogManager.getLog(), "/Shooter/Goal RPM");
   private DoubleLogEntry shooterRPMLogger = new DoubleLogEntry(DataLogManager.getLog(), "/Shooter/Shooter RPM");
-  
+
   /** Creates ShooterSubsystem. */
   public ShooterSubsystem() {
     shooterMotor.setIdleMode(IdleMode.kCoast);
