@@ -49,8 +49,10 @@ public final class Constants {
      * CAN Ids
      */
     public static class CAN {
-      public static class SparkFlex {
-        public static final int INTAKE_PORT = 17; // Port Number Still Unknown (to be replaced)
+      public static class SparkMax {
+        public static final int INTAKE_PORT = 17; // TODO assign actual port
+        public static final int ARM_LEFT_PORT = 18; // TODO assign actual port
+        public static final int ARM_RIGHT_PORT = 19; // TODO assign actual port
       }
     }
 
