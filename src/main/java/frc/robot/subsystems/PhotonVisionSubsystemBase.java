@@ -23,7 +23,7 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
  */
 public abstract class PhotonVisionSubsystemBase extends SubsystemBase {
 
-  private final PhotonCamera camera;
+  protected final PhotonCamera camera;
   private final Transform3d cameraToRobot;
   private final Transform3d robotToCamera;
   private PhotonPipelineResult result = new PhotonPipelineResult();
@@ -65,12 +65,13 @@ public abstract class PhotonVisionSubsystemBase extends SubsystemBase {
   }
 
   /**
-   * Updates the pose estimate based on vision information using the expected
-   * target pose.
+   * Returns the latest vision result.
    * 
-   * @param estimator  The pose estimator.
+   * @return The latest vision result.
    */
-  public abstract void updatePoseEstimate(SwerveDrivePoseEstimator estimator);
+  protected PhotonPipelineResult getLatestResult() {
+    return result;
+  }
 
   /**
    * Returns the transform from the camera to center of the robot.

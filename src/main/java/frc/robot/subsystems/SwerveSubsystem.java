@@ -22,6 +22,7 @@ import com.revrobotics.CANSparkMax;
 import com.revrobotics.CANSparkBase.IdleMode;
 import com.revrobotics.CANSparkLowLevel.MotorType;
 
+import edu.wpi.first.math.Matrix;
 import edu.wpi.first.math.controller.HolonomicDriveController;
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.controller.ProfiledPIDController;
@@ -35,6 +36,8 @@ import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
 import edu.wpi.first.math.kinematics.SwerveModulePosition;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
+import edu.wpi.first.math.numbers.N1;
+import edu.wpi.first.math.numbers.N3;
 import edu.wpi.first.math.trajectory.TrapezoidProfile;
 import edu.wpi.first.math.trajectory.constraint.SwerveDriveKinematicsConstraint;
 import edu.wpi.first.util.datalog.DoubleLogEntry;
@@ -217,6 +220,16 @@ public class SwerveSubsystem extends SubsystemBase {
   private void updateSensorState() {
     rawOrientation = !isSimulation ? Rotation2d.fromDegrees(-ahrs.getAngle()) : simOrientation;
     rawOrientationLog.append(rawOrientation.getDegrees());
+  }
+
+  /** See {@link SwerveDrivePoseEstimator#addVisionMeasurement(Pose2d, double)} */
+  public void addVisionMeasurement(Pose2d visionMeasurement, double timestamp) {
+    odometry.addVisionMeasurement(visionMeasurement, timestamp);
+  }
+
+  /** See {@link SwerveDrivePoseEstimator#addVisionMeasurement(Pose2d, double, Matrix)} */
+  public void addVisionMeasurement(Pose2d visionMeasurment, double timestamp, Matrix<N3, N1> stdDevs){
+    odometry.addVisionMeasurement(visionMeasurment, timestamp, stdDevs);
   }
 
   /**
