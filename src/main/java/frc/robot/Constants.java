@@ -4,7 +4,9 @@
 
 package frc.robot;
 
+import edu.wpi.first.math.geometry.Rotation3d;
 import edu.wpi.first.math.geometry.Transform3d;
+import edu.wpi.first.math.geometry.Translation3d;
 import edu.wpi.first.math.util.Units;
 
 /**
@@ -37,7 +39,10 @@ public final class Constants {
     public static final double WHEEL_DIAMETER_INCHES = 4.0;
 
     /** 3d transforms that moves the camera to the center of the robot. */
-    public static final Transform3d APRILTAG_CAMERA_TO_ROBOT = new Transform3d();
+    public static final Transform3d APRILTAG_CAMERA_TO_ROBOT = new Transform3d(
+      new Translation3d(Units.inchesToMeters(-3.5), Units.inchesToMeters(-15.25), Units.inchesToMeters(-23)),
+      new Rotation3d(0, Math.toRadians(13.3), Math.toRadians(180))
+    );
 
     /** Distance robot should be from speaker to score. */
     public static final double SCORING_DISTANCE_FROM_SPEAKER = Units.inchesToMeters(100);

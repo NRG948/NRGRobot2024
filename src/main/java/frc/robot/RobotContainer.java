@@ -85,6 +85,10 @@ public class RobotContainer {
     return m_autonomous.getAutonomousCommand();
   }
 
+  public void periodic(){
+    m_subsystems.periodic();
+  }
+
   public void initShuffleboard(){
     ShuffleboardTab operatorTab = Shuffleboard.getTab("Operator");
     
