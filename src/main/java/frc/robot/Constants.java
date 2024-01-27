@@ -33,6 +33,11 @@ public final class Constants {
      */
     public static final double WHEEL_DIAMETER_INCHES = 4.0;
 
+     /**
+     * Field of View of Camera in degrees.
+     */
+    public static final double CAMERA_FOV = 70;
+    
     public static final Transform3d APRILTAG_CAMERA_TO_ROBOT = new Transform3d();
     
   /**
