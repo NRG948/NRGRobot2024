@@ -31,31 +31,53 @@ public final class Constants {
      */
     public static final double MAX_BATTERY_VOLTAGE = 12.0;
 
+    public static final double ROBOT_LENGTH = Units.inchesToMeters(39);
+
     /**
      * Wheel diameter.
      */
     public static final double WHEEL_DIAMETER_INCHES = 4.0;
 
+    /** Distance robot should be from speaker to score. */
+    public static final double SCORING_DISTANCE_FROM_SPEAKER = Units.inchesToMeters(100);
+
+    /** Distance robot should be from amp to score. */
+    public static final double SCORING_DISTANCE_FROM_AMP = Units.inchesToMeters(20);
+    
     /** 3d transforms that moves the camera to the center of the robot. */
     public static final Transform3d APRILTAG_CAMERA_TO_ROBOT = new Transform3d(
       new Translation3d(Units.inchesToMeters(-3.5), Units.inchesToMeters(-14.75), Units.inchesToMeters(-23.25)),
       new Rotation3d(0, Math.toRadians(13.3), Math.toRadians(180))
     );
- 
-  /**
-   * Defines operator (i.e. driver and manipulator) constants.
-   */
-  public static class OperatorConstants {
 
     /**
-     * Defines the port numbers of the Xbox controllers.
+     * CAN Ids
      */
-    public static class XboxControllerPort {
+    public static class CAN {
+      public static class SparkMax {
+        public static final int SHOOTER_PORT = 16;
+        public static final int INTAKE_PORT = 17; // TODO assign actual port
+        public static final int ARM_LEFT_PORT = 18; // TODO assign actual port
+        public static final int ARM_RIGHT_PORT = 19; // TODO assign actual port
+      }
+    }
 
-      public static final int DRIVER = 0;
-      public static final int MANIPULATOR = 1;
+    /**
+     * Defines operator (i.e. driver and manipulator) constants.
+     */
+    public static class OperatorConstants {
 
+      /**
+       * Defines the port numbers of the Xbox controllers.
+       */
+      public static class XboxControllerPort {
+        public static final int DRIVER = 0;
+        public static final int MANIPULATOR = 1;
+      }
     }
   }
-}
+
+    
+  
+
 }

@@ -7,6 +7,7 @@ package frc.robot.subsystems;
 import java.util.ArrayList;
 import java.util.Map;
 
+import com.ctre.phoenix6.StatusSignal;
 import com.ctre.phoenix6.configs.CANcoderConfiguration;
 import com.ctre.phoenix6.configs.CANcoderConfigurator;
 import com.ctre.phoenix6.hardware.CANcoder;
@@ -21,6 +22,7 @@ import com.revrobotics.CANSparkMax;
 import com.revrobotics.CANSparkBase.IdleMode;
 import com.revrobotics.CANSparkLowLevel.MotorType;
 
+import edu.wpi.first.math.Matrix;
 import edu.wpi.first.math.controller.HolonomicDriveController;
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.controller.ProfiledPIDController;
@@ -34,6 +36,8 @@ import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
 import edu.wpi.first.math.kinematics.SwerveModulePosition;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
+import edu.wpi.first.math.numbers.N1;
+import edu.wpi.first.math.numbers.N3;
 import edu.wpi.first.math.trajectory.TrapezoidProfile;
 import edu.wpi.first.math.trajectory.constraint.SwerveDriveKinematicsConstraint;
 import edu.wpi.first.util.datalog.DoubleLogEntry;
@@ -60,8 +64,8 @@ import frc.robot.util.SwerveModuleVoltages;
 @RobotPreferencesLayout(groupName = "Drive", column = 0, row = 1, width = 2, height = 3)
 public class SwerveSubsystem extends SubsystemBase {
   @RobotPreferencesValue
-  public static RobotPreferences.EnumValue<SwerveDriveParameters> PARAMETERS = 
-  new RobotPreferences.EnumValue<SwerveDriveParameters>("Drive", "Robot Base", SwerveDriveParameters.PracticeBase2024);
+  public static RobotPreferences.EnumValue<SwerveDriveParameters> PARAMETERS = new RobotPreferences.EnumValue<SwerveDriveParameters>(
+      "Drive", "Robot Base", SwerveDriveParameters.PracticeBase2024);
 
   public static boolean ENABLE_DRIVE_TAB = true;
 
@@ -103,13 +107,17 @@ public class SwerveSubsystem extends SubsystemBase {
       PARAMETERS.getValue().getAngleEncoderId(SwerveAngleEncoder.BackRight));
 
   private final SwerveModule frontLeftModule = createSwerveModule(
-      frontLeftDriveMotor, frontLeftSteeringMotor, frontLeftAngle, PARAMETERS.getValue().getAngleOffset(SwerveAngleEncoder.FrontLeft), "Front Left");
+      frontLeftDriveMotor, frontLeftSteeringMotor, frontLeftAngle,
+      PARAMETERS.getValue().getAngleOffset(SwerveAngleEncoder.FrontLeft), "Front Left");
   private final SwerveModule frontRightModule = createSwerveModule(
-      frontRightDriveMotor, frontRightSteeringMotor, frontRightAngle,PARAMETERS.getValue().getAngleOffset(SwerveAngleEncoder.FrontRight),  "Front Right");
+      frontRightDriveMotor, frontRightSteeringMotor, frontRightAngle,
+      PARAMETERS.getValue().getAngleOffset(SwerveAngleEncoder.FrontRight), "Front Right");
   private final SwerveModule backLeftModule = createSwerveModule(
-      backLeftDriveMotor, backLeftSteeringMotor, backLeftAngle, PARAMETERS.getValue().getAngleOffset(SwerveAngleEncoder.BackLeft), "Back Left");
+      backLeftDriveMotor, backLeftSteeringMotor, backLeftAngle,
+      PARAMETERS.getValue().getAngleOffset(SwerveAngleEncoder.BackLeft), "Back Left");
   private final SwerveModule backRightModule = createSwerveModule(
-      backRightDriveMotor, backRightSteeringMotor, backRightAngle, PARAMETERS.getValue().getAngleOffset(SwerveAngleEncoder.BackRight), "Back Right");
+      backRightDriveMotor, backRightSteeringMotor, backRightAngle,
+      PARAMETERS.getValue().getAngleOffset(SwerveAngleEncoder.BackRight), "Back Right");
 
   private final SwerveModule[] modules = { frontLeftModule, frontRightModule, backLeftModule, backRightModule };
 
@@ -124,18 +132,11 @@ public class SwerveSubsystem extends SubsystemBase {
   // The current sensor state updated by the periodic method.
   private Rotation2d rawOrientation;
   private Rotation2d rawOrientationOffset = new Rotation2d();
-  private Rotation2d rawTilt;
-  private Rotation2d tiltOffset;
-  private double tiltVelocity;
-  private boolean wasNavXCalibrating;
 
   private DoubleLogEntry rawOrientationLog = new DoubleLogEntry(DataLogManager.getLog(),
       "/SwerveSubsystem/rawOrientation");
   private DoubleLogEntry rawOrientationOffsetLog = new DoubleLogEntry(DataLogManager.getLog(),
       "/SwerveSubsystem/rawOrientationOffset");
-  private DoubleLogEntry rawTiltLog = new DoubleLogEntry(DataLogManager.getLog(), "/SwerveSubsystem/rawTilt");
-  private DoubleLogEntry tiltOffsetLog = new DoubleLogEntry(DataLogManager.getLog(), "/SwerveSubsystem/tiltOffset");
-  private DoubleLogEntry tiltVelocityLog = new DoubleLogEntry(DataLogManager.getLog(), "/SwerveSubsystem/tiltVelocity");
   private DoubleLogEntry poseXLog = new DoubleLogEntry(DataLogManager.getLog(), "/SwerveSubsystem/Pose X");
   private DoubleLogEntry poseYLog = new DoubleLogEntry(DataLogManager.getLog(), "/SwerveSubsystem/Pose Y");
   private DoubleLogEntry poseAngleLog = new DoubleLogEntry(DataLogManager.getLog(), "/SwerveSubsystem/Pose Angle");
@@ -163,26 +164,31 @@ public class SwerveSubsystem extends SubsystemBase {
 
     driveMotor.setNeutralMode(NeutralModeValue.Brake);
     steeringMotor.setIdleMode(IdleMode.kBrake);
+    steeringMotor.setInverted(PARAMETERS.getValue().isSteeringInverted());
 
     CANcoderConfigurator wheelAngleConfigurator = wheelAngle.getConfigurator();
     CANcoderConfiguration wheelAngleConfig = new CANcoderConfiguration();
 
     wheelAngleConfig.MagnetSensor.AbsoluteSensorRange = AbsoluteSensorRangeValue.Signed_PlusMinusHalf;
-    wheelAngleConfig.MagnetSensor.MagnetOffset = angleOffset/360.0;
+    wheelAngleConfig.MagnetSensor.MagnetOffset = angleOffset / 360.0;
     wheelAngleConfigurator.apply(wheelAngleConfig);
 
-    final double metersPerRotation = (PARAMETERS.getValue().getWheelDiameter() * Math.PI) / PARAMETERS.getValue().getDriveGearRatio();
+    final double metersPerRotation = (PARAMETERS.getValue().getWheelDiameter() * Math.PI)
+        / PARAMETERS.getValue().getDriveGearRatio();
+
+    StatusSignal<Double> drivePosition = driveMotor.getPosition();
+    StatusSignal<Double> driveVelocity = driveMotor.getVelocity();
+    StatusSignal<Double> wheelOrientation = wheelAngle.getAbsolutePosition();
+    StatusSignal<Double> angularVelocity = wheelAngle.getVelocity();
 
     return new SwerveModule(
         PARAMETERS.getValue(),
         driveMotor,
-        () -> driveMotor.getPosition().refresh().getValueAsDouble() * metersPerRotation,
-        // The TalonFX reports the velocity in pulses per 100ms, so we need to
-        // multiply by 10 to convert to pulses per second.
-        () -> driveMotor.getVelocity().refresh().getValueAsDouble() * metersPerRotation,
+        () -> drivePosition.refresh().getValueAsDouble() * metersPerRotation,
+        () -> driveVelocity.refresh().getValueAsDouble() * metersPerRotation,
         steeringMotor,
-        () -> Rotation2d.fromDegrees(wheelAngle.getAbsolutePosition().refresh().getValueAsDouble()*360.0),
-        () -> Math.toRadians(wheelAngle.getVelocity().refresh().getValueAsDouble()),
+        () -> Rotation2d.fromDegrees(wheelOrientation.refresh().getValueAsDouble() * 360.0),
+        () -> Math.toRadians(angularVelocity.refresh().getValueAsDouble()),
         name);
   }
 
@@ -202,10 +208,7 @@ public class SwerveSubsystem extends SubsystemBase {
    */
   private void initializeSensorState() {
     ahrs.reset();
-    wasNavXCalibrating = true;
-
     updateSensorState();
-    tiltOffset = Rotation2d.fromDegrees(-3.5); // For 2022 robot
   }
 
   /**
@@ -216,21 +219,17 @@ public class SwerveSubsystem extends SubsystemBase {
    */
   private void updateSensorState() {
     rawOrientation = !isSimulation ? Rotation2d.fromDegrees(-ahrs.getAngle()) : simOrientation;
-    rawTilt = Rotation2d.fromDegrees(ahrs.getRoll());
-
-    if (wasNavXCalibrating && !ahrs.isCalibrating()) {
-      tiltOffset = rawTilt;
-      System.out.println("Tilt offset: " + tiltOffset.getDegrees());
-      wasNavXCalibrating = false;
-      tiltOffsetLog.append(tiltOffset.getDegrees());
-    }
-
-    tiltVelocity = ahrs.getRawGyroY();
-
     rawOrientationLog.append(rawOrientation.getDegrees());
-    rawTiltLog.append(rawTilt.getDegrees());
-    tiltVelocityLog.append(tiltVelocity);
+  }
 
+  /** See {@link SwerveDrivePoseEstimator#addVisionMeasurement(Pose2d, double)} */
+  public void addVisionMeasurement(Pose2d visionMeasurement, double timestamp) {
+    odometry.addVisionMeasurement(visionMeasurement, timestamp);
+  }
+
+  /** See {@link SwerveDrivePoseEstimator#addVisionMeasurement(Pose2d, double, Matrix)} */
+  public void addVisionMeasurement(Pose2d visionMeasurment, double timestamp, Matrix<N3, N1> stdDevs){
+    odometry.addVisionMeasurement(visionMeasurment, timestamp, stdDevs);
   }
 
   /**
@@ -293,12 +292,12 @@ public class SwerveSubsystem extends SubsystemBase {
     return PARAMETERS.getValue().getRotationalConstraints();
   }
 
-   /**
+  /**
    * Return the wheel base radius in meters.
    * 
    * @return The wheel base radius in meters.
    */
-  public double getWheelBaseRadius(){
+  public double getWheelBaseRadius() {
     return PARAMETERS.getValue().getWheelBaseRadius();
   }
 
@@ -336,21 +335,8 @@ public class SwerveSubsystem extends SubsystemBase {
    * 
    * @param speeds The chassis speeds.
    */
-
   public void setChassisSpeeds(ChassisSpeeds speeds) {
-    setChassisSpeeds(speeds, false);
-  }
-
-  /**
-   * Sets the current module's states based on the chassis speed.
-   * 
-   * @param speeds           The chassis speeds.
-   * @param adjustForGravity If true, use the tilt angle to adjust feedforward for
-   *                         the effects of gravity.
-   * @param tilt             The robot base tilt angle.
-   */
-  public void setChassisSpeeds(ChassisSpeeds speeds, boolean adjustForGravity) {
-    drivetrain.setChassisSpeeds(speeds, adjustForGravity, getTilt());
+    drivetrain.setChassisSpeeds(speeds);
   }
 
   /**
@@ -387,11 +373,7 @@ public class SwerveSubsystem extends SubsystemBase {
    */
 
   public void setModuleStates(SwerveModuleState[] states) {
-    setModuleStates(states, false);
-  }
-
-  public void setModuleStates(SwerveModuleState[] states, boolean adjustForGravity) {
-    drivetrain.setModuleStates(states, adjustForGravity, getTilt());
+    setModuleStates(states);
   }
 
   /**
@@ -471,25 +453,6 @@ public class SwerveSubsystem extends SubsystemBase {
     return rawOrientation.plus(rawOrientationOffset);
   }
 
-  /**
-   * Returns the corrected tilt of the robot as a {@link Rotation2d} object.
-   * 
-   * @return Gets the tilt of the robot (positive is nose up, negative is nose
-   *         down).
-   */
-  public Rotation2d getTilt() {
-    return rawTilt.minus(tiltOffset);
-  }
-
-  /**
-   * Returns the tilt velocity of the robot in degrees per second per second.
-   * 
-   * @return Gets the tilt velocity of the robot.
-   */
-  public double getTiltVelocity() {
-    return tiltVelocity;
-  }
-
   @Override
   public void periodic() {
     // Read sensors to update subsystem state.
@@ -562,10 +525,6 @@ public class SwerveSubsystem extends SubsystemBase {
           .withPosition(0, 0);
       positionLayout.addDouble("Y", () -> odometry.getEstimatedPosition().getY())
           .withPosition(1, 0);
-      positionLayout.addDouble("Tilt", () -> getTilt().getDegrees())
-          .withPosition(2, 0);
-      positionLayout.addDouble("Tilt Velocity", () -> getTiltVelocity())
-          .withPosition(3, 0);
     }
 
     if (ENABLE_FIELD_TAB) {

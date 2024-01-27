@@ -21,36 +21,36 @@ import frc.robot.Constants;
  * FRC Team 449 - The Blair Robot Project.
  */
 public enum SwerveModuleParameters {
-  
 
   /** An MK4 Swerve Module in the L1 - Standard configuration. */
-  MK4Standard(Units.inchesToMeters(Constants.RobotConstants.WHEEL_DIAMETER_INCHES), 8.14, 12.8),
+  MK4Standard(Units.inchesToMeters(Constants.RobotConstants.WHEEL_DIAMETER_INCHES), 8.14, 12.8, false),
 
   /** An MK4 Swerve Module in the L2 - Fast configuration. */
-  MK4Fast(Units.inchesToMeters(Constants.RobotConstants.WHEEL_DIAMETER_INCHES), 6.75, 12.8),
+  MK4Fast(Units.inchesToMeters(Constants.RobotConstants.WHEEL_DIAMETER_INCHES), 6.75, 12.8, false),
 
   /** An MK4 Swerve Module in the L3 - Very Fast configuration. */
-  MK4VeryFast(Units.inchesToMeters(Constants.RobotConstants.WHEEL_DIAMETER_INCHES), 6.12, 12.8),
+  MK4VeryFast(Units.inchesToMeters(Constants.RobotConstants.WHEEL_DIAMETER_INCHES), 6.12, 12.8, false),
 
   /** An MK4 Swerve Module in the L4 - Too Fast configuration. */
-  MK4TooFast(Units.inchesToMeters(Constants.RobotConstants.WHEEL_DIAMETER_INCHES), 5.14, 12.8),
+  MK4TooFast(Units.inchesToMeters(Constants.RobotConstants.WHEEL_DIAMETER_INCHES), 5.14, 12.8, false),
 
   /** An MK4I Swerve Module in the L1 - Standard configuration. */
-  MK4IStandard(Units.inchesToMeters(Constants.RobotConstants.WHEEL_DIAMETER_INCHES), 8.14, 150.0/7.0),
+  MK4IStandard(Units.inchesToMeters(Constants.RobotConstants.WHEEL_DIAMETER_INCHES), 8.14, 150.0 / 7.0, true),
 
   /** An MK4I Swerve Module in the L2 - Fast configuration. */
-  MK4IFast(Units.inchesToMeters(Constants.RobotConstants.WHEEL_DIAMETER_INCHES), 6.75, 150.0/7.0),
+  MK4IFast(Units.inchesToMeters(Constants.RobotConstants.WHEEL_DIAMETER_INCHES), 6.75, 150.0 / 7.0, true),
 
   /** An MK4I Swerve Module in the L3 - Very Fast configuration. */
-  MK4IVeryFast(Units.inchesToMeters(Constants.RobotConstants.WHEEL_DIAMETER_INCHES), 6.12, 150.0/7.0);
+  MK4IVeryFast(Units.inchesToMeters(Constants.RobotConstants.WHEEL_DIAMETER_INCHES), 6.12, 150.0 / 7.0, true);
 
   /**
    *
    */
-  
+
   private final double wheelDiameter;
   private final double driveGearRatio;
   private final double steeringGearRatio;
+  private final boolean steeringInverted;
 
   /**
    * Constructs an instance of this enum.
@@ -59,10 +59,12 @@ public enum SwerveModuleParameters {
    * @param driveGearRatio    The drive gear ratio.
    * @param steeringGearRatio The steering gear ratio.
    */
-  SwerveModuleParameters(double wheelDiameter, double driveGearRatio, double steeringGearRatio) {
+  SwerveModuleParameters(double wheelDiameter, double driveGearRatio, double steeringGearRatio,
+      boolean steeringInverted) {
     this.wheelDiameter = wheelDiameter;
     this.driveGearRatio = driveGearRatio;
     this.steeringGearRatio = steeringGearRatio;
+    this.steeringInverted = steeringInverted;
   }
 
   /**
@@ -90,6 +92,15 @@ public enum SwerveModuleParameters {
    */
   public double getSteeringGearRatio() {
     return this.steeringGearRatio;
+  }
+
+  /**
+   * Returns true if the steering motor is inverted.
+   * 
+   * @return Whether the steering motor is inverted.
+   */
+  public boolean isSteeringInverted() {
+    return this.steeringInverted;
   }
 
   /**
@@ -149,5 +160,5 @@ public enum SwerveModuleParameters {
   public double calculateMaxSteeringAcceleration(MotorParameters motor, double robotMass) {
     return (2 * 4 * motor.getStallTorque() * this.steeringGearRatio * 2 * Math.PI) / robotMass;
   }
-  
+
 }

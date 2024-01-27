@@ -4,6 +4,7 @@
 
 package frc.robot;
 
+
 import com.nrg948.preferences.RobotPreferences;
 import com.nrg948.preferences.RobotPreferencesLayout;
 
@@ -15,6 +16,7 @@ import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
 import frc.robot.Constants.RobotConstants.OperatorConstants;
 import frc.robot.commands.DriveUsingController;
+import frc.robot.commands.SysID;
 import frc.robot.subsystems.Subsystems;
 
 /**
@@ -70,6 +72,8 @@ public class RobotContainer {
     // pressed,
     // cancelling on release.
     m_driverController.start().onTrue(Commands.runOnce(() -> m_subsystems.drivetrain.resetOrientation(), m_subsystems.drivetrain));
+    m_driverController.back().whileTrue(SysID.getSwerveDriveCharacterizationSequence(m_subsystems));
+    m_driverController.leftBumper().whileTrue(SysID.getSwerveSteeringCharacterizationSequence(m_subsystems));
   }
 
   /**
@@ -79,6 +83,10 @@ public class RobotContainer {
    */
   public Command getAutonomousCommand() {
     return m_autonomous.getAutonomousCommand();
+  }
+
+  public void periodic(){
+    m_subsystems.periodic();
   }
 
   public void initShuffleboard(){
