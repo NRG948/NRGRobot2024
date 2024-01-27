@@ -18,7 +18,7 @@ import frc.robot.Constants.RobotConstants;
 
 public class DriveUsingController extends Command {
   private static final double DEADBAND = 0.05;
-  private static final double kP = 1 / RobotConstants.CAMERA_FOV;
+  private static final double kP = 1.0 / 70; // Camera Field of View is 70 degrees
 
   private final SwerveSubsystem m_drivetrain;
   private final AprilTagSubsystem m_aprilTag;
