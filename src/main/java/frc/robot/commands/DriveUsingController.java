@@ -25,7 +25,7 @@ public class DriveUsingController extends Command {
   private final SwerveSubsystem m_drivetrain;
   private final AprilTagSubsystem m_aprilTag;
   private final CommandXboxController m_xboxController;
-  private ProfiledPIDController m_ProfiledPIDController;
+  private ProfiledPIDController m_profiledPIDController;
 
  
 
@@ -35,12 +35,15 @@ public class DriveUsingController extends Command {
     m_drivetrain = subsystems.drivetrain;
     m_aprilTag = subsystems.aprilTag;
     m_xboxController = xboxController;
-    addRequirements(m_drivetrain, m_aprilTag);
+    addRequirements(m_drivetrain);
   }
 
   // Called when the command is initially scheduled.
   @Override
-  public void initialize() {}
+  public void initialize() {
+    m_profiledPIDController = new ProfiledPIDController(KP, 0, 0, m_drivetrain.getRotationalConstraints());
+    m_profiledPIDController.reset(m_drivetrain.getOrientation().getRadians());
+  }
 
   // Called every time the scheduler runs while the command is scheduled.
   @Override
@@ -66,7 +69,7 @@ public class DriveUsingController extends Command {
     if (optionalTarget.isPresent()) {
       Rotation2d angleToTarget = Rotation2d.fromDegrees(-m_aprilTag.getAngleToBestTarget());
       targetOrientation = targetOrientation.plus(angleToTarget);
-      rSpeed = m_ProfiledPIDController.calculate(currentOrientation.getRadians(), targetOrientation.getRadians());
+      rSpeed = m_profiledPIDController.calculate(currentOrientation.getRadians(), targetOrientation.getRadians());
     } else {
       rSpeed = -m_xboxController.getRightX();
       rSpeed = MathUtil.applyDeadband(rSpeed, DEADBAND) * inputScalar;
