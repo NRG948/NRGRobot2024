@@ -28,6 +28,7 @@ import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardLayout;
 import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
+import edu.wpi.first.wpilibj.DriverStation;
 import frc.robot.Constants.RobotConstants;
 
 /**
@@ -95,6 +96,20 @@ public class AprilTagSubsystem extends PhotonVisionSubsystemBase {
    */
   public Transform3d getCameraToTarget(int id) {
     return getTarget(id).get().getBestCameraToTarget();
+  }
+
+  /**
+   * 
+   * @return apriltagId for speaker center 
+   */
+  public static int getSpeakerCenterApriltagId() {
+    String alliance = DriverStation.getAlliance().toString();
+    if (alliance == "RED") {
+      return 4;
+    }
+    else {
+      return 7;
+    }
   }
 
   /**

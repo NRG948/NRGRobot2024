@@ -54,7 +54,7 @@ public class DriveUsingController extends Command {
 
     Optional<PhotonTrackedTarget> optionalTarget = Optional.empty();
     if (m_xboxController.rightBumper().getAsBoolean()) {
-      optionalTarget = m_aprilTag.getTarget(4); //TODO (AprilTagSubsystem.getSpeakerCenterApriltagId());
+      optionalTarget = m_aprilTag.getTarget(AprilTagSubsystem.getSpeakerCenterApriltagId()); 
     }
 
     if (optionalTarget.isPresent()) {
