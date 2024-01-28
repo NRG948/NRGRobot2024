@@ -9,6 +9,8 @@ import java.util.Optional;
 import org.photonvision.targeting.PhotonTrackedTarget;
 
 import edu.wpi.first.math.MathUtil;
+import edu.wpi.first.math.controller.ProfiledPIDController;
+import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import frc.robot.subsystems.AprilTagSubsystem;
@@ -18,11 +20,12 @@ import frc.robot.Constants.RobotConstants;
 
 public class DriveUsingController extends Command {
   private static final double DEADBAND = 0.05;
-  private static final double kP = 1 / RobotConstants.CAMERA_FOV;
+  private static final double KP = 1 / (RobotConstants.CAMERA_FOV / 2.0);
 
   private final SwerveSubsystem m_drivetrain;
   private final AprilTagSubsystem m_aprilTag;
   private final CommandXboxController m_xboxController;
+  private ProfiledPIDController m_ProfiledPIDController;
 
  
 
@@ -47,6 +50,9 @@ public class DriveUsingController extends Command {
     double ySpeed = -m_xboxController.getLeftX();
     double inputScalar = Math.max(1.0-m_xboxController.getRightTriggerAxis(), 0.15);
 
+    Rotation2d currentOrientation = m_drivetrain.getOrientation();
+    Rotation2d targetOrientation = currentOrientation;
+
     // Applies deadbands to x and y joystick values and multiples all
     // values with inputScalar whihc allows finer driving control.
     xSpeed = MathUtil.applyDeadband(xSpeed, DEADBAND) * inputScalar;
@@ -54,12 +60,13 @@ public class DriveUsingController extends Command {
 
     Optional<PhotonTrackedTarget> optionalTarget = Optional.empty();
     if (m_xboxController.rightBumper().getAsBoolean()) {
-      optionalTarget = m_aprilTag.getTarget(AprilTagSubsystem.getSpeakerCenterApriltagId()); 
+      optionalTarget = m_aprilTag.getTarget(AprilTagSubsystem.getSpeakerCenterAprilTagID()); 
     }
 
     if (optionalTarget.isPresent()) {
-      var angleToTarget = optionalTarget.get().getYaw();
-      rSpeed = angleToTarget * kP;
+      Rotation2d angleToTarget = Rotation2d.fromDegrees(-m_aprilTag.getAngleToBestTarget());
+      targetOrientation = targetOrientation.plus(angleToTarget);
+      rSpeed = m_ProfiledPIDController.calculate(currentOrientation.getRadians(), targetOrientation.getRadians());
     } else {
       rSpeed = -m_xboxController.getRightX();
       rSpeed = MathUtil.applyDeadband(rSpeed, DEADBAND) * inputScalar;
