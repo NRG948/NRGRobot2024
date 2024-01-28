@@ -4,9 +4,11 @@
 
 package frc.robot.subsystems;
 
-import java.io.IOException;
 import java.util.Optional;
 
+import org.photonvision.EstimatedRobotPose;
+import org.photonvision.PhotonPoseEstimator;
+import org.photonvision.PhotonPoseEstimator.PoseStrategy;
 import org.photonvision.targeting.PhotonTrackedTarget;
 
 import com.nrg948.preferences.RobotPreferences;
@@ -18,13 +20,12 @@ import edu.wpi.first.apriltag.AprilTagFields;
 import edu.wpi.first.cscore.HttpCamera;
 import edu.wpi.first.cscore.HttpCamera.HttpCameraKind;
 import edu.wpi.first.cscore.VideoSource;
-import edu.wpi.first.math.estimator.SwerveDrivePoseEstimator;
-import edu.wpi.first.math.geometry.Pose3d;
-import edu.wpi.first.math.geometry.Rotation3d;
+import edu.wpi.first.math.Matrix;
+import edu.wpi.first.math.VecBuilder;
+import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Transform3d;
-import edu.wpi.first.math.geometry.Translation3d;
-import edu.wpi.first.util.datalog.DoubleLogEntry;
-import edu.wpi.first.wpilibj.DataLogManager;
+import edu.wpi.first.math.numbers.N1;
+import edu.wpi.first.math.numbers.N3;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import edu.wpi.first.wpilibj.shuffleboard.BuiltInLayouts;
@@ -42,58 +43,84 @@ import frc.robot.Constants.RobotConstants;
 
 @RobotPreferencesLayout(groupName = "AprilTag", row = 1, column = 4, width = 2, height = 1)
 public class AprilTagSubsystem extends PhotonVisionSubsystemBase {
+  public static final Matrix<N3, N1> SINGLE_TAG_STD_DEVS = VecBuilder.fill(4, 4, 8);
+  public static final Matrix<N3, N1> MULTI_TAG_STD_DEVS = VecBuilder.fill(0.5, 0.5, 1);
 
   @RobotPreferencesValue
   public static final RobotPreferences.BooleanValue enableTab = new RobotPreferences.BooleanValue(
       "AprilTag", "Enable Tab", false);
 
-  private DoubleLogEntry targetXLogger = new DoubleLogEntry(DataLogManager.getLog(), "AprilTag/Target X");
-  private DoubleLogEntry targetYLogger = new DoubleLogEntry(DataLogManager.getLog(), "AprilTag/Target Y");
-  private DoubleLogEntry targetAngleLogger = new DoubleLogEntry(DataLogManager.getLog(), "AprilTag/Target Angle");
-
-  private SendableChooser<Integer> aprilTagIdChooser = new SendableChooser<Integer>();
-  private AprilTagFieldLayout aprilTagLayout;
+  private final PhotonPoseEstimator estimator;
+  private double lastEstTimestamp = 0;
+  private final SendableChooser<Integer> aprilTagIdChooser = new SendableChooser<Integer>();
+  private final AprilTagFieldLayout aprilTagLayout;
 
   /** Creates a new PhotonVisionSubsystem. */
   public AprilTagSubsystem() {
     super("948Mono001", RobotConstants.APRILTAG_CAMERA_TO_ROBOT);
-
     for (int i = 1; i <= 16; i++) {
       aprilTagIdChooser.addOption(String.valueOf(i), i);
     }
     aprilTagIdChooser.setDefaultOption("1", 1);
-    try {
-      aprilTagLayout = AprilTagFieldLayout.loadFromResource(AprilTagFields.k2024Crescendo.m_resourceFile);
-    }
-    catch (IOException e) {
-      DriverStation.reportError("Couldn't load apriltag field layout", true);
-    }
-    
+    aprilTagLayout = AprilTagFields.k2024Crescendo.loadAprilTagLayoutField();
+    estimator = new PhotonPoseEstimator(aprilTagLayout, PoseStrategy.MULTI_TAG_PNP_ON_COPROCESSOR, camera,
+        getRobotToCameraTransform());
   }
 
-  @Override
-  public void updatePoseEstimate(SwerveDrivePoseEstimator estimator) {
-    if (hasTargets()) {
-      var bestTarget = getBestTarget();
-      var targetPoseOptional = aprilTagLayout.getTagPose(bestTarget.getFiducialId());
-      if (targetPoseOptional.isEmpty()) {
-        return;
-      }
-      var targetPose = targetPoseOptional.get();
-      Transform3d cameraToRobot = getCameraToRobotTransform();
-      Transform3d targetToCamera = new Transform3d(
-          new Translation3d(
-              getDistanceToBestTarget(),
-              new Rotation3d(0, 0, Math.toRadians(-getAngleToBestTarget()))),
-          cameraToRobot.getRotation()).inverse();
-      Pose3d cameraPose = targetPose.transformBy(targetToCamera);
-      Pose3d robotPose = cameraPose.transformBy(cameraToRobot);
-
-      estimator.addVisionMeasurement(robotPose.toPose2d(), getTargetTimestamp());
-      targetXLogger.append(targetPose.getX());
-      targetYLogger.append(targetPose.getY());
-      targetAngleLogger.append(Math.toRadians(targetPose.getRotation().getAngle()));
+  /**
+   * The latest estimated robot pose on the field from vision data. This may be
+   * empty. This should
+   * only be called once per loop.
+   * 
+   * @return An {@link EstimatedRobotPose} with an estimated pose, estimate
+   *         timestamp, and targets
+   *         used for estimation.
+   */
+  public Optional<EstimatedRobotPose> getEstimateGlobalPose() {
+    var visionEst = estimator.update();
+    double latestTimestamp = camera.getLatestResult().getTimestampSeconds();
+    boolean newResult = Math.abs(latestTimestamp - lastEstTimestamp) > 1e-5;
+    if (newResult) {
+      lastEstTimestamp = latestTimestamp;
     }
+    return visionEst;
+  }
+
+  /**
+   * The standard deviations of the estimated pose from
+   * {@link #getEstimateGlobalPose()}, for use
+   * with {@link edu.wpi.first.math.estimator.SwerveDrivePoseEstimator
+   * SwerveDrivePoseEstimator}.
+   * This should only be used when there are targets visible.
+   * 
+   * @param estimatedPose The estimated pose to guess standard deviations for.
+   */
+  public Matrix<N3, N1> getEstimationStdDevs(Pose2d estimatedPose) {
+    var estStdDevs = SINGLE_TAG_STD_DEVS;
+    var targets = getLatestResult().getTargets();
+    int numTags = 0;
+    double avgDist = 0;
+    for (var tgt : targets) {
+      var tagPose = estimator.getFieldTags().getTagPose(tgt.getFiducialId());
+      if (tagPose.isEmpty())
+        continue;
+      numTags++;
+      avgDist += tagPose.get().toPose2d().getTranslation().getDistance(estimatedPose.getTranslation());
+    }
+    if (numTags == 0) {
+      return estStdDevs;
+    }
+    avgDist /= numTags;
+    if (numTags > 1) {
+      estStdDevs = MULTI_TAG_STD_DEVS;
+    }
+    if (numTags == 1 && avgDist > 4) {
+      estStdDevs = VecBuilder.fill(Double.MAX_VALUE, Double.MAX_VALUE, Double.MAX_VALUE);
+    } else {
+      estStdDevs = estStdDevs.times(1 + (avgDist * avgDist / 30));
+    }
+
+    return estStdDevs;
   }
 
   /**
@@ -108,6 +135,7 @@ public class AprilTagSubsystem extends PhotonVisionSubsystemBase {
 
   /**
    * Returns the transform from the camera to the AprilTag with input ID.
+   * 
    * @param id The AprilTag ID.
    * @return The transform from the camera to the AprilTag with input ID.
    */
@@ -144,17 +172,23 @@ public class AprilTagSubsystem extends PhotonVisionSubsystemBase {
     return target.get().getYaw();
   }
 
-  public static int getSpeakerCenterAprilTagID(){
-    var alliance =  DriverStation.getAlliance().get();
-    return alliance==Alliance.Red ? 4 : 7; 
+  public static int getSpeakerCenterAprilTagID() {
+    var alliance = DriverStation.getAlliance().get();
+    return alliance == Alliance.Red ? 4 : 7;
   }
 
-  public static int getAmpAprilTagID(){ 
-    var alliance =  DriverStation.getAlliance().get();
-    return alliance==Alliance.Red ? 5 : 6; 
+  public static int getAmpAprilTagID() {
+    var alliance = DriverStation.getAlliance().get();
+    return alliance == Alliance.Red ? 5 : 6;
   }
 
-    /**
+  @Override
+  public void periodic() {
+    super.periodic();
+    estimator.update(getLatestResult());
+  }
+
+  /**
    * Adds a tab for April Tag in Shuffleboard.
    */
   public void addShuffleboardTab() {
@@ -171,7 +205,8 @@ public class AprilTagSubsystem extends PhotonVisionSubsystemBase {
     targetLayout.addDouble("Distance", () -> getDistanceToTarget(aprilTagIdChooser.getSelected()));
     targetLayout.addDouble("Angle", () -> getAngleToTarget(aprilTagIdChooser.getSelected()));
 
-    VideoSource video = new HttpCamera("photonvision_Port_1182_Output_MJPEG_Server", "http://photonvision.local:1182/?action=stream",
+    VideoSource video = new HttpCamera("photonvision_Port_1182_Output_MJPEG_Server",
+        "http://photonvision.local:1182/?action=stream",
         HttpCameraKind.kMJPGStreamer);
     visionTab.add("April Tag", video)
         .withWidget(BuiltInWidgets.kCameraStream)
