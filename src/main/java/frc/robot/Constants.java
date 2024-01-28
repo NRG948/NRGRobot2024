@@ -8,6 +8,7 @@ import edu.wpi.first.math.geometry.Rotation3d;
 import edu.wpi.first.math.geometry.Transform3d;
 import edu.wpi.first.math.geometry.Translation3d;
 import edu.wpi.first.math.util.Units;
+import edu.wpi.first.wpilibj.util.Color8Bit;
 
 /**
  * The Constants class provides a convenient place for teams to hold robot-wide
@@ -37,6 +38,14 @@ public final class Constants {
      * Wheel diameter.
      */
     public static final double WHEEL_DIAMETER_INCHES = 4.0;
+    
+    /**
+     * PMW Ports.
+     */
+    public static class PWMPort{
+      public static final int LED = 1;
+      public static final int LightningLED = 2;
+    }
 
     /**
      * Field of View of Camera in degrees.
@@ -82,8 +91,26 @@ public final class Constants {
         public static final int MANIPULATOR = 1;
       }
     }
-  }
 
+    /**
+     * The number of LEDs on the addressable LED string.
+     */
+    public static final int LED_COUNT = 63;
+  }
+    public static class ColorConstants {
+      public static final Color8Bit BLACK = new Color8Bit(0,0,0);
+      public static final Color8Bit RED = new Color8Bit(204,0,0);
+      public static final Color8Bit ORANGE = new Color8Bit(204,84,0);
+      public static final Color8Bit YELLOW = new Color8Bit(192,192,0);
+      public static final Color8Bit GREEN = new Color8Bit(0,204,0);
+      public static final Color8Bit BLUE = new Color8Bit(0,0,204);
+      public static final Color8Bit PURPLE = new Color8Bit(152, 16, 201);
+      public static final Color8Bit PINK = new Color8Bit(252,5,141);
+      public static final Color8Bit LIGHTBLUE = new Color8Bit(56,197,252);
+
+      public static final Color8Bit COLORS[] = { RED, ORANGE, YELLOW, GREEN, BLUE, PURPLE, PINK, LIGHTBLUE };
+
+     }
     
   
 
