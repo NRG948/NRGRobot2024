@@ -4,7 +4,7 @@
 
 package frc.robot;
 
-import com.nrg948.preferences.RobotPreferences;
+import com.nrg948.Common;
 
 import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj2.command.Command;
@@ -27,8 +27,10 @@ public class Robot extends TimedRobot {
    */
   @Override
   public void robotInit() {
-    RobotPreferences.init("frc.robot");
-    
+    // Initialize the NRG Common Library before creating the RobotContainer so that
+    // it is initialized and ready for use by the subsystems.
+    Common.init("frc.robot");
+       
     // Instantiate our RobotContainer.  This will perform all our button bindings, and put our
     // autonomous chooser on the dashboard.
     m_robotContainer = new RobotContainer();
