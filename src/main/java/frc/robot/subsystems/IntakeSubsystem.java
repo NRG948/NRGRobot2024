@@ -4,61 +4,59 @@
 
 package frc.robot.subsystems;
 
-import com.revrobotics.CANSparkFlex;
+import com.nrg948.preferences.RobotPreferences.DoubleValue;
+import com.revrobotics.CANSparkMax;
 import com.revrobotics.CANSparkBase.IdleMode;
 import com.revrobotics.CANSparkLowLevel.MotorType;
 
+import edu.wpi.first.math.controller.SimpleMotorFeedforward;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
-import frc.robot.Constants.RobotConstants.CAN;
 
 /**
  * The intake subsystem is responsible for acquiring game elements from the
  * floor.
  */
 public class IntakeSubsystem extends SubsystemBase {
-  private static final double INTAKE_POWER = 0.3; // moving this
-
-  private final CANSparkFlex motor = new CANSparkFlex(CAN.SparkFlex.INTAKE_PORT, MotorType.kBrushless);
+  private static final double INTAKE_POWER = 0.3; // moving this 
+  private final static CANSparkMax motor = new CANSparkMax(0, MotorType.kBrushless);
+  
+  private static double KS = 0.15;
+  public final DoubleValue KV = new DoubleValue("IntakeSubsystem", "KV", 1.0);
+  public final DoubleValue KA = new DoubleValue("IntakeSubsystem", "KA", 1.0);
   private boolean isEnabled = false;
   private double motorPower;
+  private final SimpleMotorFeedforward indexerFeedforward = new SimpleMotorFeedforward(KS, KV.getValue(), KA.getValue());
 
   /** Creates a new IntakeSubsystem. */
   public IntakeSubsystem() {
     motor.setIdleMode(IdleMode.kBrake);
   }
-
-  /**
-   * Runs the motor
-   * 
-   * @param power
-   */
+  
   public void runMotor(double power) {
-    motor.set(power);
+    double voltage  = indexerFeedforward.calculate(power);
+    motor.set(voltage);
   }
-
-  /**
-   * Stops the motor
-   */
+  
   public void stopMotor() {
     motor.stopMotor();
   }
-
+  
   /**
-   * Enable the intake inwards.
+   * Enable the intake upward.
    */
-  public void in() {
+  public void up() {
     isEnabled = true;
     motorPower = INTAKE_POWER;
   }
-
+  
   /**
-   * Enable the intake outward.
+   * Enable the intake downward.
    */
-  public void out() {
+  public void down() {
     isEnabled = true;
     motorPower = -INTAKE_POWER;
   }
-
+  
   /**
    * Disable the intake.
    */
