@@ -34,7 +34,6 @@ import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardLayout;
 import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
-import frc.robot.Robot;
 import frc.robot.Constants.RobotConstants;
 
 /**
@@ -88,8 +87,10 @@ public class AprilTagSubsystem extends PhotonVisionSubsystemBase {
   }
 
   /**
-   * The standard deviations of the estimated pose from {@link #getEstimateGlobalPose()}, for use
-   * with {@link edu.wpi.first.math.estimator.SwerveDrivePoseEstimator SwerveDrivePoseEstimator}.
+   * The standard deviations of the estimated pose from
+   * {@link #getEstimateGlobalPose()}, for use
+   * with {@link edu.wpi.first.math.estimator.SwerveDrivePoseEstimator
+   * SwerveDrivePoseEstimator}.
    * This should only be used when there are targets visible.
    * 
    * @param estimatedPose The estimated pose to guess standard deviations for.
@@ -106,17 +107,16 @@ public class AprilTagSubsystem extends PhotonVisionSubsystemBase {
       numTags++;
       avgDist += tagPose.get().toPose2d().getTranslation().getDistance(estimatedPose.getTranslation());
     }
-    if (numTags == 0){
+    if (numTags == 0) {
       return estStdDevs;
     }
     avgDist /= numTags;
-    if (numTags > 1){
+    if (numTags > 1) {
       estStdDevs = MULTI_TAG_STD_DEVS;
     }
-    if (numTags == 1 && avgDist > 4){
+    if (numTags == 1 && avgDist > 4) {
       estStdDevs = VecBuilder.fill(Double.MAX_VALUE, Double.MAX_VALUE, Double.MAX_VALUE);
-    }
-    else{
+    } else {
       estStdDevs = estStdDevs.times(1 + (avgDist * avgDist / 30));
     }
 
@@ -144,8 +144,7 @@ public class AprilTagSubsystem extends PhotonVisionSubsystemBase {
   }
 
   /**
-   * Returns the distance to the target with the input ID. Returns 0 if target not
-   * found.
+   * Returns the distance to the target with the input ID. Returns 0 if target not found.
    * 
    * @param id The AprilTag ID.
    * @return The distance to the target with the input ID.
@@ -160,8 +159,7 @@ public class AprilTagSubsystem extends PhotonVisionSubsystemBase {
   }
 
   /**
-   * Returns the angle to the target with the input ID. Returns 0 if target not
-   * found.
+   * Returns the angle to the target with the input ID. Returns 0 if target not found.
    * 
    * @param id The AprilTag ID.
    * @return The angle to the target with the input ID.

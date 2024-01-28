@@ -132,6 +132,7 @@ public class SwerveSubsystem extends SubsystemBase {
   // The current sensor state updated by the periodic method.
   private Rotation2d rawOrientation;
   private Rotation2d rawOrientationOffset = new Rotation2d();
+  private Pose2d lastVisionMeasurement = new Pose2d();
 
   private DoubleLogEntry rawOrientationLog = new DoubleLogEntry(DataLogManager.getLog(),
       "/SwerveSubsystem/rawOrientation");
@@ -230,6 +231,7 @@ public class SwerveSubsystem extends SubsystemBase {
   /** See {@link SwerveDrivePoseEstimator#addVisionMeasurement(Pose2d, double, Matrix)} */
   public void addVisionMeasurement(Pose2d visionMeasurment, double timestamp, Matrix<N3, N1> stdDevs){
     odometry.addVisionMeasurement(visionMeasurment, timestamp, stdDevs);
+    lastVisionMeasurement = visionMeasurment;
   }
 
   /**
@@ -508,7 +510,7 @@ public class SwerveSubsystem extends SubsystemBase {
 
       ShuffleboardLayout odometryLayout = swerveDriveTab.getLayout("Odometry", BuiltInLayouts.kList)
           .withPosition(6, 0)
-          .withSize(3, 4);
+          .withSize(4, 4);
 
       odometryLayout.add("Orientation", new Sendable() {
         @Override
@@ -519,12 +521,19 @@ public class SwerveSubsystem extends SubsystemBase {
       }).withWidget(BuiltInWidgets.kGyro).withPosition(0, 0);
 
       ShuffleboardLayout positionLayout = odometryLayout.getLayout("Position", BuiltInLayouts.kGrid)
-          .withProperties(Map.of("Number of columns", 4, "Number of rows", 1));
+          .withProperties(Map.of("Number of columns", 5, "Number of rows", 1));
 
       positionLayout.addDouble("X", () -> odometry.getEstimatedPosition().getX())
           .withPosition(0, 0);
       positionLayout.addDouble("Y", () -> odometry.getEstimatedPosition().getY())
           .withPosition(1, 0);
+
+      positionLayout.addDouble("est. X", () -> lastVisionMeasurement.getX())
+          .withPosition(2, 0);
+      positionLayout.addDouble("est. Y", () -> lastVisionMeasurement.getY())
+          .withPosition(3, 0);
+      positionLayout.addDouble("est. angle", () -> lastVisionMeasurement.getRotation().getDegrees())
+          .withPosition(4, 0);    
     }
 
     if (ENABLE_FIELD_TAB) {
