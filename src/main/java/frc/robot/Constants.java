@@ -47,17 +47,17 @@ public final class Constants {
       public static final int LightningLED = 2;
     }
 
-    /** 3d transforms that moves the camera to the center of the robot. */
-    public static final Transform3d APRILTAG_CAMERA_TO_ROBOT = new Transform3d(
-      new Translation3d(Units.inchesToMeters(-3.5), Units.inchesToMeters(-15.25), Units.inchesToMeters(-23)),
-      new Rotation3d(0, Math.toRadians(13.3), Math.toRadians(180))
-    );
-
     /** Distance robot should be from speaker to score. */
     public static final double SCORING_DISTANCE_FROM_SPEAKER = Units.inchesToMeters(100);
 
     /** Distance robot should be from amp to score. */
     public static final double SCORING_DISTANCE_FROM_AMP = Units.inchesToMeters(20);
+    
+    /** 3d transforms that moves the camera to the center of the robot. */
+    public static final Transform3d APRILTAG_CAMERA_TO_ROBOT = new Transform3d(
+      new Translation3d(Units.inchesToMeters(-3.5), Units.inchesToMeters(-14.75), Units.inchesToMeters(-23.25)),
+      new Rotation3d(0, Math.toRadians(13.3), Math.toRadians(180))
+    );
 
     /**
      * CAN Ids

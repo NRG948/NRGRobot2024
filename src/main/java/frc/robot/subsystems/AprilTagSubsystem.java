@@ -34,7 +34,6 @@ import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardLayout;
 import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
-import frc.robot.Robot;
 import frc.robot.Constants.RobotConstants;
 
 /**
@@ -144,8 +143,7 @@ public class AprilTagSubsystem extends PhotonVisionSubsystemBase {
   }
 
   /**
-   * Returns the distance to the target with the input ID. Returns 0 if target not
-   * found.
+   * Returns the distance to the target with the input ID. Returns 0 if target not found.
    * 
    * @param id The AprilTag ID.
    * @return The distance to the target with the input ID.
@@ -160,8 +158,7 @@ public class AprilTagSubsystem extends PhotonVisionSubsystemBase {
   }
 
   /**
-   * Returns the angle to the target with the input ID. Returns 0 if target not
-   * found.
+   * Returns the angle to the target with the input ID. Returns 0 if target not found.
    * 
    * @param id The AprilTag ID.
    * @return The angle to the target with the input ID.
