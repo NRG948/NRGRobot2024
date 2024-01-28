@@ -4,7 +4,11 @@
 
 package frc.robot;
 
+import edu.wpi.first.math.geometry.Rotation3d;
 import edu.wpi.first.math.geometry.Transform3d;
+import edu.wpi.first.math.geometry.Translation3d;
+import edu.wpi.first.math.util.Units;
+import edu.wpi.first.wpilibj.util.Color8Bit;
 
 /**
  * The Constants class provides a convenient place for teams to hold robot-wide
@@ -28,10 +32,20 @@ public final class Constants {
      */
     public static final double MAX_BATTERY_VOLTAGE = 12.0;
 
+    public static final double ROBOT_LENGTH = Units.inchesToMeters(39);
+
     /**
      * Wheel diameter.
      */
     public static final double WHEEL_DIAMETER_INCHES = 4.0;
+    
+    /**
+     * PMW Ports.
+     */
+    public static class PWMPort{
+      public static final int LED = 1;
+      public static final int LightningLED = 2;
+    }
 
     /**
      * Field of View of Camera in degrees.
@@ -40,21 +54,70 @@ public final class Constants {
 
     public static final Transform3d APRILTAG_CAMERA_TO_ROBOT = new Transform3d();
 
- 
-  /**
-   * Defines operator (i.e. driver and manipulator) constants.
-   */
-  public static class OperatorConstants {
+    /** 3d transforms that moves the camera to the center of the robot. */
+    public static final Transform3d APRILTAG_CAMERA_TO_ROBOT = new Transform3d(
+      new Translation3d(Units.inchesToMeters(-3.5), Units.inchesToMeters(-15.25), Units.inchesToMeters(-23)),
+      new Rotation3d(0, Math.toRadians(13.3), Math.toRadians(180))
+    );
+
+    /** Distance robot should be from speaker to score. */
+    public static final double SCORING_DISTANCE_FROM_SPEAKER = Units.inchesToMeters(100);
+
+    /** Distance robot should be from amp to score. */
+    public static final double SCORING_DISTANCE_FROM_AMP = Units.inchesToMeters(20);
+    
+    /** 3d transforms that moves the camera to the center of the robot. */
+    public static final Transform3d APRILTAG_CAMERA_TO_ROBOT = new Transform3d(
+      new Translation3d(Units.inchesToMeters(-3.5), Units.inchesToMeters(-14.75), Units.inchesToMeters(-23.25)),
+      new Rotation3d(0, Math.toRadians(13.3), Math.toRadians(180))
+    );
 
     /**
-     * Defines the port numbers of the Xbox controllers.
+     * CAN Ids
      */
-    public static class XboxControllerPort {
-
-      public static final int DRIVER = 0;
-      public static final int MANIPULATOR = 1;
-
+    public static class CAN {
+      public static class SparkMax {
+        public static final int SHOOTER_PORT = 16;
+        public static final int INTAKE_PORT = 17; // TODO assign actual port
+        public static final int ARM_LEFT_PORT = 18; // TODO assign actual port
+        public static final int ARM_RIGHT_PORT = 19; // TODO assign actual port
+      }
     }
+
+    /**
+     * Defines operator (i.e. driver and manipulator) constants.
+     */
+    public static class OperatorConstants {
+
+      /**
+       * Defines the port numbers of the Xbox controllers.
+       */
+      public static class XboxControllerPort {
+        public static final int DRIVER = 0;
+        public static final int MANIPULATOR = 1;
+      }
+    }
+
+    /**
+     * The number of LEDs on the addressable LED string.
+     */
+    public static final int LED_COUNT = 63;
   }
-}
+    public static class ColorConstants {
+      public static final Color8Bit BLACK = new Color8Bit(0,0,0);
+      public static final Color8Bit RED = new Color8Bit(204,0,0);
+      public static final Color8Bit ORANGE = new Color8Bit(204,84,0);
+      public static final Color8Bit YELLOW = new Color8Bit(192,192,0);
+      public static final Color8Bit GREEN = new Color8Bit(0,204,0);
+      public static final Color8Bit BLUE = new Color8Bit(0,0,204);
+      public static final Color8Bit PURPLE = new Color8Bit(152, 16, 201);
+      public static final Color8Bit PINK = new Color8Bit(252,5,141);
+      public static final Color8Bit LIGHTBLUE = new Color8Bit(56,197,252);
+
+      public static final Color8Bit COLORS[] = { RED, ORANGE, YELLOW, GREEN, BLUE, PURPLE, PINK, LIGHTBLUE };
+
+     }
+    
+  
+
 }

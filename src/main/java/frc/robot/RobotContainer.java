@@ -4,17 +4,22 @@
 
 package frc.robot;
 
+
 import com.nrg948.preferences.RobotPreferences;
 import com.nrg948.preferences.RobotPreferencesLayout;
 
+import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
+import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
 import frc.robot.Constants.RobotConstants.OperatorConstants;
+import frc.robot.commands.AlignToAmp;
 import frc.robot.commands.DriveUsingController;
+import frc.robot.commands.SysID;
 import frc.robot.subsystems.Subsystems;
 
 /**
@@ -28,6 +33,14 @@ import frc.robot.subsystems.Subsystems;
  */
 @RobotPreferencesLayout(groupName = "Preferences", column = 0, row = 0, width = 2, height = 1)
 public class RobotContainer {
+  // Joystick and Joystick Buttons
+    private final Joystick joystick = new Joystick(3);
+
+    private JoystickButton joyButton1 = new JoystickButton(joystick, 1);
+    private JoystickButton joyButton2 = new JoystickButton(joystick, 9);
+    private JoystickButton joyButton3 = new JoystickButton(joystick, 10);
+    private JoystickButton joyButton4 = new JoystickButton(joystick, 11);
+    private JoystickButton joyButton5 = new JoystickButton(joystick, 12);
   // The robot's subsystems and commands are defined here...
   private final Subsystems m_subsystems = new Subsystems();
 
@@ -42,6 +55,7 @@ public class RobotContainer {
    * The container for the robot. Contains subsystems, OI devices, and commands.
    */
   public RobotContainer() {
+
     m_subsystems.drivetrain.setDefaultCommand(new DriveUsingController(m_subsystems, m_driverController));
     
     // Configure the trigger bindings
@@ -70,6 +84,9 @@ public class RobotContainer {
     // pressed,
     // cancelling on release.
     m_driverController.start().onTrue(Commands.runOnce(() -> m_subsystems.drivetrain.resetOrientation(), m_subsystems.drivetrain));
+    m_driverController.back().whileTrue(SysID.getSwerveDriveCharacterizationSequence(m_subsystems));
+    m_driverController.leftBumper().whileTrue(SysID.getSwerveSteeringCharacterizationSequence(m_subsystems));
+    m_driverController.y().onTrue(Commands.runOnce(() -> AlignToAmp.driveToAmp(m_subsystems).execute()));
   }
 
   /**
@@ -79,6 +96,10 @@ public class RobotContainer {
    */
   public Command getAutonomousCommand() {
     return m_autonomous.getAutonomousCommand();
+  }
+
+  public void periodic(){
+    m_subsystems.periodic();
   }
 
   public void initShuffleboard(){
