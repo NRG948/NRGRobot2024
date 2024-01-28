@@ -31,6 +31,8 @@ public final class Constants {
 
     public static final double ROBOT_LENGTH = Units.inchesToMeters(39);
 
+    public static final double INDEXER_MASS = 0.5;
+
     /**
      * Wheel diameter.
      */
