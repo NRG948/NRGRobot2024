@@ -56,7 +56,7 @@ public class RobotContainer {
    */
   public RobotContainer() {
 
-    m_subsystems.drivetrain.setDefaultCommand(new DriveUsingController(m_subsystems.drivetrain, m_driverController));
+    m_subsystems.drivetrain.setDefaultCommand(new DriveUsingController(m_subsystems, m_driverController));
     
     // Configure the trigger bindings
     configureBindings();

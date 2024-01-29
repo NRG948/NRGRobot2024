@@ -47,6 +47,11 @@ public final class Constants {
       public static final int LightningLED = 2;
     }
 
+    /**
+     * Field of View of Camera in degrees.
+     */
+    public static final double CAMERA_FOV = 70;
+
     /** Distance robot should be from speaker to score. */
     public static final double SCORING_DISTANCE_FROM_SPEAKER = Units.inchesToMeters(100);
 
