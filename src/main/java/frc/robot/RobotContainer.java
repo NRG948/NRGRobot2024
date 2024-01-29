@@ -19,6 +19,7 @@ import edu.wpi.first.wpilibj2.command.button.Trigger;
 import frc.robot.Constants.RobotConstants.OperatorConstants;
 import frc.robot.commands.AlignToAmp;
 import frc.robot.commands.DriveUsingController;
+import frc.robot.commands.Pathfinding;
 import frc.robot.commands.SysID;
 import frc.robot.subsystems.Subsystems;
 
@@ -86,6 +87,7 @@ public class RobotContainer {
     m_driverController.start().onTrue(Commands.runOnce(() -> m_subsystems.drivetrain.resetOrientation(), m_subsystems.drivetrain));
     m_driverController.back().whileTrue(SysID.getSwerveDriveCharacterizationSequence(m_subsystems));
     m_driverController.leftBumper().whileTrue(SysID.getSwerveSteeringCharacterizationSequence(m_subsystems));
+    m_driverController.a().onTrue(Pathfinding.pathFindToSpeakerFront(m_subsystems));
     m_driverController.y().onTrue(Commands.runOnce(() -> AlignToAmp.driveToAmp(m_subsystems).execute()));
   }
 
