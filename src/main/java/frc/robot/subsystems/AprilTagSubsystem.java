@@ -67,6 +67,11 @@ public class AprilTagSubsystem extends PhotonVisionSubsystemBase {
         getRobotToCameraTransform());
   }
 
+  public Pose2d getTagPose2d(int id) {
+    var optionalPose = aprilTagLayout.getTagPose(id);
+    return optionalPose.get().toPose2d();
+  }
+
   /**
    * The latest estimated robot pose on the field from vision data. This may be
    * empty. This should
