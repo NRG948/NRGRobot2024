@@ -34,6 +34,8 @@ public final class Constants {
 
     public static final double ROBOT_LENGTH = Units.inchesToMeters(39);
 
+    public static final double INDEXER_MASS = 0.5;
+
     /**
      * Wheel diameter.
      */
@@ -46,6 +48,11 @@ public final class Constants {
       public static final int LED = 1;
       public static final int LightningLED = 2;
     }
+
+    /**
+     * Field of View of Camera in degrees.
+     */
+    public static final double CAMERA_FOV = 70;
 
     /** Distance robot should be from speaker to score. */
     public static final double SCORING_DISTANCE_FROM_SPEAKER = Units.inchesToMeters(100);
