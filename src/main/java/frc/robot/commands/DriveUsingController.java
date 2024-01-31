@@ -16,11 +16,10 @@ import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import frc.robot.subsystems.AprilTagSubsystem;
 import frc.robot.subsystems.Subsystems;
 import frc.robot.subsystems.SwerveSubsystem;
-import frc.robot.Constants.RobotConstants;
 
 public class DriveUsingController extends Command {
   private static final double DEADBAND = 0.05;
-  private static final double KP = 1 / (RobotConstants.CAMERA_FOV / 2.0);
+  private static final double KP = 1.0;
 
   private final SwerveSubsystem m_drivetrain;
   private final AprilTagSubsystem m_aprilTag;
