@@ -14,6 +14,7 @@ import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import frc.robot.subsystems.AprilTagSubsystem;
+import frc.robot.subsystems.NoteVisionSubsystem;
 import frc.robot.subsystems.Subsystems;
 import frc.robot.subsystems.SwerveSubsystem;
 
@@ -23,16 +24,16 @@ public class DriveUsingController extends Command {
 
   private final SwerveSubsystem m_drivetrain;
   private final AprilTagSubsystem m_aprilTag;
+  private final NoteVisionSubsystem m_noteVision;
   private final CommandXboxController m_xboxController;
   private ProfiledPIDController m_profiledPIDController;
-
- 
 
   /** Creates a new DriveUsingController. */
   public DriveUsingController(Subsystems subsystems, CommandXboxController xboxController) {
     // Use addRequirements() here to declare subsystem dependencies.
     m_drivetrain = subsystems.drivetrain;
     m_aprilTag = subsystems.aprilTag;
+    m_noteVision = subsystems.noteVision;
     m_xboxController = xboxController;
     addRequirements(m_drivetrain);
   }
@@ -50,7 +51,7 @@ public class DriveUsingController extends Command {
     double rSpeed;
     double xSpeed = -m_xboxController.getLeftY();
     double ySpeed = -m_xboxController.getLeftX();
-    double inputScalar = Math.max(1.0-m_xboxController.getRightTriggerAxis(), 0.15);
+    double inputScalar = Math.max(1.0 - m_xboxController.getRightTriggerAxis(), 0.15);
 
     Rotation2d currentOrientation = m_drivetrain.getOrientation();
     Rotation2d targetOrientation = currentOrientation;
@@ -60,25 +61,33 @@ public class DriveUsingController extends Command {
     xSpeed = MathUtil.applyDeadband(xSpeed, DEADBAND) * inputScalar;
     ySpeed = MathUtil.applyDeadband(ySpeed, DEADBAND) * inputScalar;
 
-    Optional<PhotonTrackedTarget> optionalTarget = Optional.empty();
+    Optional<PhotonTrackedTarget> optionalTagTarget = Optional.empty();
+    Optional<PhotonTrackedTarget> optionalNoteTarget = Optional.empty();
     if (m_xboxController.rightBumper().getAsBoolean()) {
-      optionalTarget = m_aprilTag.getTarget(AprilTagSubsystem.getSpeakerCenterAprilTagID()); 
+      optionalTagTarget = m_aprilTag.getTarget(AprilTagSubsystem.getSpeakerCenterAprilTagID());
+    } else if (m_xboxController.x().getAsBoolean() && m_noteVision.hasTargets()) { // Nonpermanent X binding
+      optionalNoteTarget = Optional.of(m_noteVision.getBestTarget());
     }
 
-    if (optionalTarget.isPresent()) {
+    // Don't want to do both tag and note alignment so to choose one, tag takes priority
+    if (optionalTagTarget.isPresent()) {
       Rotation2d angleToTarget = Rotation2d.fromDegrees(-m_aprilTag.getAngleToBestTarget());
+      targetOrientation = targetOrientation.plus(angleToTarget);
+      rSpeed = m_profiledPIDController.calculate(currentOrientation.getRadians(), targetOrientation.getRadians());
+    } else if (optionalNoteTarget.isPresent()) {
+      Rotation2d angleToTarget = Rotation2d.fromDegrees(-m_noteVision.getYaw());
       targetOrientation = targetOrientation.plus(angleToTarget);
       rSpeed = m_profiledPIDController.calculate(currentOrientation.getRadians(), targetOrientation.getRadians());
     } else {
       rSpeed = -m_xboxController.getRightX();
       rSpeed = MathUtil.applyDeadband(rSpeed, DEADBAND) * inputScalar;
-    } 
+    }
 
     m_drivetrain.drive(
-      xSpeed,
-      ySpeed,
-      rSpeed,
-      true);
+        xSpeed,
+        ySpeed,
+        rSpeed,
+        true);
   }
 
   // Called once the command ends or is interrupted.

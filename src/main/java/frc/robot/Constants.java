@@ -66,6 +66,8 @@ public final class Constants {
       new Rotation3d(0, Math.toRadians(13.3), Math.toRadians(180))
     );
 
+    public static final Transform3d NOTE_CAMERA_TO_ROBOT = new Transform3d();  //TODO get real constant
+
     /**
      * CAN Ids
      */
