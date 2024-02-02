@@ -45,8 +45,7 @@ public final class Constants {
      * PMW Ports.
      */
     public static class PWMPort{
-      public static final int LED = 1;
-      public static final int LightningLED = 2;
+      public static final int LED = 2;
     }
 
     /**

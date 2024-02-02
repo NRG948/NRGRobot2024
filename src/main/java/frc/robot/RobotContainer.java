@@ -16,6 +16,7 @@ import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
+import frc.robot.Constants.ColorConstants;
 import frc.robot.Constants.RobotConstants.OperatorConstants;
 import frc.robot.commands.AlignToAmp;
 import frc.robot.commands.DriveUsingController;
@@ -89,6 +90,10 @@ public class RobotContainer {
     m_driverController.leftBumper().whileTrue(SysID.getSwerveSteeringCharacterizationSequence(m_subsystems));
     m_driverController.a().onTrue(Pathfinding.pathFindToSpeakerFront(m_subsystems));
     m_driverController.y().onTrue(Commands.runOnce(() -> AlignToAmp.driveToAmp(m_subsystems).execute()));
+
+    Trigger noteDetected = new Trigger(m_subsystems.indexerSubsystem::isNoteDetected);
+    noteDetected.onTrue(Commands.runOnce(() -> m_subsystems.addressableLEDSubsystem.fillAndCommitColor(ColorConstants.ORANGE), m_subsystems.addressableLEDSubsystem));
+    noteDetected.onFalse(Commands.runOnce(() -> m_subsystems.addressableLEDSubsystem.fillAndCommitColor(ColorConstants.RED), m_subsystems.addressableLEDSubsystem));
   }
 
   /**
