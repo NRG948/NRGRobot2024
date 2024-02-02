@@ -74,8 +74,6 @@ public final class Constants {
     }
 
     /**
-     * Defines the port numbers of the Xbox controllers.
-    /**
      * CAN Ids
      */
     public static class CAN {
