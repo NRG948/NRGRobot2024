@@ -67,6 +67,15 @@ public final class Constants {
     );
 
     /**
+     * Digital I/O port numbers.
+     */
+    public static class DigitalIO {
+      public static final int INDEXER_BEAM_BREAK = 0; //check if beam is applicable
+    }
+
+    /**
+     * Defines the port numbers of the Xbox controllers.
+    /**
      * CAN Ids
      */
     public static class CAN {
@@ -75,6 +84,7 @@ public final class Constants {
         public static final int INTAKE_PORT = 17; // TODO assign actual port
         public static final int ARM_LEFT_PORT = 18; // TODO assign actual port
         public static final int ARM_RIGHT_PORT = 19; // TODO assign actual port
+        public static final int INDEXER_PORT = 20; //TODO assign actual port
       }
     }
 
