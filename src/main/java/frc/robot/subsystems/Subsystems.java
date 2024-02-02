@@ -8,6 +8,8 @@ package frc.robot.subsystems;
 public class Subsystems {
     public SwerveSubsystem drivetrain = new SwerveSubsystem();
     public AprilTagSubsystem aprilTag = new AprilTagSubsystem();
+    public IndexerSubsystem indexerSubsystem = new IndexerSubsystem();
+    public AddressableLEDSubsystem addressableLEDSubsystem = new AddressableLEDSubsystem();
     //public IntakeSubsystem intake = new IntakeSubsystem();
 
     public void periodic(){

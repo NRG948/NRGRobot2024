@@ -82,6 +82,23 @@ public class AddressableLEDSubsystem extends SubsystemBase {
     }
   }
 
+public void setColor(Color8Bit color, int index) {
+    leds.setColor(color, index);
+  }
+
+  public void commitColor() {
+    leds.commitColor();
+  }
+
+  public void fillColor(Color8Bit color) {
+    leds.setColor(color);
+  }
+
+  public void fillAndCommitColor(Color8Bit color) {
+    leds.setColor(color);
+    commitColor();
+  }
+
   public void start() {
     leds.start();
   }
