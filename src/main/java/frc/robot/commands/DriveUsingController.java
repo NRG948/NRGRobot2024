@@ -75,7 +75,7 @@ public class DriveUsingController extends Command {
       targetOrientation = targetOrientation.plus(angleToTarget);
       rSpeed = m_profiledPIDController.calculate(currentOrientation.getRadians(), targetOrientation.getRadians());
     } else if (optionalNoteTarget.isPresent()) {
-      Rotation2d angleToTarget = Rotation2d.fromDegrees(-m_noteVision.getYaw());
+      Rotation2d angleToTarget = Rotation2d.fromDegrees(-m_noteVision.getAngleToBestTarget());
       targetOrientation = targetOrientation.plus(angleToTarget);
       rSpeed = m_profiledPIDController.calculate(currentOrientation.getRadians(), targetOrientation.getRadians());
     } else {
