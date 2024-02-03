@@ -205,8 +205,8 @@ public class AprilTagSubsystem extends PhotonVisionSubsystemBase {
     targetLayout.addDouble("Distance", () -> getDistanceToTarget(aprilTagIdChooser.getSelected()));
     targetLayout.addDouble("Angle", () -> getAngleToTarget(aprilTagIdChooser.getSelected()));
 
-    VideoSource video = new HttpCamera("photonvision_Port_1182_Output_MJPEG_Server",
-        "http://photonvision.local:1182/?action=stream",
+    VideoSource video = new HttpCamera("photonvision_Port_1184_Output_MJPEG_Server",
+        "http://photonvision.local:1184/?action=stream",
         HttpCameraKind.kMJPGStreamer);
     visionTab.add("April Tag", video)
         .withWidget(BuiltInWidgets.kCameraStream)
