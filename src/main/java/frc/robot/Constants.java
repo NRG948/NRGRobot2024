@@ -114,9 +114,9 @@ public final class Constants {
     public static class ColorConstants {
       public static final Color8Bit BLACK = new Color8Bit(0,0,0);
       public static final Color8Bit WHITE = new Color8Bit(200, 200, 200);
-      public static final Color8Bit RED = new Color8Bit(204,0,0);
-      public static final Color8Bit ORANGE = new Color8Bit(204,84,0);
-      public static final Color8Bit YELLOW = new Color8Bit(235,141,0);
+      public static final Color8Bit RED = new Color8Bit(255,0,0);
+      public static final Color8Bit ORANGE = new Color8Bit(255,119,0);
+      public static final Color8Bit YELLOW = new Color8Bit(255,165,0);
       public static final Color8Bit GREEN = new Color8Bit(0,204,0);
       public static final Color8Bit BLUE = new Color8Bit(0,0,204);
       public static final Color8Bit PURPLE = new Color8Bit(238, 80, 255);
