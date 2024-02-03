@@ -59,7 +59,7 @@ public abstract class PhotonVisionSubsystemBase extends SubsystemBase {
 
     if (hasTargets()) {
       distanceLogger.append(getDistanceToBestTarget());
-      angleLogger.append(-getAngleToBestTarget());
+      angleLogger.append(getAngleToBestTarget());
     }
   }
 
@@ -101,6 +101,7 @@ public abstract class PhotonVisionSubsystemBase extends SubsystemBase {
 
   /**
    * Returns information on the best target.
+   * Check hasTargets() before using this function.
    * 
    * @return Information on the best target.
    */
@@ -117,7 +118,6 @@ public abstract class PhotonVisionSubsystemBase extends SubsystemBase {
     if (!hasTargets()) {
       return 0;
     }
-
     Transform3d bestTarget = getBestTarget().getBestCameraToTarget();
     return Math.hypot(bestTarget.getX(), bestTarget.getY());
   }

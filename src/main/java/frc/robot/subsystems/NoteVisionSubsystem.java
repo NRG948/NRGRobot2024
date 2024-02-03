@@ -6,8 +6,6 @@ package frc.robot.subsystems;
 
 import java.util.Optional;
 
-import org.photonvision.PhotonCamera;
-import org.photonvision.targeting.PhotonPipelineResult;
 import org.photonvision.targeting.PhotonTrackedTarget;
 
 import com.nrg948.preferences.RobotPreferences;
@@ -17,9 +15,6 @@ import com.nrg948.preferences.RobotPreferencesValue;
 import edu.wpi.first.cscore.HttpCamera;
 import edu.wpi.first.cscore.HttpCamera.HttpCameraKind;
 import edu.wpi.first.cscore.VideoSource;
-import edu.wpi.first.util.datalog.BooleanLogEntry;
-import edu.wpi.first.util.datalog.DoubleLogEntry;
-import edu.wpi.first.wpilibj.DataLogManager;
 import edu.wpi.first.wpilibj.shuffleboard.BuiltInLayouts;
 import edu.wpi.first.wpilibj.shuffleboard.BuiltInWidgets;
 import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
@@ -30,12 +25,6 @@ import frc.robot.Constants.RobotConstants;
 @RobotPreferencesLayout(groupName = "NoteVision", row = 1, column = 4, width = 2, height = 1)
 public class NoteVisionSubsystem extends PhotonVisionSubsystemBase {
 
-  private PhotonPipelineResult result = new PhotonPipelineResult();
-
-  private BooleanLogEntry hasTargetLogger;
-  private DoubleLogEntry distanceLogger;
-  private DoubleLogEntry angleLogger;
-
   @RobotPreferencesValue
   public static final RobotPreferences.BooleanValue enableTab = new RobotPreferences.BooleanValue(
       "NoteVision", "Enable Tab", false);
@@ -45,25 +34,17 @@ public class NoteVisionSubsystem extends PhotonVisionSubsystemBase {
   /** Creates a new NoteSubsystem. */
   public NoteVisionSubsystem() {
     super("948ColorCamera", RobotConstants.NOTE_CAMERA_TO_ROBOT);
-
-    hasTargetLogger = new BooleanLogEntry(DataLogManager.getLog(), String.format("/%s/Has Target", "948ColorCamera"));
-    distanceLogger = new DoubleLogEntry(DataLogManager.getLog(), String.format("/%s/Distance", "948ColorCamera"));
-    angleLogger = new DoubleLogEntry(DataLogManager.getLog(), String.format("/%s/Angle", "948ColorCamera"));
   }
 
   @Override
   public void periodic() {
     // This method will be called once per scheduler run
-    PhotonPipelineResult currentResult = camera.getLatestResult();
-    currentTarget = Optional.of(getBestTarget());
+    super.periodic();
 
-    if (this.result.hasTargets() != currentResult.hasTargets()) {
-      hasTargetLogger.append(currentResult.hasTargets());
-    }
-    this.result = currentResult;
     if (hasTargets()) {
-      distanceLogger.append(getDistanceToBestTarget());
-      angleLogger.append(-getAngleToBestTarget());
+      currentTarget = Optional.of(getBestTarget());
+    } else {
+      currentTarget = Optional.empty();
     }
   }
 
@@ -73,6 +54,9 @@ public class NoteVisionSubsystem extends PhotonVisionSubsystemBase {
    * @return yaw of the target.
    */
   public double getYaw() {
+    if (currentTarget.isEmpty()) {
+      return 0.0;
+    }
     return currentTarget.get().getYaw();
 
   }
@@ -83,6 +67,9 @@ public class NoteVisionSubsystem extends PhotonVisionSubsystemBase {
    * @return Target's confidence levels.
    */
   public double getConfidence() {
+    if (currentTarget.isEmpty()) {
+      return 0.0;
+    }
     return currentTarget.get().getPoseAmbiguity();
   }
 
@@ -101,8 +88,8 @@ public class NoteVisionSubsystem extends PhotonVisionSubsystemBase {
     targetLayout.addBoolean("Has Target", this::hasTargets);
     targetLayout.addDouble("Angle", () -> getYaw());
 
-    VideoSource video = new HttpCamera("photonvision_Port_1184_Output_MJPEG_Server",
-        "http://photonvision.local:1184/?action=stream",
+    VideoSource video = new HttpCamera("photonvision_Port_1182_Output_MJPEG_Server",
+        "http://photonvision.local:1182/?action=stream",
         HttpCameraKind.kMJPGStreamer);
     noteVisionTab.add("Note Camera", video)
         .withWidget(BuiltInWidgets.kCameraStream)
