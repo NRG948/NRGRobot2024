@@ -27,6 +27,10 @@ public abstract class PhotonVisionSubsystemBase extends SubsystemBase {
   private final Transform3d robotToCamera;
   private PhotonPipelineResult result = new PhotonPipelineResult();
 
+  private double angleToTarget;
+  private double distanceToTarget;
+  private double poseAmbiguity;
+
   private BooleanLogEntry hasTargetLogger;
   private DoubleLogEntry distanceLogger;
   private DoubleLogEntry angleLogger;
@@ -58,8 +62,14 @@ public abstract class PhotonVisionSubsystemBase extends SubsystemBase {
     this.result = currentResult;
 
     if (hasTargets()) {
-      distanceLogger.append(getDistanceToBestTarget());
-      angleLogger.append(getAngleToBestTarget());
+      PhotonTrackedTarget bestTarget = getBestTarget();
+      angleToTarget = -bestTarget.getYaw();
+      Transform3d bestTargetTransform = bestTarget.getBestCameraToTarget();
+      distanceToTarget = Math.hypot(bestTargetTransform.getX(), bestTargetTransform.getY());
+      poseAmbiguity = bestTarget.getPoseAmbiguity();
+
+      distanceLogger.append(distanceToTarget);
+      angleLogger.append(angleToTarget);
     }
   }
 
@@ -111,28 +121,32 @@ public abstract class PhotonVisionSubsystemBase extends SubsystemBase {
 
   /**
    * Returns the distance to the best target.
+   * Check hasTargets() to make sure you're getting a valid value.
    * 
    * @return The distance, in meters, to the best target.
    */
   public double getDistanceToBestTarget() {
-    if (!hasTargets()) {
-      return 0;
-    }
-    Transform3d bestTarget = getBestTarget().getBestCameraToTarget();
-    return Math.hypot(bestTarget.getX(), bestTarget.getY());
+    return distanceToTarget;
   }
 
   /**
    * Returns the angle to the best target.
+   * Check hasTargets() to make sure you're getting a valid value.
    * 
    * @return The angle to the best target.
    */
   public double getAngleToBestTarget() {
-    if (!hasTargets()) {
-      return 0;
-    }
+    return angleToTarget;
+  }
 
-    return getBestTarget().getYaw();
+  /**
+   * Returns the pose ambiguity of the best target.
+   * Check hasTargets() to make sure you're getting a valid value.
+   * 
+   * @return The pose ambiguity of the best target.
+   */
+  public double getPoseAmbiguity() {
+    return poseAmbiguity;
   }
 
   /**
