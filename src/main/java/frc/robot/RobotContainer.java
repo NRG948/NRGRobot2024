@@ -118,5 +118,6 @@ public class RobotContainer {
     
     m_subsystems.drivetrain.addShuffleboardTab();
     m_subsystems.aprilTag.addShuffleboardTab();
+    m_subsystems.noteVision.addShuffleboardTab();
   }
 }
