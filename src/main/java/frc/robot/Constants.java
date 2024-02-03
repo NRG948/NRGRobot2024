@@ -44,9 +44,13 @@ public final class Constants {
     /**
      * PMW Ports.
      */
-    public static class PWMPort{
-      public static final int LED = 1;
-      public static final int LightningLED = 2;
+    public static class PWMPort {
+      public static final int LED = 2;
+    }
+
+    public static class LEDSegment {
+      public static final int STATUS_FIRST_LED = 0;
+      public static final int STATUS_LED_COUNT = 9;
     }
 
     /**
@@ -69,14 +73,22 @@ public final class Constants {
     public static final Transform3d NOTE_CAMERA_TO_ROBOT = new Transform3d();  //TODO get real constant
 
     /**
+     * Digital I/O port numbers.
+     */
+    public static class DigitalIO {
+      public static final int INDEXER_BEAM_BREAK = 0; //check if beam is applicable
+    }
+
+    /**
      * CAN Ids
      */
     public static class CAN {
       public static class SparkMax {
-        public static final int SHOOTER_PORT = 16;
-        public static final int INTAKE_PORT = 17; // TODO assign actual port
-        public static final int ARM_LEFT_PORT = 18; // TODO assign actual port
-        public static final int ARM_RIGHT_PORT = 19; // TODO assign actual port
+        public static final int SHOOTER_PORT = 59;
+        public static final int INTAKE_PORT = 60; // TODO assign actual port
+        public static final int ARM_LEFT_PORT = 61; // TODO assign actual port
+        public static final int ARM_RIGHT_PORT = 62; // TODO assign actual port
+        public static final int INDEXER_PORT = 63; //TODO assign actual port
       }
     }
 

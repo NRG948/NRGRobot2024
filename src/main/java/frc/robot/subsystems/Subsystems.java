@@ -9,6 +9,8 @@ public class Subsystems {
     public SwerveSubsystem drivetrain = new SwerveSubsystem();
     public AprilTagSubsystem aprilTag = new AprilTagSubsystem();
     public NoteVisionSubsystem noteVision = new NoteVisionSubsystem();
+    public IndexerSubsystem indexerSubsystem = new IndexerSubsystem();
+    public AddressableLEDSubsystem addressableLEDSubsystem = new AddressableLEDSubsystem();
     //public IntakeSubsystem intake = new IntakeSubsystem();
 
     public void periodic(){

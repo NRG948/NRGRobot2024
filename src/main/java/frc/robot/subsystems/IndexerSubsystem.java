@@ -45,8 +45,8 @@ public class IndexerSubsystem extends SubsystemBase {
   private boolean isEnabled = false;
   private double goalRPM = 0;
 
-  private CANSparkMax motor = new CANSparkMax(0, MotorType.kBrushless); // TODO Get the device ID
-  private final DigitalInput beamBreak = new DigitalInput(0); // TODO Get the channel
+  private CANSparkMax motor = new CANSparkMax(RobotConstants.CAN.SparkMax.INDEXER_PORT, MotorType.kBrushless);
+  private final DigitalInput beamBreak = new DigitalInput(RobotConstants.DigitalIO.INDEXER_BEAM_BREAK);
   private final SimpleMotorFeedforward indexerFeedfoward = new SimpleMotorFeedforward(KS, KV, KA);
 
   private final BooleanLogEntry noteDetectedLogger = new BooleanLogEntry(DataLogManager.getLog(),
