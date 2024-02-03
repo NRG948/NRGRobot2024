@@ -5,6 +5,9 @@
 package frc.robot;
 
 
+import static frc.robot.Constants.ColorConstants.ORANGE;
+import static frc.robot.Constants.ColorConstants.RED;
+
 import com.nrg948.preferences.RobotPreferences;
 import com.nrg948.preferences.RobotPreferencesLayout;
 
@@ -20,6 +23,7 @@ import frc.robot.Constants.ColorConstants;
 import frc.robot.Constants.RobotConstants.OperatorConstants;
 import frc.robot.commands.AlignToAmp;
 import frc.robot.commands.DriveUsingController;
+import frc.robot.commands.LEDs;
 import frc.robot.commands.Pathfinding;
 import frc.robot.commands.SysID;
 import frc.robot.subsystems.Subsystems;
@@ -92,8 +96,8 @@ public class RobotContainer {
     m_driverController.y().onTrue(Commands.runOnce(() -> AlignToAmp.driveToAmp(m_subsystems).execute()));
 
     Trigger noteDetected = new Trigger(m_subsystems.indexerSubsystem::isNoteDetected);
-    noteDetected.onTrue(Commands.runOnce(() -> m_subsystems.addressableLEDSubsystem.fillAndCommitColor(ColorConstants.ORANGE), m_subsystems.addressableLEDSubsystem));
-    noteDetected.onFalse(Commands.runOnce(() -> m_subsystems.addressableLEDSubsystem.fillAndCommitColor(ColorConstants.RED), m_subsystems.addressableLEDSubsystem));
+    noteDetected.onTrue(LEDs.fillColor(m_subsystems.addressableLEDSubsystem, ORANGE));
+    noteDetected.onFalse(LEDs.fillColor(m_subsystems.addressableLEDSubsystem, RED));
   }
 
   /**
