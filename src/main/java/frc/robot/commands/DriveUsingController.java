@@ -24,11 +24,15 @@ import frc.robot.subsystems.SwerveSubsystem;
 public class DriveUsingController extends Command {
   private static final double DEADBAND = 0.05;
   private static final double KP_APRIL_TAG = 1.0;
+  private static final double KI_APRIL_TAG = 0;
   private static final double KD_APRIL_TAG = 0;
   @RobotPreferencesValue
-  public static final RobotPreferences.DoubleValue KP_NOTE = new RobotPreferences.DoubleValue("NoteVision", "kP", 0.25);
+  public static final RobotPreferences.DoubleValue KP_NOTE = new RobotPreferences.DoubleValue("NoteVision", "kP", 0.7);
   @RobotPreferencesValue
-  public static final RobotPreferences.DoubleValue KD_NOTE = new RobotPreferences.DoubleValue("NoteVision", "kD", 0.01);
+  public static final RobotPreferences.DoubleValue KI_NOTE = new RobotPreferences.DoubleValue("NoteVision", "kI", 0.0);
+  @RobotPreferencesValue
+  public static final RobotPreferences.DoubleValue KD_NOTE = new RobotPreferences.DoubleValue("NoteVision", "kD", 0.0);
+  
 
   private final SwerveSubsystem m_drivetrain;
   private final AprilTagSubsystem m_aprilTag;
@@ -84,12 +88,14 @@ public class DriveUsingController extends Command {
       Rotation2d angleToTarget = Rotation2d.fromDegrees(m_aprilTag.getAngleToBestTarget());
       targetOrientation = targetOrientation.plus(angleToTarget);
       m_profiledPIDController.setP(KP_APRIL_TAG);
+      m_profiledPIDController.setI(KI_APRIL_TAG);
       m_profiledPIDController.setD(KD_APRIL_TAG);
       rSpeed = m_profiledPIDController.calculate(currentOrientation.getRadians(), targetOrientation.getRadians());
     } else if (optionalNoteTarget.isPresent()) {
       Rotation2d angleToTarget = Rotation2d.fromDegrees(m_noteVision.getAngleToBestTarget());
       targetOrientation = targetOrientation.plus(angleToTarget);
       m_profiledPIDController.setP(KP_NOTE.getValue());
+      m_profiledPIDController.setI(KI_NOTE.getValue());
       m_profiledPIDController.setD(KD_NOTE.getValue());
       rSpeed = m_profiledPIDController.calculate(currentOrientation.getRadians(), targetOrientation.getRadians());
     } else {
