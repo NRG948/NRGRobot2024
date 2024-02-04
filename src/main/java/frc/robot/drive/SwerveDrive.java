@@ -37,6 +37,9 @@ public class SwerveDrive extends RobotDriveBase {
   private DoubleLogEntry omegaSpeedLog = new DoubleLogEntry(DataLogManager.getLog(), "/SwerveDrive/omegaSpeed");
 
   private final SwerveModuleState[] moduleStates = new SwerveModuleState[4];
+  private final SwerveModulePosition[] modulePositions = new SwerveModulePosition[4];
+  private final SwerveModuleVelocities[] velocities = new SwerveModuleVelocities[4];
+  private final SwerveModuleVoltages[] motorVoltages = new SwerveModuleVoltages[4];
 
   /**
    * constructs the swerve drive
@@ -188,13 +191,11 @@ public class SwerveDrive extends RobotDriveBase {
    * @return Swerve module positions.
    */
   public SwerveModulePosition[] getModulesPositions() {
-    SwerveModulePosition[] modulePosition = new SwerveModulePosition[4];
-
     for (int i = 0; i < modules.length; i++) {
-      modulePosition[i] = modules[i].getPosition();
+      modulePositions[i] = modules[i].getPosition();
     }
 
-    return modulePosition;
+    return modulePositions;
   }
 
   /**
@@ -203,8 +204,6 @@ public class SwerveDrive extends RobotDriveBase {
    * @return The swerve module velocities.
    */
   public SwerveModuleVelocities[] getModuleVelocities() {
-    SwerveModuleVelocities[] velocities = new SwerveModuleVelocities[4];
-
     for (int i = 0; i < modules.length; i++) {
       velocities[i] = modules[i].getVelocities();
     }
@@ -218,7 +217,6 @@ public class SwerveDrive extends RobotDriveBase {
    * @return The module motor
    */
   public SwerveModuleVoltages[] getModuleVoltages(){
-    SwerveModuleVoltages[] motorVoltages = new SwerveModuleVoltages[modules.length];
     for (int i = 0; i < modules.length; i++) {
       motorVoltages[i] = modules[i].getMotorVoltages();
     }
