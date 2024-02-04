@@ -36,6 +36,8 @@ public class SwerveDrive extends RobotDriveBase {
   private DoubleLogEntry ySpeedLog = new DoubleLogEntry(DataLogManager.getLog(), "/SwerveDrive/ySpeed");
   private DoubleLogEntry omegaSpeedLog = new DoubleLogEntry(DataLogManager.getLog(), "/SwerveDrive/omegaSpeed");
 
+  private final SwerveModuleState[] moduleStates = new SwerveModuleState[4];
+
   /**
    * constructs the swerve drive
    * 
@@ -149,8 +151,6 @@ public class SwerveDrive extends RobotDriveBase {
    * @return The current module state.
    */
   public SwerveModuleState[] getModuleStates() {
-    SwerveModuleState[] moduleStates = new SwerveModuleState[4];
-
     for (int i = 0; i < modules.length; i++) {
       moduleStates[i] = modules[i].getState();
     }
