@@ -132,6 +132,7 @@ public class SwerveSubsystem extends SubsystemBase {
   // The current sensor state updated by the periodic method.
   private Rotation2d rawOrientation;
   private Rotation2d rawOrientationOffset = new Rotation2d();
+  private Rotation2d orientation = new Rotation2d();
   private Pose2d lastVisionMeasurement = new Pose2d();
 
   private DoubleLogEntry rawOrientationLog = new DoubleLogEntry(DataLogManager.getLog(),
@@ -221,6 +222,7 @@ public class SwerveSubsystem extends SubsystemBase {
   private void updateSensorState() {
     rawOrientation = !isSimulation ? Rotation2d.fromDegrees(-ahrs.getAngle()) : simOrientation;
     rawOrientationLog.append(rawOrientation.getDegrees());
+    orientation = rawOrientation.plus(rawOrientationOffset);
   }
 
   /** See {@link SwerveDrivePoseEstimator#addVisionMeasurement(Pose2d, double)} */
@@ -452,7 +454,7 @@ public class SwerveSubsystem extends SubsystemBase {
    * @return Gets the field orientation of the robot.
    */
   public Rotation2d getOrientation() {
-    return rawOrientation.plus(rawOrientationOffset);
+    return orientation;
   }
 
   @Override
