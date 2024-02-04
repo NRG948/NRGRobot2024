@@ -41,7 +41,7 @@ import frc.robot.Constants.RobotConstants;
  * PhotonVision.
  */
 
-@RobotPreferencesLayout(groupName = "AprilTag", row = 1, column = 4, width = 2, height = 1)
+@RobotPreferencesLayout(groupName = "AprilTag", row = 2, column = 4, width = 2, height = 1)
 public class AprilTagSubsystem extends PhotonVisionSubsystemBase {
   public static final Matrix<N3, N1> SINGLE_TAG_STD_DEVS = VecBuilder.fill(4, 4, 8);
   public static final Matrix<N3, N1> MULTI_TAG_STD_DEVS = VecBuilder.fill(0.5, 0.5, 1);

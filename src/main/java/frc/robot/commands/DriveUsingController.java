@@ -8,6 +8,9 @@ import java.util.Optional;
 
 import org.photonvision.targeting.PhotonTrackedTarget;
 
+import com.nrg948.preferences.RobotPreferences;
+import com.nrg948.preferences.RobotPreferencesValue;
+
 import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.controller.ProfiledPIDController;
 import edu.wpi.first.math.geometry.Rotation2d;
@@ -21,7 +24,8 @@ import frc.robot.subsystems.SwerveSubsystem;
 public class DriveUsingController extends Command {
   private static final double DEADBAND = 0.05;
   private static final double KP_APRIL_TAG = 1.0;
-  private static final double KP_NOTE = 0.1;
+  @RobotPreferencesValue
+  public static final RobotPreferences.DoubleValue KP_NOTE = new RobotPreferences.DoubleValue("NoteVision", "kP", 0.25);
 
   private final SwerveSubsystem m_drivetrain;
   private final AprilTagSubsystem m_aprilTag;
@@ -43,6 +47,7 @@ public class DriveUsingController extends Command {
   @Override
   public void initialize() {
     m_profiledPIDController = new ProfiledPIDController(KP_APRIL_TAG, 0, 0, m_drivetrain.getRotationalConstraints());
+    m_profiledPIDController.enableContinuousInput(-Math.PI, Math.PI);
     m_profiledPIDController.reset(m_drivetrain.getOrientation().getRadians());
   }
 
@@ -80,7 +85,7 @@ public class DriveUsingController extends Command {
     } else if (optionalNoteTarget.isPresent()) {
       Rotation2d angleToTarget = Rotation2d.fromDegrees(m_noteVision.getAngleToBestTarget());
       targetOrientation = targetOrientation.plus(angleToTarget);
-      m_profiledPIDController.setP(KP_NOTE);
+      m_profiledPIDController.setP(KP_NOTE.getValue());
       rSpeed = m_profiledPIDController.calculate(currentOrientation.getRadians(), targetOrientation.getRadians());
     } else {
       rSpeed = -m_xboxController.getRightX();
