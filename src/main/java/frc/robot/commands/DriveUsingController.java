@@ -20,7 +20,8 @@ import frc.robot.subsystems.SwerveSubsystem;
 
 public class DriveUsingController extends Command {
   private static final double DEADBAND = 0.05;
-  private static final double KP = 1.0;
+  private static final double KP_APRIL_TAG = 1.0;
+  private static final double KP_NOTE = 0.1;
 
   private final SwerveSubsystem m_drivetrain;
   private final AprilTagSubsystem m_aprilTag;
@@ -41,7 +42,7 @@ public class DriveUsingController extends Command {
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
-    m_profiledPIDController = new ProfiledPIDController(KP, 0, 0, m_drivetrain.getRotationalConstraints());
+    m_profiledPIDController = new ProfiledPIDController(KP_APRIL_TAG, 0, 0, m_drivetrain.getRotationalConstraints());
     m_profiledPIDController.reset(m_drivetrain.getOrientation().getRadians());
   }
 
@@ -69,14 +70,17 @@ public class DriveUsingController extends Command {
       optionalNoteTarget = Optional.of(m_noteVision.getBestTarget());
     }
 
-    // Don't want to do both tag and note alignment so to choose one, tag takes priority
+    // Don't want to do both tag and note alignment so to choose one, tag takes
+    // priority
     if (optionalTagTarget.isPresent()) {
-      Rotation2d angleToTarget = Rotation2d.fromDegrees(-m_aprilTag.getAngleToBestTarget());
+      Rotation2d angleToTarget = Rotation2d.fromDegrees(m_aprilTag.getAngleToBestTarget());
       targetOrientation = targetOrientation.plus(angleToTarget);
+      m_profiledPIDController.setP(KP_APRIL_TAG);
       rSpeed = m_profiledPIDController.calculate(currentOrientation.getRadians(), targetOrientation.getRadians());
     } else if (optionalNoteTarget.isPresent()) {
-      Rotation2d angleToTarget = Rotation2d.fromDegrees(-m_noteVision.getAngleToBestTarget());
+      Rotation2d angleToTarget = Rotation2d.fromDegrees(m_noteVision.getAngleToBestTarget());
       targetOrientation = targetOrientation.plus(angleToTarget);
+      m_profiledPIDController.setP(KP_NOTE);
       rSpeed = m_profiledPIDController.calculate(currentOrientation.getRadians(), targetOrientation.getRadians());
     } else {
       rSpeed = -m_xboxController.getRightX();
