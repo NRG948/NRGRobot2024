@@ -18,7 +18,7 @@ import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardLayout;
 import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
 import frc.robot.Constants.RobotConstants;
 
-@RobotPreferencesLayout(groupName = "NoteVision", row = 0, column = 4, width = 2, height = 2)
+@RobotPreferencesLayout(groupName = "NoteVision", row = 1, column = 4, width = 2, height = 3)
 public class NoteVisionSubsystem extends PhotonVisionSubsystemBase {
 
   @RobotPreferencesValue
