@@ -4,6 +4,10 @@
 
 package frc.robot.commands;
 
+import com.nrg948.preferences.RobotPreferences;
+import com.nrg948.preferences.RobotPreferencesValue;
+
+import edu.wpi.first.math.geometry.Pose3d;
 import edu.wpi.first.math.geometry.Rotation3d;
 import edu.wpi.first.math.geometry.Transform3d;
 import edu.wpi.first.math.geometry.Translation3d;
@@ -14,6 +18,9 @@ import frc.robot.subsystems.AprilTagSubsystem;
 import frc.robot.subsystems.Subsystems;
 
 public final class AlignToAmp {
+  @RobotPreferencesValue
+  public static final RobotPreferences.BooleanValue USE_ESTIMATED_POSE = new RobotPreferences.BooleanValue("AprilTag", "Use Estimated Pose", false);
+
   /** Returns a Command that drives to speaker shooting position. */
   public static Command driveToAmp(Subsystems subsystems) {
      
@@ -24,16 +31,22 @@ public final class AlignToAmp {
     var targetOptional = aprilTag.getTarget(targetID);
     if(targetOptional.isEmpty()){
       return Commands.none(); // TODO blink LEDS red to tell driver we can't see the target
-    }
+    } 
 
     var target = targetOptional.get();
     var cameraToTarget = target.getBestCameraToTarget();
+    Pose3d targetPose;
 
-    // Transform the robot's pose to find the tag's pose
-    var robotPose = drivetrain.getPosition3d();
-    var cameraPose = robotPose.transformBy(RobotConstants.APRILTAG_CAMERA_TO_ROBOT);
-    System.out.println("CAMERA POSE = " + cameraPose);
-    var targetPose = cameraPose.transformBy(cameraToTarget);
+    if (USE_ESTIMATED_POSE.getValue()) {
+      targetPose = aprilTag.getAprilTagPose(targetID);
+    } else {
+      // Transform the robot's pose to find the tag's pose
+      var robotPose = drivetrain.getPosition3d();
+      var cameraPose = robotPose.transformBy(RobotConstants.APRILTAG_CAMERA_TO_ROBOT);
+      System.out.println("CAMERA POSE = " + cameraPose);
+      targetPose = cameraPose.transformBy(cameraToTarget);
+    }
+
     System.out.println("TARGET POSE = " + targetPose);
 
     // Find the scoring position pose.

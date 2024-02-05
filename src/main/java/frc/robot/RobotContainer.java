@@ -8,6 +8,8 @@ package frc.robot;
 import static frc.robot.Constants.ColorConstants.ORANGE;
 import static frc.robot.Constants.ColorConstants.RED;
 
+import java.util.Set;
+
 import com.nrg948.preferences.RobotPreferences;
 import com.nrg948.preferences.RobotPreferencesLayout;
 
@@ -19,7 +21,6 @@ import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
-import frc.robot.Constants.ColorConstants;
 import frc.robot.Constants.RobotConstants.OperatorConstants;
 import frc.robot.commands.AlignToAmp;
 import frc.robot.commands.DriveUsingController;
@@ -93,7 +94,8 @@ public class RobotContainer {
     m_driverController.back().whileTrue(SysID.getSwerveDriveCharacterizationSequence(m_subsystems));
     m_driverController.leftBumper().whileTrue(SysID.getSwerveSteeringCharacterizationSequence(m_subsystems));
     m_driverController.a().onTrue(Pathfinding.pathFindToSpeakerFront(m_subsystems));
-    m_driverController.y().onTrue(Commands.runOnce(() -> AlignToAmp.driveToAmp(m_subsystems).execute()));
+    m_driverController.y().onTrue(Commands.defer(() -> AlignToAmp.driveToAmp(m_subsystems), 
+      Set.of(m_subsystems.drivetrain, m_subsystems.aprilTag)));
 
     Trigger noteDetected = new Trigger(m_subsystems.indexerSubsystem::isNoteDetected);
     noteDetected.onTrue(LEDs.fillColor(m_subsystems.addressableLEDSubsystem, ORANGE));
