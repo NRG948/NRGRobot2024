@@ -25,6 +25,7 @@ import frc.robot.Constants.RobotConstants.OperatorConstants;
 import frc.robot.commands.AlignToAmp;
 import frc.robot.commands.DriveUsingController;
 import frc.robot.commands.LEDs;
+import frc.robot.commands.ManualArmController;
 import frc.robot.commands.Pathfinding;
 import frc.robot.commands.SysID;
 import frc.robot.subsystems.Subsystems;
@@ -57,6 +58,8 @@ public class RobotContainer {
   // Replace with CommandPS4Controller or CommandJoystick if needed
   private final CommandXboxController m_driverController = new CommandXboxController(
       OperatorConstants.XboxControllerPort.DRIVER);
+  private final CommandXboxController m_operatorController = new CommandXboxController(
+      OperatorConstants.XboxControllerPort.MANIPULATOR);
 
   /**
    * The container for the robot. Contains subsystems, OI devices, and commands.
@@ -64,6 +67,7 @@ public class RobotContainer {
   public RobotContainer() {
 
     m_subsystems.drivetrain.setDefaultCommand(new DriveUsingController(m_subsystems, m_driverController));
+    m_subsystems.armSubsystem.setDefaultCommand(new ManualArmController(m_subsystems, m_operatorController));
     
     // Configure the trigger bindings
     configureBindings();
