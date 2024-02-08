@@ -11,7 +11,7 @@ public class Subsystems {
     public NoteVisionSubsystem noteVision = new NoteVisionSubsystem();
     public IndexerSubsystem indexerSubsystem = new IndexerSubsystem();
     public AddressableLEDSubsystem addressableLEDSubsystem = new AddressableLEDSubsystem();
-    //public IntakeSubsystem intake = new IntakeSubsystem();
+    public IntakeSubsystem intake = new IntakeSubsystem();
 
     public void periodic(){
         var visionEst = aprilTag.getEstimateGlobalPose();
