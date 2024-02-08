@@ -145,7 +145,8 @@ public class AprilTagSubsystem extends PhotonVisionSubsystemBase {
   }
 
   /**
-   * Returns the distance to the target with the input ID. Returns 0 if target not found.
+   * Returns the distance to the target with the input ID. Returns 0 if target not
+   * found.
    * 
    * @param id The AprilTag ID.
    * @return The distance to the target with the input ID.
@@ -160,7 +161,8 @@ public class AprilTagSubsystem extends PhotonVisionSubsystemBase {
   }
 
   /**
-   * Returns the angle to the target with the input ID. Returns 0 if target not found.
+   * Returns the angle to the target with the input ID. Returns 0 if target not
+   * found.
    * 
    * @param id The AprilTag ID.
    * @return The angle to the target with the input ID.
@@ -217,5 +219,13 @@ public class AprilTagSubsystem extends PhotonVisionSubsystemBase {
         .withWidget(BuiltInWidgets.kCameraStream)
         .withPosition(2, 0)
         .withSize(4, 3);
+
+    ShuffleboardLayout apriltagLayout = visionTab.getLayout("Target Position", BuiltInLayouts.kList)
+        .withPosition(6, 0)
+        .withSize(2, 5);
+        apriltagLayout.addDouble("X", () -> getAprilTagPose(aprilTagIdChooser.getSelected()).getX());
+        apriltagLayout.addDouble("Y", () -> getAprilTagPose(aprilTagIdChooser.getSelected()).getY());
+        apriltagLayout.addDouble("Z", () -> getAprilTagPose(aprilTagIdChooser.getSelected()).getZ());
+
   }
 }
