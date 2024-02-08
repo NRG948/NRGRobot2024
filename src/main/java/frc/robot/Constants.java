@@ -65,9 +65,14 @@ public final class Constants {
     public static final double SCORING_DISTANCE_FROM_AMP = Units.inchesToMeters(20);
     
     /** 3d transforms that moves the camera to the center of the robot. */
+    public static final double APRILTAG_CAMERA_PITCH = Math.toRadians(13.3);
+
     public static final Transform3d APRILTAG_CAMERA_TO_ROBOT = new Transform3d(
-      new Translation3d(Units.inchesToMeters(-3.5), Units.inchesToMeters(-14.75), Units.inchesToMeters(-23.25)),
-      new Rotation3d(0, Math.toRadians(13.3), Math.toRadians(180))
+      new Translation3d(
+        Units.inchesToMeters(3.5) / Math.cos(APRILTAG_CAMERA_PITCH),
+        Units.inchesToMeters(14.75),
+        Units.inchesToMeters(-23.25) * Math.cos(APRILTAG_CAMERA_PITCH)),
+      new Rotation3d(0, -APRILTAG_CAMERA_PITCH, Math.toRadians(180))
     );
 
     public static final Transform3d NOTE_CAMERA_TO_ROBOT = new Transform3d();  //TODO get real constant
