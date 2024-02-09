@@ -39,13 +39,15 @@ public abstract class PhotonVisionSubsystemBase extends SubsystemBase {
    * Creates a new PhotonVisionSubsystemBase.
    * 
    * @param cameraName    The name of the PhotonVision camera.
-   * @param cameraToRobot The transform from the camera to center of the robot.
+   * @param robotToCamera The transform from the center of the robot to the
+   *                      camera.
    */
-  public PhotonVisionSubsystemBase(String cameraName, Transform3d cameraToRobot) {
+  public PhotonVisionSubsystemBase(String cameraName, Transform3d robotToCamera) {
     this.camera = new PhotonCamera(cameraName);
-    this.cameraToRobot = cameraToRobot;
-    this.robotToCamera = cameraToRobot.inverse();
-
+    this.cameraToRobot = robotToCamera.inverse();
+    this.robotToCamera = robotToCamera;
+    System.out.println(cameraName + " robot to camera: " + robotToCamera);
+    System.out.println(cameraName + " camera to robot: " + cameraToRobot);
     hasTargetLogger = new BooleanLogEntry(DataLogManager.getLog(), String.format("/%s/Has Target", cameraName));
     distanceLogger = new DoubleLogEntry(DataLogManager.getLog(), String.format("/%s/Distance", cameraName));
     angleLogger = new DoubleLogEntry(DataLogManager.getLog(), String.format("/%s/Angle", cameraName));
