@@ -58,7 +58,7 @@ public class AprilTagSubsystem extends PhotonVisionSubsystemBase {
 
   /** Creates a new PhotonVisionSubsystem. */
   public AprilTagSubsystem() {
-    super("948Mono001", RobotConstants.APRILTAG_CAMERA_TO_ROBOT);
+    super("948Mono001", RobotConstants.APRILTAG_ROBOT_TO_CAMERA);
     for (int i = 1; i <= 16; i++) {
       aprilTagIdChooser.addOption(String.valueOf(i), i);
     }
