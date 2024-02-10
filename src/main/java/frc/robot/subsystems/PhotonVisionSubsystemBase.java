@@ -15,6 +15,7 @@ import edu.wpi.first.util.datalog.BooleanLogEntry;
 import edu.wpi.first.util.datalog.DoubleLogEntry;
 import edu.wpi.first.wpilibj.DataLogManager;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import frc.robot.util.GeometryUtils;
 
 /**
  * This is a base class for subsystems responsible for getting target
@@ -46,8 +47,10 @@ public abstract class PhotonVisionSubsystemBase extends SubsystemBase {
     this.camera = new PhotonCamera(cameraName);
     this.cameraToRobot = robotToCamera.inverse();
     this.robotToCamera = robotToCamera;
-    System.out.println(cameraName + " robot to camera: " + robotToCamera);
-    System.out.println(cameraName + " camera to robot: " + cameraToRobot);
+
+    System.out.println(cameraName + " robot to camera: " + GeometryUtils.transformToString(robotToCamera));
+    System.out.println(cameraName + " camera to robot: " + GeometryUtils.transformToString(cameraToRobot));
+
     hasTargetLogger = new BooleanLogEntry(DataLogManager.getLog(), String.format("/%s/Has Target", cameraName));
     distanceLogger = new DoubleLogEntry(DataLogManager.getLog(), String.format("/%s/Distance", cameraName));
     angleLogger = new DoubleLogEntry(DataLogManager.getLog(), String.format("/%s/Angle", cameraName));

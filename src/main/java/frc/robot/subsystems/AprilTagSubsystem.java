@@ -4,6 +4,8 @@
 
 package frc.robot.subsystems;
 
+import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 
 import org.photonvision.EstimatedRobotPose;
@@ -46,6 +48,8 @@ import frc.robot.Constants.RobotConstants;
 public class AprilTagSubsystem extends PhotonVisionSubsystemBase {
   public static final Matrix<N3, N1> SINGLE_TAG_STD_DEVS = VecBuilder.fill(4, 4, 8);
   public static final Matrix<N3, N1> MULTI_TAG_STD_DEVS = VecBuilder.fill(0.5, 0.5, 1);
+  public static Pose3d NO_APRILTAG = new Pose3d();
+  public static EstimatedRobotPose NO_APRILTAG_ESTIMATE = new EstimatedRobotPose(NO_APRILTAG, 0, List.of(), PoseStrategy.LOWEST_AMBIGUITY);
 
   @RobotPreferencesValue
   public static final RobotPreferences.BooleanValue enableTab = new RobotPreferences.BooleanValue(
@@ -55,6 +59,9 @@ public class AprilTagSubsystem extends PhotonVisionSubsystemBase {
   private double lastEstTimestamp = 0;
   private final SendableChooser<Integer> aprilTagIdChooser = new SendableChooser<Integer>();
   private final AprilTagFieldLayout aprilTagLayout;
+  private int selectedAprilTag;
+  private Pose3d selectedAprilTagPose = new Pose3d();
+  private Pose3d globalEstimatedPose = new Pose3d();
 
   /** Creates a new PhotonVisionSubsystem. */
   public AprilTagSubsystem() {
@@ -84,6 +91,7 @@ public class AprilTagSubsystem extends PhotonVisionSubsystemBase {
     if (newResult) {
       lastEstTimestamp = latestTimestamp;
     }
+    globalEstimatedPose = visionEst.orElse(NO_APRILTAG_ESTIMATE).estimatedPose;
     return visionEst;
   }
 
@@ -186,13 +194,16 @@ public class AprilTagSubsystem extends PhotonVisionSubsystemBase {
   }
 
   public Pose3d getAprilTagPose(int id) {
-    return aprilTagLayout.getTagPose(id).get();
+    return aprilTagLayout.getTagPose(id).orElse(NO_APRILTAG);
   }
 
   @Override
   public void periodic() {
     super.periodic();
     estimator.update(getLatestResult());
+
+    selectedAprilTag = aprilTagIdChooser.getSelected().intValue();
+    selectedAprilTagPose = getAprilTagPose(selectedAprilTag);
   }
 
   /**
@@ -209,8 +220,8 @@ public class AprilTagSubsystem extends PhotonVisionSubsystemBase {
         .withSize(2, 5);
     targetLayout.add("Id Selection", aprilTagIdChooser).withWidget(BuiltInWidgets.kComboBoxChooser);
     targetLayout.addBoolean("Has Target", this::hasTargets);
-    targetLayout.addDouble("Distance", () -> getDistanceToTarget(aprilTagIdChooser.getSelected()));
-    targetLayout.addDouble("Angle", () -> getAngleToTarget(aprilTagIdChooser.getSelected()));
+    targetLayout.addDouble("Distance", () -> getDistanceToTarget(selectedAprilTag));
+    targetLayout.addDouble("Angle", () -> getAngleToTarget(selectedAprilTag));
 
     VideoSource video = new HttpCamera("photonvision_Port_1184_Output_MJPEG_Server",
         "http://photonvision.local:1184/?action=stream",
@@ -222,10 +233,37 @@ public class AprilTagSubsystem extends PhotonVisionSubsystemBase {
 
     ShuffleboardLayout apriltagLayout = visionTab.getLayout("Target Position", BuiltInLayouts.kList)
         .withPosition(6, 0)
-        .withSize(2, 5);
-        apriltagLayout.addDouble("X", () -> getAprilTagPose(aprilTagIdChooser.getSelected()).getX());
-        apriltagLayout.addDouble("Y", () -> getAprilTagPose(aprilTagIdChooser.getSelected()).getY());
-        apriltagLayout.addDouble("Z", () -> getAprilTagPose(aprilTagIdChooser.getSelected()).getZ());
+        .withSize(2, 4);
+
+    ShuffleboardLayout selectedLayout = apriltagLayout.getLayout("Selected AprilTag", BuiltInLayouts.kGrid)
+        .withProperties(Map.of("Number of columns", 3, "Number of rows", 2));
+    selectedLayout.addDouble("X", () -> selectedAprilTagPose.getX())
+      .withPosition(0, 0);
+    selectedLayout.addDouble("Y", () -> selectedAprilTagPose.getY())
+      .withPosition(1, 0);
+    selectedLayout.addDouble("Z", () -> selectedAprilTagPose.getZ())
+      .withPosition(2, 0);
+    selectedLayout.addDouble("Roll", () -> Math.toDegrees(selectedAprilTagPose.getRotation().getX()))
+      .withPosition(0, 1);
+    selectedLayout.addDouble("Pitch", () -> Math.toDegrees(selectedAprilTagPose.getRotation().getY()))
+      .withPosition(1, 1);
+    selectedLayout.addDouble("Yaw", () -> Math.toDegrees(selectedAprilTagPose.getRotation().getZ()))
+      .withPosition(2, 1);
+
+    ShuffleboardLayout estimatedLayout = apriltagLayout.getLayout("Global Estimated Pose", BuiltInLayouts.kGrid)
+        .withProperties(Map.of("Number of columns", 3, "Number of rows", 2));
+    estimatedLayout.addDouble("X", () -> globalEstimatedPose.getX())
+      .withPosition(0, 0);
+    estimatedLayout.addDouble("Y", () -> globalEstimatedPose.getY())
+      .withPosition(1, 0);
+    estimatedLayout.addDouble("Z", () -> globalEstimatedPose.getZ())
+      .withPosition(2, 0);
+    estimatedLayout.addDouble("Roll", () -> Math.toDegrees(globalEstimatedPose.getRotation().getX()))
+      .withPosition(0, 1);
+    estimatedLayout.addDouble("Pitch", () -> Math.toDegrees(globalEstimatedPose.getRotation().getY()))
+      .withPosition(1, 1);
+    estimatedLayout.addDouble("Yaw", () -> Math.toDegrees(globalEstimatedPose.getRotation().getZ()))
+      .withPosition(2, 1);
 
   }
 }
