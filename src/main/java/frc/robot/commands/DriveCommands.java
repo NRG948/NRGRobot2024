@@ -17,11 +17,11 @@ import frc.robot.Constants.RobotConstants;
 import frc.robot.subsystems.AprilTagSubsystem;
 import frc.robot.subsystems.Subsystems;
 
-public final class AlignToAmp {
+public final class DriveCommands {
   @RobotPreferencesValue
   public static final RobotPreferences.BooleanValue USE_ESTIMATED_POSE = new RobotPreferences.BooleanValue("AprilTag", "Use Estimated Pose", false);
 
-  /** Returns a Command that drives to speaker shooting position. */
+  /** Returns a Command that drives to amp delivery position. */
   public static Command driveToAmp(Subsystems subsystems) {
      
     var drivetrain = subsystems.drivetrain;
