@@ -94,8 +94,8 @@ public final class Constants {
       public static class SparkMax {
         public static final int SHOOTER_PORT = 59;
         public static final int INTAKE_PORT = 60; // TODO assign actual port
-        public static final int ARM_LEFT_PORT = 61; // TODO assign actual port
-        public static final int ARM_RIGHT_PORT = 62; // TODO assign actual port
+        public static final int ARM_LEFT_PORT = 1;
+        public static final int ARM_RIGHT_PORT = 11; 
         public static final int INDEXER_PORT = 63; //TODO assign actual port
       }
     }
