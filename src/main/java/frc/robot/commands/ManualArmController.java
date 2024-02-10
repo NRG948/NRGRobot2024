@@ -11,7 +11,7 @@ import frc.robot.subsystems.ArmSubsystem;
 import frc.robot.subsystems.Subsystems;
 
 public class ManualArmController extends Command {
-  private final double ARM_POWER_LIMIT = 0.2;
+  private final double ARM_POWER_LIMIT = 0.3;
   private final double DEADBAND = 0.05;
 
   private final CommandXboxController controller;
