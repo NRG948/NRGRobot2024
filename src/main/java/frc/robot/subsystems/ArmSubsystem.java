@@ -35,7 +35,7 @@ public class ArmSubsystem extends SubsystemBase {
       "Arm", "Enable Tab", false);
 
   public static final double GEAR_RATIO = 168.0;
-  public static final double MASS = 125.0; // TODO determine actual arm mass
+  public static final double MASS = 0.5; // TODO determine actual arm mass
   public static final double RADIANS_PER_REVOLUTION = (2 * Math.PI) / GEAR_RATIO;
   public static final MotorParameters MOTOR = MotorParameters.NeoV1_1;
   public static final double MAX_ANGULAR_SPEED = MOTOR.getFreeSpeedRPM() * RADIANS_PER_REVOLUTION / 60.0;
@@ -45,7 +45,7 @@ public class ArmSubsystem extends SubsystemBase {
   public static final double KS = 3.0;
   public static final double KV = (RobotConstants.MAX_BATTERY_VOLTAGE - KS) / MAX_ANGULAR_SPEED;
   public static final double KA = (RobotConstants.MAX_BATTERY_VOLTAGE - KS) / MAX_ANGULAR_ACCELERATION;
-  public static final double KG = KA * 9.81;
+  public static final double KG = 0; // KA * 9.81;
   public static final double STOWED_ANGLE = -31.3;
   public static final double ARM_RADIANS_PER_MOTOR_ROTATION = (2 * Math.PI) / GEAR_RATIO;
   private static final double LOWER_ANGLE_LIMIT = Math.toRadians(-27);
@@ -65,19 +65,19 @@ public class ArmSubsystem extends SubsystemBase {
   private double currentAngle = STOWED_ANGLE;
 
   private final ArmFeedforward feedForward = new ArmFeedforward(KS, KV, KA, KG);
-  private final Timer timer = new Timer();
-  private final ProfiledPIDController controller = new ProfiledPIDController(1.0, 0.0, 0.0, CONSTRAINTS);
+  private final ProfiledPIDController controller = new ProfiledPIDController(35.0, 0.0, 0.0, CONSTRAINTS);
   private boolean enablePeriodicControl = false;
 
   /** Creates a new ArmSubsystem. */
   public ArmSubsystem() {
     rightMotor.follow(leftMotor, true);
-    leftMotor.setIdleMode(IdleMode.kBrake);
-    rightMotor.setIdleMode(IdleMode.kBrake);
+    leftMotor.setIdleMode(IdleMode.kCoast); // TODO kBreak
+    rightMotor.setIdleMode(IdleMode.kCoast); // TODO kBreak
     leftEncoder.setPositionConversionFactor(ARM_RADIANS_PER_MOTOR_ROTATION);
     leftEncoder.setVelocityConversionFactor(ARM_RADIANS_PER_MOTOR_ROTATION);
     absoluteEncoder.setDutyCycleRange(1.0 / 1025.0, 1024.0 / 1025.0);
     absoluteEncoder.setDistancePerRotation(2 * Math.PI);
+    controller.enableContinuousInput(-Math.PI, Math.PI);
 
     System.out.println("Arm max velocity: " + Math.toDegrees(MAX_ANGULAR_SPEED));
     System.out.println("Arm max accel: " + Math.toDegrees(MAX_ANGULAR_ACCELERATION));
@@ -91,8 +91,6 @@ public class ArmSubsystem extends SubsystemBase {
   public void setGoalAngle(double goalAngle) {
     controller.reset(currentAngle);
     controller.setGoal(goalAngle);
-    timer.reset();
-    timer.start();
     enablePeriodicControl = true;
   }
 
@@ -102,7 +100,6 @@ public class ArmSubsystem extends SubsystemBase {
   public void disable() {
     enablePeriodicControl = false;
     leftMotor.stopMotor();
-    timer.stop();
   }
 
   /** Returns whether the arm is at the goal angle. */
@@ -147,7 +144,7 @@ public class ArmSubsystem extends SubsystemBase {
   @Override
   public void periodic() {
     // This method will be called once per scheduler run
-    currentAngle = rawAngleOffset - absoluteEncoder.getDistance();
+    currentAngle = MathUtil.angleModulus(rawAngleOffset - absoluteEncoder.getDistance());
 
     if (enablePeriodicControl) {
       double feedback = controller.calculate(currentAngle);
