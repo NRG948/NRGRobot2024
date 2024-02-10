@@ -18,6 +18,7 @@ import edu.wpi.first.math.controller.ProfiledPIDController;
 import edu.wpi.first.math.trajectory.TrapezoidProfile;
 import edu.wpi.first.wpilibj.DutyCycleEncoder;
 import edu.wpi.first.wpilibj.Timer;
+import edu.wpi.first.wpilibj.shuffleboard.BuiltInLayouts;
 import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardLayout;
 import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
@@ -55,7 +56,7 @@ public class ArmSubsystem extends SubsystemBase {
   private final RelativeEncoder leftEncoder = leftMotor.getEncoder();
   private final DutyCycleEncoder absoluteEncoder = new DutyCycleEncoder(Constants.RobotConstants.DigitalIO.ARM_ABSOLUTE_ENCODER);
 
-  private final double ANGLE_ENCODER_OFFSET = 0.0; //TODO: get abs encoder offset
+  private double rawAngleOffset = Math.toRadians(9.15);
 
   private double currentAngle = STOWED_ANGLE;
 
@@ -67,13 +68,12 @@ public class ArmSubsystem extends SubsystemBase {
 
   /** Creates a new ArmSubsystem. */
   public ArmSubsystem() {
-    rightMotor.setInverted(true); // TODO verify correct inversion
-    rightMotor.follow(leftMotor);
+    rightMotor.follow(leftMotor, true);
     leftMotor.setIdleMode(IdleMode.kBrake);
     rightMotor.setIdleMode(IdleMode.kBrake);
     leftEncoder.setPositionConversionFactor(ARM_RADIANS_PER_MOTOR_ROTATION);
     leftEncoder.setVelocityConversionFactor(ARM_RADIANS_PER_MOTOR_ROTATION);
-    absoluteEncoder.setPositionOffset(ANGLE_ENCODER_OFFSET);
+    absoluteEncoder.setDutyCycleRange(1.0/1025.0, 1024.0/1025.0);
     absoluteEncoder.setDistancePerRotation(2 * Math.PI);
   }
 
@@ -136,7 +136,7 @@ public class ArmSubsystem extends SubsystemBase {
   @Override
   public void periodic() {
     // This method will be called once per scheduler run
-    currentAngle = absoluteEncoder.getAbsolutePosition();
+    currentAngle = rawAngleOffset - absoluteEncoder.getDistance();
 
     if (enablePeriodicControl) {
       double feedback = controller.calculate(currentAngle);
@@ -151,8 +151,9 @@ public class ArmSubsystem extends SubsystemBase {
     }
 
     ShuffleboardTab armTab = Shuffleboard.getTab("Arm");
-    ShuffleboardLayout infolayout = armTab.getLayout("Arm Info")
+    ShuffleboardLayout infolayout = armTab.getLayout("Arm Info", BuiltInLayouts.kList)
+      .withPosition(0, 0)
       .withSize(2, 4);
-    infolayout.addDouble("Angle", () -> getAngle());
+    infolayout.addDouble("Angle", () -> Math.toDegrees(getAngle()));
   }
 }
