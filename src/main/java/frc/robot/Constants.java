@@ -65,11 +65,12 @@ public final class Constants {
     public static final double SCORING_DISTANCE_FROM_AMP = Units.inchesToMeters(20);
     
     /** 3d transforms that moves the camera to the center of the robot. */
-    public static final double APRILTAG_CAMERA_PITCH = Math.toRadians(15);
+    public static final double APRILTAG_CAMERA_PITCH = Math.toRadians(-15);
+    public static final double APRILTAG_CAMERA_YAW = Math.toRadians(180);
 
     public static final Transform3d APRILTAG_ROBOT_TO_CAMERA = new Transform3d(
       new Translation3d(Units.inchesToMeters(3.5), Units.inchesToMeters(14.75), Units.inchesToMeters(23.25)), 
-      new Rotation3d(0, APRILTAG_CAMERA_PITCH, Math.PI)
+      new Rotation3d(0, APRILTAG_CAMERA_PITCH, APRILTAG_CAMERA_YAW)
       );
 
     public static final Transform3d APRILTAG_CAMERA_TO_ROBOT = APRILTAG_ROBOT_TO_CAMERA.inverse();
