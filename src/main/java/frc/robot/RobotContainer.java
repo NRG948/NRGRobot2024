@@ -22,7 +22,7 @@ import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
 import frc.robot.Constants.RobotConstants.OperatorConstants;
-import frc.robot.commands.AlignToAmp;
+import frc.robot.commands.DriveCommands;
 import frc.robot.commands.DriveUsingController;
 import frc.robot.commands.LEDs;
 import frc.robot.commands.ManualArmController;
@@ -98,7 +98,7 @@ public class RobotContainer {
     m_driverController.back().whileTrue(SysID.getSwerveDriveCharacterizationSequence(m_subsystems));
     m_driverController.leftBumper().whileTrue(SysID.getSwerveSteeringCharacterizationSequence(m_subsystems));
     m_driverController.a().onTrue(Pathfinding.pathFindToSpeakerFront(m_subsystems));
-    m_driverController.y().onTrue(Commands.defer(() -> AlignToAmp.driveToAmp(m_subsystems), 
+    m_driverController.y().onTrue(Commands.defer(() -> DriveCommands.driveToAmp(m_subsystems), 
       Set.of(m_subsystems.drivetrain, m_subsystems.aprilTag)));
 
     m_operatorController.povUp().onTrue(Commands.runOnce(() -> m_subsystems.armSubsystem.setGoalAngle(Math.toRadians(45)), m_subsystems.armSubsystem));
