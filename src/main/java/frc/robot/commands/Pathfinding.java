@@ -26,15 +26,12 @@ public class Pathfinding {
 	 * 
 	 * @return A command in which the robot will pathfind to the front of the blue speaker.
 	 */
-	public static Command pathFindToSpeakerFront(Subsystems subsystems) {
-		SwerveSubsystem drivetrain = subsystems.drivetrain;
-		/*I know it should be not only in here, but I'm having issues with drivetrain 
-		can't be static and the method needing to be static */
+	public static Command pathFindToSpeakerFront() {
 		PathConstraints constraints = new PathConstraints( 
-			PATH_SPEED_PERCENT * drivetrain.getMaxSpeed(),
-			PATH_SPEED_PERCENT * drivetrain.getMaxAcceleration(),
-			PATH_SPEED_PERCENT * drivetrain.getRotationalConstraints().maxVelocity,
-			PATH_SPEED_PERCENT * drivetrain.getRotationalConstraints().maxAcceleration);
+			PATH_SPEED_PERCENT * SwerveSubsystem.getMaxSpeed(),
+			PATH_SPEED_PERCENT * SwerveSubsystem.getMaxAcceleration(),
+			PATH_SPEED_PERCENT * SwerveSubsystem.getRotationalConstraints().maxVelocity,
+			PATH_SPEED_PERCENT * SwerveSubsystem.getRotationalConstraints().maxAcceleration);
 		return AutoBuilder.pathfindToPose(BLUE_SPEAKER_FRONT, constraints);
 	}
 
