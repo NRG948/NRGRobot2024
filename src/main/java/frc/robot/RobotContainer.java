@@ -67,7 +67,7 @@ public class RobotContainer {
   public RobotContainer() {
 
     m_subsystems.drivetrain.setDefaultCommand(new DriveUsingController(m_subsystems, m_driverController));
-    m_subsystems.armSubsystem.setDefaultCommand(new ManualArmController(m_subsystems, m_operatorController));
+    //m_subsystems.armSubsystem.setDefaultCommand(new ManualArmController(m_subsystems, m_operatorController));
     
     // Configure the trigger bindings
     configureBindings();
@@ -100,6 +100,13 @@ public class RobotContainer {
     m_driverController.a().onTrue(Pathfinding.pathFindToSpeakerFront(m_subsystems));
     m_driverController.y().onTrue(Commands.defer(() -> AlignToAmp.driveToAmp(m_subsystems), 
       Set.of(m_subsystems.drivetrain, m_subsystems.aprilTag)));
+
+    m_operatorController.povUp().onTrue(Commands.runOnce(() -> m_subsystems.armSubsystem.setGoalAngle(Math.toRadians(45)), m_subsystems.armSubsystem));
+    m_operatorController.povRight().onTrue(Commands.runOnce(() -> m_subsystems.armSubsystem.setGoalAngle(0), m_subsystems.armSubsystem));
+    m_operatorController.povDown().onTrue(Commands.runOnce(() -> m_subsystems.armSubsystem.setGoalAngle(Math.toRadians(-25)), m_subsystems.armSubsystem));
+    m_operatorController.povLeft().onTrue(Commands.runOnce(() -> m_subsystems.armSubsystem.disable(), m_subsystems.armSubsystem));
+
+
 
     Trigger noteDetected = new Trigger(m_subsystems.indexerSubsystem::isNoteDetected);
     noteDetected.onTrue(LEDs.fillColor(m_subsystems.addressableLEDSubsystem, ORANGE));
