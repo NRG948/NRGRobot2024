@@ -17,6 +17,7 @@ import edu.wpi.first.math.controller.ArmFeedforward;
 import edu.wpi.first.math.controller.ProfiledPIDController;
 import edu.wpi.first.math.trajectory.TrapezoidProfile;
 import edu.wpi.first.wpilibj.DutyCycleEncoder;
+import edu.wpi.first.wpilibj.RobotController;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.shuffleboard.BuiltInLayouts;
 import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
@@ -47,6 +48,8 @@ public class ArmSubsystem extends SubsystemBase {
   public static final double KG = KA * 9.81;
   public static final double STOWED_ANGLE = -31.3;
   public static final double ARM_RADIANS_PER_MOTOR_ROTATION = (2 * Math.PI) / GEAR_RATIO;
+  private static final double LOWER_ANGLE_LIMIT = Math.toRadians(-27);
+  private static final double UPPER_ANGLE_LIMIT = Math.toRadians(80);
 
   private final CANSparkMax leftMotor = new CANSparkMax(RobotConstants.CAN.SparkMax.ARM_LEFT_PORT,
       MotorType.kBrushless);
@@ -54,7 +57,8 @@ public class ArmSubsystem extends SubsystemBase {
       MotorType.kBrushless);
 
   private final RelativeEncoder leftEncoder = leftMotor.getEncoder();
-  private final DutyCycleEncoder absoluteEncoder = new DutyCycleEncoder(Constants.RobotConstants.DigitalIO.ARM_ABSOLUTE_ENCODER);
+  private final DutyCycleEncoder absoluteEncoder = new DutyCycleEncoder(
+      Constants.RobotConstants.DigitalIO.ARM_ABSOLUTE_ENCODER);
 
   private double rawAngleOffset = Math.toRadians(9.15);
 
@@ -63,7 +67,6 @@ public class ArmSubsystem extends SubsystemBase {
   private final ArmFeedforward feedForward = new ArmFeedforward(KS, KV, KA, KG);
   private final Timer timer = new Timer();
   private final ProfiledPIDController controller = new ProfiledPIDController(1.0, 0.0, 0.0, CONSTRAINTS);
-  private double goalAngle;
   private boolean enablePeriodicControl = false;
 
   /** Creates a new ArmSubsystem. */
@@ -73,8 +76,11 @@ public class ArmSubsystem extends SubsystemBase {
     rightMotor.setIdleMode(IdleMode.kBrake);
     leftEncoder.setPositionConversionFactor(ARM_RADIANS_PER_MOTOR_ROTATION);
     leftEncoder.setVelocityConversionFactor(ARM_RADIANS_PER_MOTOR_ROTATION);
-    absoluteEncoder.setDutyCycleRange(1.0/1025.0, 1024.0/1025.0);
+    absoluteEncoder.setDutyCycleRange(1.0 / 1025.0, 1024.0 / 1025.0);
     absoluteEncoder.setDistancePerRotation(2 * Math.PI);
+
+    System.out.println("Arm max velocity: " + Math.toDegrees(MAX_ANGULAR_SPEED));
+    System.out.println("Arm max accel: " + Math.toDegrees(MAX_ANGULAR_ACCELERATION));
   }
 
   /**
@@ -83,7 +89,6 @@ public class ArmSubsystem extends SubsystemBase {
    * @param goalAngle The goal angle in radians.
    */
   public void setGoalAngle(double goalAngle) {
-    this.goalAngle = goalAngle;
     controller.reset(currentAngle);
     controller.setGoal(goalAngle);
     timer.reset();
@@ -120,6 +125,12 @@ public class ArmSubsystem extends SubsystemBase {
    * @param voltage The desired voltage.
    */
   public void setMotorVoltages(double voltage) {
+    if (voltage < 0 && currentAngle < LOWER_ANGLE_LIMIT) {
+      voltage = 0;
+    } else if (voltage > 0 && currentAngle > UPPER_ANGLE_LIMIT) {
+      voltage = 0;
+    }
+
     leftMotor.setVoltage(voltage);
   }
 
@@ -130,7 +141,7 @@ public class ArmSubsystem extends SubsystemBase {
    */
   public void setMotorPowers(double powerPercent) {
     powerPercent = MathUtil.clamp(powerPercent, -1.0, 1.0);
-    leftMotor.set(powerPercent);
+    setMotorVoltages(powerPercent * RobotController.getBatteryVoltage());
   }
 
   @Override
@@ -152,8 +163,8 @@ public class ArmSubsystem extends SubsystemBase {
 
     ShuffleboardTab armTab = Shuffleboard.getTab("Arm");
     ShuffleboardLayout infolayout = armTab.getLayout("Arm Info", BuiltInLayouts.kList)
-      .withPosition(0, 0)
-      .withSize(2, 4);
+        .withPosition(0, 0)
+        .withSize(2, 4);
     infolayout.addDouble("Angle", () -> Math.toDegrees(getAngle()));
   }
 }
