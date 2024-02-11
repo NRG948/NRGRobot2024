@@ -3,57 +3,57 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 2.84,
-        "y": 4.188891299550061
+        "x": 2.9047634776883906,
+        "y": 5.55
       },
       "prevControl": null,
       "nextControl": {
-        "x": 3.6909806712720346,
-        "y": 4.940716933641028
+        "x": 2.5149235995927133,
+        "y": 5.335732134450866
       },
       "isLocked": false,
       "linkedName": null
     },
     {
       "anchor": {
-        "x": 5.78231056307781,
-        "y": 4.370352406171121
+        "x": 2.3065524157954154,
+        "y": 5.08
       },
       "prevControl": {
-        "x": 4.860483855805502,
-        "y": 5.074315409542372
+        "x": 2.610259570294926,
+        "y": 5.457333131347877
       },
       "nextControl": {
-        "x": 7.141587777045881,
-        "y": 3.3323255596822756
+        "x": 2.284505050159265,
+        "y": 5.0526078184520555
       },
       "isLocked": false,
       "linkedName": null
     },
     {
       "anchor": {
-        "x": 4.085944870919574,
-        "y": 0.8637961970806275
+        "x": 2.3065524157954154,
+        "y": 4.53
       },
       "prevControl": {
-        "x": 6.4054472640776625,
-        "y": 0.7463117434053165
+        "x": 2.119510217251427,
+        "y": 4.843216660823577
       },
       "nextControl": {
-        "x": 1.7664424777614869,
-        "y": 0.9812806507559387
+        "x": 2.383364895596107,
+        "y": 4.401371548131729
       },
       "isLocked": false,
       "linkedName": null
     },
     {
       "anchor": {
-        "x": 2.8394326015162217,
-        "y": 4.188891299550061
+        "x": 2.9047634776883906,
+        "y": 4.1
       },
       "prevControl": {
-        "x": 2.3424992022139515,
-        "y": 3.371763469412239
+        "x": 2.7206985355703153,
+        "y": 4.113054703502887
       },
       "nextControl": null,
       "isLocked": false,
@@ -75,7 +75,10 @@
     "rotateFast": false
   },
   "reversed": false,
-  "folder": "Miscellaneous",
-  "previewStartingState": null,
-  "useDefaultConstraints": false
+  "folder": "Spike Sweep",
+  "previewStartingState": {
+    "rotation": 0,
+    "velocity": 0
+  },
+  "useDefaultConstraints": true
 }

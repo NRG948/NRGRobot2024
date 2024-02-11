@@ -1,0 +1,31 @@
+{
+  "version": 1.0,
+  "startingPose": null,
+  "command": {
+    "type": "sequential",
+    "data": {
+      "commands": [
+        {
+          "type": "path",
+          "data": {
+            "pathName": "Spike Start to Amp Spike"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "Amp Spike to Mid Spike"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "Copy of Amp Spike to Mid Spike"
+          }
+        }
+      ]
+    }
+  },
+  "folder": null,
+  "choreoAuto": false
+}
