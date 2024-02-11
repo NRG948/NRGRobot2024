@@ -65,18 +65,26 @@ public final class Constants {
     public static final double SCORING_DISTANCE_FROM_AMP = Units.inchesToMeters(20);
     
     /** 3d transforms that moves the camera to the center of the robot. */
-    public static final Transform3d APRILTAG_CAMERA_TO_ROBOT = new Transform3d(
-      new Translation3d(Units.inchesToMeters(-3.5), Units.inchesToMeters(-14.75), Units.inchesToMeters(-23.25)),
-      new Rotation3d(0, Math.toRadians(13.3), Math.toRadians(180))
-    );
+    public static final double APRILTAG_CAMERA_PITCH = Math.toRadians(-13.5);
+    public static final double APRILTAG_CAMERA_YAW = Math.toRadians(180);
 
-    public static final Transform3d NOTE_CAMERA_TO_ROBOT = new Transform3d();  //TODO get real constant
+    public static final Transform3d APRILTAG_ROBOT_TO_CAMERA = new Transform3d(
+      new Translation3d(Units.inchesToMeters(3.5), Units.inchesToMeters(12.50), Units.inchesToMeters(23.25)), 
+      new Rotation3d(0, APRILTAG_CAMERA_PITCH, APRILTAG_CAMERA_YAW)
+      );
+
+    public static final Transform3d APRILTAG_CAMERA_TO_ROBOT = APRILTAG_ROBOT_TO_CAMERA.inverse();
+
+    public static final Transform3d NOTE_ROBOT_TO_CAMERA = new Transform3d(); //TODO get real constant
+
+    public static final Transform3d NOTE_CAMERA_TO_ROBOT = NOTE_ROBOT_TO_CAMERA.inverse();  //TODO get real constant
 
     /**
      * Digital I/O port numbers.
      */
     public static class DigitalIO {
-      public static final int INDEXER_BEAM_BREAK = 0; //check if beam is applicable
+      public static final int INDEXER_BEAM_BREAK = 1; //check if beam is applicable
+      public static final int ARM_ABSOLUTE_ENCODER = 0;
     }
 
     /**
@@ -86,8 +94,8 @@ public final class Constants {
       public static class SparkMax {
         public static final int SHOOTER_PORT = 59;
         public static final int INTAKE_PORT = 60; // TODO assign actual port
-        public static final int ARM_LEFT_PORT = 61; // TODO assign actual port
-        public static final int ARM_RIGHT_PORT = 62; // TODO assign actual port
+        public static final int ARM_LEFT_PORT = 1;
+        public static final int ARM_RIGHT_PORT = 11; 
         public static final int INDEXER_PORT = 63; //TODO assign actual port
       }
     }

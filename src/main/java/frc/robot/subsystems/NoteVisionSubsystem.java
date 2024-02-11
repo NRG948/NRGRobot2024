@@ -27,7 +27,7 @@ public class NoteVisionSubsystem extends PhotonVisionSubsystemBase {
 
   /** Creates a new NoteSubsystem. */
   public NoteVisionSubsystem() {
-    super("948ColorCamera", RobotConstants.NOTE_CAMERA_TO_ROBOT);
+    super("948ColorCamera", RobotConstants.NOTE_ROBOT_TO_CAMERA);
   }
 
   /**

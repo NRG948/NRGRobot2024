@@ -1,0 +1,37 @@
+{
+  "version": 1.0,
+  "startingPose": {
+    "position": {
+      "x": 1.31,
+      "y": 5.66
+    },
+    "rotation": 0
+  },
+  "command": {
+    "type": "sequential",
+    "data": {
+      "commands": [
+        {
+          "type": "path",
+          "data": {
+            "pathName": "Spike Start to Amp Spike"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "Amp Spike to Mid Spike"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "Mid Spike to Podium Spike"
+          }
+        }
+      ]
+    }
+  },
+  "folder": null,
+  "choreoAuto": false
+}

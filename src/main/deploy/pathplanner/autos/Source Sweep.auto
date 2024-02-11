@@ -1,0 +1,49 @@
+{
+  "version": 1.0,
+  "startingPose": {
+    "position": {
+      "x": 1.46,
+      "y": 1.49
+    },
+    "rotation": 0
+  },
+  "command": {
+    "type": "sequential",
+    "data": {
+      "commands": [
+        {
+          "type": "path",
+          "data": {
+            "pathName": "Source Start to Source Farshot"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "Source Farshot to Source Note"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "Source Note to Source Farshot"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "Source Farshot to Mid Source Note"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "Mid Source Note to Source Farshot"
+          }
+        }
+      ]
+    }
+  },
+  "folder": null,
+  "choreoAuto": false
+}

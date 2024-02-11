@@ -241,7 +241,7 @@ public class SwerveSubsystem extends SubsystemBase {
    * 
    * @return The maximum drive speed.
    */
-  public double getMaxSpeed() {
+  public static double getMaxSpeed() {
     return PARAMETERS.getValue().getMaxDriveSpeed();
   }
 
@@ -250,7 +250,7 @@ public class SwerveSubsystem extends SubsystemBase {
    * 
    * @return The maximum drive acceleration.
    */
-  public double getMaxAcceleration() {
+  public static double getMaxAcceleration() {
     return PARAMETERS.getValue().getMaxDriveAcceleration();
   }
 
@@ -270,7 +270,7 @@ public class SwerveSubsystem extends SubsystemBase {
    * @return A {@link SwerveDriveKinematicsConstraint} object used to enforce
    *         swerve drive kinematics constraints when following a trajectory.
    */
-  public SwerveDriveKinematicsConstraint getKinematicsConstraint() {
+  public static SwerveDriveKinematicsConstraint getKinematicsConstraint() {
     return PARAMETERS.getValue().getKinematicsConstraint();
   }
 
@@ -292,7 +292,7 @@ public class SwerveSubsystem extends SubsystemBase {
    *         velocity and acceleration constraints on the controller used to reach
    *         the goal robot orientation.
    */
-  public TrapezoidProfile.Constraints getRotationalConstraints() {
+  public static TrapezoidProfile.Constraints getRotationalConstraints() {
     return PARAMETERS.getValue().getRotationalConstraints();
   }
 
@@ -301,7 +301,7 @@ public class SwerveSubsystem extends SubsystemBase {
    * 
    * @return The wheel base radius in meters.
    */
-  public double getWheelBaseRadius() {
+  public static double getWheelBaseRadius() {
     return PARAMETERS.getValue().getWheelBaseRadius();
   }
 
@@ -406,12 +406,14 @@ public class SwerveSubsystem extends SubsystemBase {
   /**
    * Resets the robots position on the field.
    * 
-   * @param initialPosition Sets the initial position.
+   * @param desiredPosition Sets the initial position.
    */
-  public void resetPosition(Pose2d initialPosition) {
-    rawOrientationOffset = initialPosition.getRotation().minus(rawOrientation);
+  public void resetPosition(Pose2d desiredPosition) {
+    orientation = desiredPosition.getRotation();
+    rawOrientationOffset = orientation.minus(rawOrientation);
     rawOrientationOffsetLog.append(rawOrientationOffset.getDegrees());
-    odometry.resetPosition(getOrientation(), drivetrain.getModulesPositions(), initialPosition);
+
+    odometry.resetPosition(getOrientation(), drivetrain.getModulesPositions(), desiredPosition);
   }
 
   /**

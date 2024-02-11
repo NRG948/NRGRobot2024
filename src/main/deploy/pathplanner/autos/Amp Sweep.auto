@@ -1,0 +1,49 @@
+{
+  "version": 1.0,
+  "startingPose": {
+    "position": {
+      "x": 0.77,
+      "y": 6.66
+    },
+    "rotation": 60.0
+  },
+  "command": {
+    "type": "sequential",
+    "data": {
+      "commands": [
+        {
+          "type": "path",
+          "data": {
+            "pathName": "Amp Start to Amp Spike"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "Amp Spike to Amp Note"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "Amp Note to Amp Farshot"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "Amp Farshot to Mid Amp Note"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "Mid Amp Note To Amp Farshot"
+          }
+        }
+      ]
+    }
+  },
+  "folder": null,
+  "choreoAuto": false
+}
