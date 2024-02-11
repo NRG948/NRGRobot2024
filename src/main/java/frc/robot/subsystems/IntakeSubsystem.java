@@ -5,11 +5,15 @@
 package frc.robot.subsystems;
 
 import com.revrobotics.CANSparkFlex;
+import com.revrobotics.RelativeEncoder;
 import com.revrobotics.CANSparkBase.IdleMode;
 import com.revrobotics.CANSparkLowLevel.MotorType;
 
+import edu.wpi.first.math.controller.SimpleMotorFeedforward;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import frc.robot.Constants.RobotConstants;
 import frc.robot.Constants.RobotConstants.CAN;
+import frc.robot.parameters.MotorParameters;
 
 /**
  * The intake subsystem is responsible for acquiring game elements from the
@@ -20,9 +24,23 @@ public class IntakeSubsystem extends SubsystemBase {
 
   private final CANSparkFlex motor = new CANSparkFlex(CAN.SparkMax.INTAKE_PORT, MotorType.kBrushless);
   private boolean isEnabled = false;
-  private double motorPower;
+  private double goalRPM;
 
-  /** Creates a new IntakeSubsystem. */
+  public static double GEAR_RATIO = 1.0; // TODO: get gear ratio once mech built
+
+  public static double MAX_RPM = MotorParameters.NeoV1_1.getFreeSpeedRPM() / GEAR_RATIO;
+  public static double MAX_ACCELERATION = (2 * MotorParameters.NeoV1_1.getStallTorque() * GEAR_RATIO)
+      / RobotConstants.INDEXER_MASS;
+
+  public static double KS = 0.15;
+  public static double KV = (RobotConstants.MAX_BATTERY_VOLTAGE - KS) / MAX_RPM;
+  public static double KA = (RobotConstants.MAX_BATTERY_VOLTAGE - KS) / MAX_ACCELERATION;
+
+  private final SimpleMotorFeedforward feedforward = new SimpleMotorFeedforward(KS, KV, KA);
+
+
+  /** Creates a
+   *  new IntakeSubsystem. */
   public IntakeSubsystem() {
     motor.setIdleMode(IdleMode.kBrake);
   }
@@ -48,7 +66,7 @@ public class IntakeSubsystem extends SubsystemBase {
    */
   public void in() {
     isEnabled = true;
-    motorPower = INTAKE_POWER;
+    goalRPM = IndexerSubsystem.INDEXER_INTAKE_RPM.getValue();
   }
 
   /**
@@ -56,7 +74,7 @@ public class IntakeSubsystem extends SubsystemBase {
    */
   public void out() {
     isEnabled = true;
-    motorPower = -INTAKE_POWER;
+    goalRPM = -IndexerSubsystem.INDEXER_INTAKE_RPM.getValue();
   }
 
   /**
@@ -70,7 +88,8 @@ public class IntakeSubsystem extends SubsystemBase {
   @Override
   public void periodic() {
     if (isEnabled) {
-      runMotor(motorPower);
+      double feedforward = this.feedforward.calculate(goalRPM);
+      motor.setVoltage(feedforward);
     }
   }
 }
