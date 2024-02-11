@@ -1,0 +1,68 @@
+{
+  "version": 1.0,
+  "waypoints": [
+    {
+      "anchor": {
+        "x": 3.69,
+        "y": 2.6
+      },
+      "prevControl": null,
+      "nextControl": {
+        "x": 4.165608331216663,
+        "y": 1.8406494212091558
+      },
+      "isLocked": false,
+      "linkedName": null
+    },
+    {
+      "anchor": {
+        "x": 6.300761659819284,
+        "y": 0.9479344519227153
+      },
+      "prevControl": {
+        "x": 5.3169839386528075,
+        "y": 1.248070027871809
+      },
+      "nextControl": {
+        "x": 6.843753239075985,
+        "y": 0.7822760040138917
+      },
+      "isLocked": false,
+      "linkedName": null
+    },
+    {
+      "anchor": {
+        "x": 8.279459787619128,
+        "y": 0.7546662626957543
+      },
+      "prevControl": {
+        "x": 7.782484443892655,
+        "y": 0.7454630155897085
+      },
+      "nextControl": null,
+      "isLocked": false,
+      "linkedName": null
+    }
+  ],
+  "rotationTargets": [],
+  "constraintZones": [],
+  "eventMarkers": [],
+  "globalConstraints": {
+    "maxVelocity": 3.0,
+    "maxAcceleration": 3.0,
+    "maxAngularVelocity": 540.0,
+    "maxAngularAcceleration": 720.0
+  },
+  "goalEndState": {
+    "velocity": 0,
+    "rotation": 0,
+    "rotateFast": false
+  },
+  "reversed": false,
+  "folder": "Source Sweep",
+  "previewStartingState": {
+    "rotation": 0,
+    "velocity": 0
+  },
+  "useDefaultConstraints": true
+}

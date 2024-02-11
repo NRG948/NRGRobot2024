@@ -1,8 +1,14 @@
 {
-  "robotWidth": 0.49,
-  "robotLength": 0.5773166,
+  "robotWidth": 0.762,
+  "robotLength": 0.851,
   "holonomicMode": true,
-  "pathFolders": [],
+  "pathFolders": [
+    "Amp Sweep",
+    "Drive Straight",
+    "Miscellaneous",
+    "Source Sweep",
+    "Spike Sweep"
+  ],
   "autoFolders": [],
   "defaultMaxVel": 3.0,
   "defaultMaxAccel": 3.0,
