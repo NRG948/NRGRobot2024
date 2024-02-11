@@ -5,7 +5,6 @@
 package frc.robot.subsystems;
 
 import com.revrobotics.CANSparkFlex;
-import com.revrobotics.RelativeEncoder;
 import com.revrobotics.CANSparkBase.IdleMode;
 import com.revrobotics.CANSparkLowLevel.MotorType;
 
@@ -20,8 +19,6 @@ import frc.robot.parameters.MotorParameters;
  * floor.
  */
 public class IntakeSubsystem extends SubsystemBase {
-  private static final double INTAKE_POWER = 0.3; // moving this
-
   private final CANSparkFlex motor = new CANSparkFlex(CAN.SparkMax.INTAKE_PORT, MotorType.kBrushless);
   private boolean isEnabled = false;
   private double goalRPM;

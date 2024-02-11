@@ -20,7 +20,6 @@ import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
 import frc.robot.Constants.RobotConstants;
-import frc.robot.drive.SwerveDrive;
 import frc.robot.subsystems.AprilTagSubsystem;
 import frc.robot.subsystems.Subsystems;
 import frc.robot.subsystems.SwerveSubsystem;
@@ -66,7 +65,7 @@ public final class DriveCommands {
     System.out.println("GOAL POSE = " + goalPose);
 
     return Commands.sequence(
-        new DriveStraight(drivetrain, goalPose, drivetrain.getMaxSpeed() * 0.5));
+        new DriveStraight(drivetrain, goalPose, SwerveSubsystem.getMaxSpeed() * 0.5));
   }
 
   /**

@@ -10,13 +10,11 @@ import frc.robot.subsystems.SwerveSubsystem;
 import java.io.File;
 import java.util.Arrays;
 import java.util.Collection;
-import java.util.List;
 import java.util.Set;
 
 import org.javatuples.LabelValue;
 
 import com.nrg948.autonomous.AutonomousCommandGenerator;
-import com.nrg948.autonomous.AutonomousCommandMethod;
 import com.pathplanner.lib.commands.PathPlannerAuto;
 
 import edu.wpi.first.math.geometry.Pose2d;

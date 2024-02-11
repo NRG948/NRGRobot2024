@@ -13,22 +13,18 @@ import java.util.Set;
 import com.nrg948.preferences.RobotPreferences;
 import com.nrg948.preferences.RobotPreferencesLayout;
 
-import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
-import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
 import frc.robot.Constants.RobotConstants.OperatorConstants;
 import frc.robot.commands.DriveCommands;
 import frc.robot.commands.DriveUsingController;
 import frc.robot.commands.InterruptAll;
 import frc.robot.commands.LEDs;
-import frc.robot.commands.ManualArmController;
 import frc.robot.commands.Pathfinding;
-import frc.robot.commands.SysID;
 import frc.robot.subsystems.Subsystems;
 
 /**
@@ -42,14 +38,6 @@ import frc.robot.subsystems.Subsystems;
  */
 @RobotPreferencesLayout(groupName = "Preferences", column = 0, row = 0, width = 2, height = 1)
 public class RobotContainer {
-  // Joystick and Joystick Buttons
-    private final Joystick joystick = new Joystick(3);
-
-    private JoystickButton joyButton1 = new JoystickButton(joystick, 1);
-    private JoystickButton joyButton2 = new JoystickButton(joystick, 9);
-    private JoystickButton joyButton3 = new JoystickButton(joystick, 10);
-    private JoystickButton joyButton4 = new JoystickButton(joystick, 11);
-    private JoystickButton joyButton5 = new JoystickButton(joystick, 12);
   // The robot's subsystems and commands are defined here...
   private final Subsystems m_subsystems = new Subsystems();
 
