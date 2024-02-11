@@ -24,6 +24,7 @@ import edu.wpi.first.wpilibj2.command.button.Trigger;
 import frc.robot.Constants.RobotConstants.OperatorConstants;
 import frc.robot.commands.DriveCommands;
 import frc.robot.commands.DriveUsingController;
+import frc.robot.commands.InterruptAll;
 import frc.robot.commands.LEDs;
 import frc.robot.commands.ManualArmController;
 import frc.robot.commands.Pathfinding;
@@ -95,8 +96,7 @@ public class RobotContainer {
     // pressed,
     // cancelling on release.
     m_driverController.start().onTrue(Commands.runOnce(() -> m_subsystems.drivetrain.resetOrientation(), m_subsystems.drivetrain));
-    m_driverController.back().whileTrue(SysID.getSwerveDriveCharacterizationSequence(m_subsystems));
-    m_driverController.leftBumper().whileTrue(SysID.getSwerveSteeringCharacterizationSequence(m_subsystems));
+    m_driverController.back().onTrue(new InterruptAll(m_subsystems));
     m_driverController.a().onTrue(Pathfinding.pathFindToSpeakerFront());
     m_driverController.y().onTrue(Commands.defer(() -> DriveCommands.driveToAmp(m_subsystems), 
       Set.of(m_subsystems.drivetrain, m_subsystems.aprilTag)));
