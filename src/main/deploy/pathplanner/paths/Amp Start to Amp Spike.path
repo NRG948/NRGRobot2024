@@ -3,13 +3,13 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 0.7788133961918153,
-        "y": 6.617134669246917
+        "x": 0.7718481866382481,
+        "y": 6.660923784481021
       },
       "prevControl": null,
       "nextControl": {
-        "x": 1.266585492812242,
-        "y": 6.930045070852474
+        "x": 1.0616043503666655,
+        "y": 7.162796181864886
       },
       "isLocked": false,
       "linkedName": null
@@ -49,9 +49,9 @@
     "rotateFast": false
   },
   "reversed": false,
-  "folder": "Amp Sweep",
+  "folder": null,
   "previewStartingState": {
-    "rotation": 16.601246987170825,
+    "rotation": 59.30027744918558,
     "velocity": 0
   },
   "useDefaultConstraints": true
