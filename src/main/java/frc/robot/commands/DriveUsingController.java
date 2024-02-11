@@ -53,7 +53,7 @@ public class DriveUsingController extends Command {
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
-    m_profiledPIDController = new ProfiledPIDController(KP_APRIL_TAG, 0, 0, m_drivetrain.getRotationalConstraints());
+    m_profiledPIDController = new ProfiledPIDController(KP_APRIL_TAG, 0, 0, SwerveSubsystem.getRotationalConstraints());
     m_profiledPIDController.enableContinuousInput(-Math.PI, Math.PI);
     m_profiledPIDController.reset(m_drivetrain.getOrientation().getRadians());
   }

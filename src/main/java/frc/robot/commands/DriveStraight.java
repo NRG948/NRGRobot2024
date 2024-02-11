@@ -44,7 +44,7 @@ public class DriveStraight extends Command {
    *                    position.
    */
   public DriveStraight(SwerveSubsystem drivetrain, Translation2d translation) {
-    this(drivetrain, () -> translation, drivetrain.getMaxSpeed(), () -> drivetrain.getPosition().getRotation());
+    this(drivetrain, () -> translation, SwerveSubsystem.getMaxSpeed(), () -> drivetrain.getPosition().getRotation());
   }
 
   /**
@@ -136,7 +136,7 @@ public class DriveStraight extends Command {
     heading = translation.getAngle();
     orientation = orientationSupplier.get();
     profile = new TrapezoidProfile(
-        new TrapezoidProfile.Constraints(maxSpeed, drivetrain.getMaxAcceleration())); // new TrapezoidProfile.State(distance, goalSpeed)
+        new TrapezoidProfile.Constraints(maxSpeed, SwerveSubsystem.getMaxAcceleration())); // new TrapezoidProfile.State(distance, goalSpeed)
 
     System.out.println(
         "BEGIN DriveStraight intitialPose = " + initialPose +

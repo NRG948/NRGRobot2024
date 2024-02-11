@@ -18,6 +18,7 @@ import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.subsystems.Subsystems;
+import frc.robot.subsystems.SwerveSubsystem;
 
 /** 
  * This class creates and manages the user interface operators used to select
@@ -40,8 +41,8 @@ public class RobotAutonomous {
         new HolonomicPathFollowerConfig(
             new PIDConstants(1.0, 0, 0),
             new PIDConstants(1.0, 0, 0),
-            subsystems.drivetrain.getMaxSpeed(),
-            subsystems.drivetrain.getWheelBaseRadius(),
+            SwerveSubsystem.getMaxSpeed(),
+            SwerveSubsystem.getWheelBaseRadius(),
             new ReplanningConfig()),
         () -> {
           // Boolean supplier that controls when the path will be mirrored for the red

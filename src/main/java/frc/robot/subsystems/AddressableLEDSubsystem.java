@@ -9,14 +9,12 @@ import static frc.robot.Constants.RobotConstants.LEDSegment.STATUS_FIRST_LED;
 import static frc.robot.Constants.RobotConstants.LEDSegment.STATUS_LED_COUNT;
 
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
-import frc.robot.Constants.RobotConstants.PWMPort;
 import frc.robot.util.AddressableLEDs;
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.util.Color8Bit;
 
 public class AddressableLEDSubsystem extends SubsystemBase {
   private AddressableLEDs leds = new AddressableLEDs(STATUS_FIRST_LED, STATUS_LED_COUNT);
-  private boolean enabled;
   private boolean toggle = false;
   private Joystick joyButton5;
   private Joystick joyButton4;
