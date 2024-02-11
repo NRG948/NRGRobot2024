@@ -32,12 +32,12 @@
     },
     {
       "anchor": {
-        "x": 8.279459787619128,
-        "y": 0.7546662626957543
+        "x": 7.825730251460501,
+        "y": 0.7707010414020833
       },
       "prevControl": {
-        "x": 7.782484443892655,
-        "y": 0.7454630155897085
+        "x": 7.328754907734028,
+        "y": 0.7614977942960375
       },
       "nextControl": null,
       "isLocked": false,
@@ -61,7 +61,7 @@
   "reversed": false,
   "folder": "Source Sweep",
   "previewStartingState": {
-    "rotation": 0,
+    "rotation": -37.26138510841796,
     "velocity": 0
   },
   "useDefaultConstraints": true

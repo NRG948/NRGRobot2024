@@ -8,20 +8,20 @@
       },
       "prevControl": null,
       "nextControl": {
-        "x": 4.60998620002938,
-        "y": 2.0815594907543087
+        "x": 4.424587249174498,
+        "y": 1.8561722123444262
       },
       "isLocked": false,
       "linkedName": null
     },
     {
       "anchor": {
-        "x": 8.293644849397962,
-        "y": 2.4323841240275086
+        "x": 7.856743713487425,
+        "y": 2.280022860045721
       },
       "prevControl": {
-        "x": 6.36410936639537,
-        "y": 1.6137933130567115
+        "x": 6.499776537444808,
+        "y": 1.0318526044459504
       },
       "nextControl": null,
       "isLocked": false,
@@ -39,13 +39,13 @@
   },
   "goalEndState": {
     "velocity": 0,
-    "rotation": 0,
+    "rotation": 18.459241384512843,
     "rotateFast": false
   },
   "reversed": false,
   "folder": "Source Sweep",
   "previewStartingState": {
-    "rotation": 0,
+    "rotation": -33.594550746844554,
     "velocity": 0
   },
   "useDefaultConstraints": true
