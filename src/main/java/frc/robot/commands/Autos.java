@@ -5,17 +5,56 @@
 package frc.robot.commands;
 
 import frc.robot.subsystems.Subsystems;
+import frc.robot.subsystems.SwerveSubsystem;
 
+import java.io.File;
+import java.util.Arrays;
+import java.util.Collection;
+import java.util.List;
+import java.util.Set;
+
+import org.javatuples.LabelValue;
+
+import com.nrg948.autonomous.AutonomousCommandGenerator;
 import com.nrg948.autonomous.AutonomousCommandMethod;
 import com.pathplanner.lib.commands.PathPlannerAuto;
 
+import edu.wpi.first.math.geometry.Pose2d;
+import edu.wpi.first.wpilibj.Filesystem;
 import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.Commands;
 
 public final class Autos {
-  /** Example static factory for an autonomous command. */
-  @AutonomousCommandMethod(name = "Award Winning Auto", isDefault = true)
-  public static Command exampleAuto(Subsystems subsystem) {
-    return new PathPlannerAuto("Award winning auto");
+  /**
+   * Returns the collection of PathPlanner auto commands.
+   * 
+   * @param subsystems The subsystem container.
+   * @return A collection of PathPlanner auto commands.
+   */
+  @AutonomousCommandGenerator
+  public static Collection<LabelValue<String, Command>> generatePathPlannerAutos(Subsystems subsystems) {
+    File autosDir = new File(Filesystem.getDeployDirectory(), "pathplanner/autos");
+    return Arrays.stream(autosDir.listFiles((file, name) -> name.endsWith(".auto")))
+        .map((file) -> file.getName().split("\\.")[0])
+        .sorted()
+        .map(name -> new LabelValue<>(name, getPathPlannerAuto(subsystems, name)))
+        .toList();
+  }
+
+  /**
+   * Returns the PathPlanner auto command. 
+   * 
+   * @param subsystems Subsystems container.
+   * @param name Name of the PathPlanner auto.
+   * @return The PathPlanner auto command.
+   */
+  public static Command getPathPlannerAuto(Subsystems subsystems, String name) {
+    SwerveSubsystem driveTrain = subsystems.drivetrain;
+    Pose2d startPose = PathPlannerAuto.getStaringPoseFromAutoFile(name);
+
+    return Commands.sequence(
+        Commands.runOnce(() -> driveTrain.resetPosition(startPose), driveTrain),
+        Commands.defer(() -> new PathPlannerAuto(name), Set.of(driveTrain)));
   }
 
   private Autos() {
