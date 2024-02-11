@@ -12,6 +12,7 @@ import com.nrg948.preferences.RobotPreferences;
 
 /** Add your docs here. */
 public class Subsystems {
+
   @RobotPreferencesValue
   public static final RobotPreferences.BooleanValue ENABLE_POSE_ESTIMATION = new RobotPreferences.BooleanValue(
       "AprilTag", "Enable Pose Estimation", true);
@@ -22,7 +23,7 @@ public class Subsystems {
   public final IndexerSubsystem indexerSubsystem = new IndexerSubsystem();
   public final AddressableLEDSubsystem addressableLEDSubsystem = new AddressableLEDSubsystem();
   public final ArmSubsystem armSubsystem = new ArmSubsystem();
-  // public IntakeSubsystem intake = new IntakeSubsystem();
+  public IntakeSubsystem intake = new IntakeSubsystem();
 
   public final Subsystem[] all = new Subsystem[] {
       drivetrain,
