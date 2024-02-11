@@ -419,9 +419,9 @@ public class SwerveSubsystem extends SubsystemBase {
   /**
    * Resets the orientation the robot.
    */
-  public void resetOrientation() {
+  public void resetOrientation(Rotation2d orientation) {
     Pose2d currentPos = odometry.getEstimatedPosition();
-    Pose2d newPos2d = new Pose2d(currentPos.getTranslation(), new Rotation2d());
+    Pose2d newPos2d = new Pose2d(currentPos.getTranslation(), orientation);
     resetPosition(newPos2d);
   }
 

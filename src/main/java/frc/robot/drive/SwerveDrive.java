@@ -4,6 +4,7 @@
 
 package frc.robot.drive;
 
+import java.util.Optional;
 import java.util.function.Supplier;
 
 import edu.wpi.first.math.geometry.Rotation2d;
@@ -13,6 +14,8 @@ import edu.wpi.first.math.kinematics.SwerveModulePosition;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
 import edu.wpi.first.util.datalog.DoubleLogEntry;
 import edu.wpi.first.wpilibj.DataLogManager;
+import edu.wpi.first.wpilibj.DriverStation;
+import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import edu.wpi.first.wpilibj.drive.RobotDriveBase;
 import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
 import frc.robot.parameters.SwerveDriveParameters;
@@ -140,12 +143,19 @@ public class SwerveDrive extends RobotDriveBase {
     xSpeed *= m_maxOutput * maxDriveSpeed;
     ySpeed *= m_maxOutput * maxDriveSpeed;
     rSpeed *= m_maxOutput * maxRotationalSpeed;
+    
+    if (!fieldRelative) {
+      setChassisSpeeds(new ChassisSpeeds(xSpeed, ySpeed, rSpeed));
+    } else {
+      Optional<Alliance> alliance = DriverStation.getAlliance();
 
-    ChassisSpeeds speeds = fieldRelative
-        ? ChassisSpeeds.fromFieldRelativeSpeeds(xSpeed, ySpeed, rSpeed, orientation)
-        : new ChassisSpeeds(xSpeed, ySpeed, rSpeed);
+      if (alliance.isPresent() && alliance.get() == Alliance.Red) {
+        xSpeed *= -1.0;
+        ySpeed *= -1.0;
+      }
 
-    setChassisSpeeds(speeds);
+      setChassisSpeeds(ChassisSpeeds.fromFieldRelativeSpeeds(xSpeed, ySpeed, rSpeed, orientation));
+    }
   }
 
   /**

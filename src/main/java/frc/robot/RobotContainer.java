@@ -95,7 +95,7 @@ public class RobotContainer {
     // Schedule `exampleMetdhodCommand` when the Xbox controller's B button is
     // pressed,
     // cancelling on release.
-    m_driverController.start().onTrue(Commands.runOnce(() -> m_subsystems.drivetrain.resetOrientation(), m_subsystems.drivetrain));
+    m_driverController.start().onTrue(DriveCommands.resetOrientation(m_subsystems));
     m_driverController.back().onTrue(new InterruptAll(m_subsystems));
     m_driverController.a().onTrue(Pathfinding.pathFindToSpeakerFront());
     m_driverController.y().onTrue(Commands.defer(() -> DriveCommands.driveToAmp(m_subsystems), 
