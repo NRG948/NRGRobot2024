@@ -20,10 +20,12 @@ import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
 import frc.robot.Constants.RobotConstants.OperatorConstants;
+import frc.robot.commands.ArmCommands;
 import frc.robot.commands.DriveCommands;
 import frc.robot.commands.DriveUsingController;
 import frc.robot.commands.InterruptAll;
 import frc.robot.commands.LEDs;
+import frc.robot.commands.ManualArmController;
 import frc.robot.commands.Pathfinding;
 import frc.robot.subsystems.Subsystems;
 
@@ -56,7 +58,7 @@ public class RobotContainer {
   public RobotContainer() {
 
     m_subsystems.drivetrain.setDefaultCommand(new DriveUsingController(m_subsystems, m_driverController));
-    //m_subsystems.armSubsystem.setDefaultCommand(new ManualArmController(m_subsystems, m_operatorController));
+    m_subsystems.armSubsystem.setDefaultCommand(new ManualArmController(m_subsystems, m_operatorController));
     
     // Configure the trigger bindings
     configureBindings();
@@ -89,11 +91,10 @@ public class RobotContainer {
     m_driverController.y().onTrue(Commands.defer(() -> DriveCommands.driveToAmp(m_subsystems), 
       Set.of(m_subsystems.drivetrain, m_subsystems.aprilTag)));
 
-    m_operatorController.povUp().onTrue(Commands.runOnce(() -> m_subsystems.armSubsystem.setGoalAngle(Math.toRadians(45)), m_subsystems.armSubsystem));
-    m_operatorController.povRight().onTrue(Commands.runOnce(() -> m_subsystems.armSubsystem.setGoalAngle(0), m_subsystems.armSubsystem));
-    m_operatorController.povDown().onTrue(Commands.runOnce(() -> m_subsystems.armSubsystem.setGoalAngle(Math.toRadians(-25)), m_subsystems.armSubsystem));
-    m_operatorController.povLeft().onTrue(Commands.runOnce(() -> m_subsystems.armSubsystem.disable(), m_subsystems.armSubsystem));
-
+    m_operatorController.povUp().onTrue(ArmCommands.seekToTrap(m_subsystems));
+    m_operatorController.povRight().onTrue(ArmCommands.seekToAmp(m_subsystems));
+    m_operatorController.povDown().onTrue(ArmCommands.stow(m_subsystems));
+    m_operatorController.povLeft().onTrue(ArmCommands.disableSeek(m_subsystems));
 
 
     Trigger noteDetected = new Trigger(m_subsystems.indexerSubsystem::isNoteDetected);
