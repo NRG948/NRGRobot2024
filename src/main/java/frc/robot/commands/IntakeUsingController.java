@@ -47,10 +47,11 @@ public class IntakeUsingController extends Command {
   public void execute() {
     double speed = -controller.getHID().getRightY();
     speed = MathUtil.applyDeadband(speed, DEADBAND);
-    speed = MathUtil.clamp(speed, 0.5, 0.7);
+    //speed = MathUtil.clamp(speed, 0.5, 0.7);
     double voltage = speed * RobotConstants.MAX_BATTERY_VOLTAGE;
     intake.runMotor(voltage);
   }
+
 
   // Called once the command ends or is interrupted.
   @Override
