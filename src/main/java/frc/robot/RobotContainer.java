@@ -88,8 +88,10 @@ public class RobotContainer {
     m_driverController.start().onTrue(DriveCommands.resetOrientation(m_subsystems));
     m_driverController.back().onTrue(new InterruptAll(m_subsystems));
     m_driverController.a().onTrue(Pathfinding.pathFindToSpeakerFront());
-    m_driverController.y().onTrue(Commands.defer(() -> DriveCommands.driveToAmp(m_subsystems), 
-      Set.of(m_subsystems.drivetrain, m_subsystems.aprilTag)));
+    m_driverController.b().whileTrue(Pathfinding.pathFindToAmp());
+    m_driverController.y().whileTrue(Pathfinding.pathFindToAmp2());
+    // m_driverController.y().onTrue(Commands.defer(() -> DriveCommands.driveToAmp(m_subsystems), 
+    //   Set.of(m_subsystems.drivetrain, m_subsystems.aprilTag)));
 
     m_operatorController.povUp().onTrue(ArmCommands.seekToTrap(m_subsystems));
     m_operatorController.povRight().onTrue(ArmCommands.seekToAmp(m_subsystems));

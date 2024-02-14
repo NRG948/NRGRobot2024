@@ -66,7 +66,7 @@ public abstract class PhotonVisionSubsystemBase extends SubsystemBase {
 
     this.result = currentResult;
 
-    if (hasTargets()) {
+    if (hasTargets()) { 
       PhotonTrackedTarget bestTarget = getBestTarget();
       angleToTarget = -bestTarget.getYaw();
       Transform3d bestTargetTransform = bestTarget.getBestCameraToTarget();
