@@ -40,6 +40,7 @@ public class IntakeSubsystem extends SubsystemBase {
    *  new IntakeSubsystem. */
   public IntakeSubsystem() {
     motor.setIdleMode(IdleMode.kBrake);
+    motor.setInverted(true);
   }
 
   /**

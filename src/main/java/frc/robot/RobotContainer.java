@@ -23,6 +23,7 @@ import frc.robot.Constants.RobotConstants.OperatorConstants;
 import frc.robot.commands.ArmCommands;
 import frc.robot.commands.DriveCommands;
 import frc.robot.commands.DriveUsingController;
+import frc.robot.commands.IntakeUsingController;
 import frc.robot.commands.InterruptAll;
 import frc.robot.commands.LEDs;
 import frc.robot.commands.ManualArmController;
@@ -59,6 +60,7 @@ public class RobotContainer {
 
     m_subsystems.drivetrain.setDefaultCommand(new DriveUsingController(m_subsystems, m_driverController));
     m_subsystems.armSubsystem.setDefaultCommand(new ManualArmController(m_subsystems, m_operatorController));
+    m_subsystems.intake.setDefaultCommand(new IntakeUsingController(m_subsystems, m_operatorController));
     
     // Configure the trigger bindings
     configureBindings();
