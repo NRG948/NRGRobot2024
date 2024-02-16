@@ -23,27 +23,24 @@ import frc.robot.parameters.MotorParameters;
 @RobotPreferencesLayout(groupName = "Indexer", column = 0, row = 1, width = 2, height = 3)
 public class IndexerSubsystem extends SubsystemBase {
 
-  public static double GEAR_RATIO = 1.0; // TODO: get gear ratio once mech built
+  public static double GEAR_RATIO = 3*26/15;
+  public static double INDEXER_DIAMETER = 0.033; // Diameter in meters
 
-  public static double MAX_RPM = MotorParameters.NeoV1_1.getFreeSpeedRPM() / GEAR_RATIO;
-  public static double MAX_ACCELERATION = (2 * MotorParameters.NeoV1_1.getStallTorque() * GEAR_RATIO)
+  public static double MAX_VELOCITY = (MotorParameters.NeoV1_1.getFreeSpeedRPM() * Math.PI * INDEXER_DIAMETER)/ (GEAR_RATIO * 60);
+  public static double MAX_ACCELERATION = (2 * MotorParameters.NeoV1_1.getStallTorque() * GEAR_RATIO * Math.PI * INDEXER_DIAMETER)
       / RobotConstants.INDEXER_MASS;
 
   public static double KS = 0.15;
-  public static double KV = (RobotConstants.MAX_BATTERY_VOLTAGE - KS) / MAX_RPM;
+  public static double KV = (RobotConstants.MAX_BATTERY_VOLTAGE - KS) / MAX_VELOCITY;
   public static double KA = (RobotConstants.MAX_BATTERY_VOLTAGE - KS) / MAX_ACCELERATION;
 
   @RobotPreferencesValue
-  public static final RobotPreferences.DoubleValue INDEXER_FEED_RPM = new RobotPreferences.DoubleValue("Indexer",
-      "Indexer Feed RPM", 1000.0);
-
-  @RobotPreferencesValue
-  public static final RobotPreferences.DoubleValue INDEXER_INTAKE_RPM = new RobotPreferences.DoubleValue("Indexer",
-      "Indexer Intake RPM", 250.0);
+  public static final RobotPreferences.DoubleValue FEED_VELOCITY = new RobotPreferences.DoubleValue("Indexer",
+      "Indexer Feed Velocity", 0.8 * MAX_VELOCITY);
 
   private boolean noteDetected = false;
   private boolean isEnabled = false;
-  private double goalRPM = 0;
+  private double goalVelocity = 0;
 
   private CANSparkMax motor = new CANSparkMax(RobotConstants.CAN.SparkMax.INDEXER_PORT, MotorType.kBrushless);
   private final DigitalInput beamBreak = new DigitalInput(RobotConstants.DigitalIO.INDEXER_BEAM_BREAK);
@@ -51,7 +48,7 @@ public class IndexerSubsystem extends SubsystemBase {
 
   private final BooleanLogEntry noteDetectedLogger = new BooleanLogEntry(DataLogManager.getLog(),
       "Indexer Note Detector");
-  private final DoubleLogEntry goalRPMLogger = new DoubleLogEntry(DataLogManager.getLog(), "Goal RPM Logger");
+  private final DoubleLogEntry goalVelocityLogger = new DoubleLogEntry(DataLogManager.getLog(), "Indexer/Goal Velocity");
 
   /** Creates a new IndexerSubsystem. */
   public IndexerSubsystem() {
@@ -64,22 +61,22 @@ public class IndexerSubsystem extends SubsystemBase {
 
   public void feed() {
     isEnabled = true;
-    goalRPM = INDEXER_FEED_RPM.getValue();
+    goalVelocity = FEED_VELOCITY.getValue();
   }
 
   public void intake() {
     isEnabled = true;
-    goalRPM = INDEXER_INTAKE_RPM.getValue();
+    goalVelocity = IntakeSubsystem.INTAKE_VELOCITY.getValue();
   }
 
   public void outake() {
     isEnabled = true;
-    goalRPM = -INDEXER_INTAKE_RPM.getValue();
+    goalVelocity = -IntakeSubsystem.INTAKE_VELOCITY.getValue();
   }
 
   public void disable() {
     isEnabled = false;
-    goalRPM = 0;
+    goalVelocity = 0;
     motor.stopMotor();
   }
 
@@ -97,8 +94,8 @@ public class IndexerSubsystem extends SubsystemBase {
     }
 
     if (isEnabled) {
-      double voltage = indexerFeedfoward.calculate(goalRPM);
-      goalRPMLogger.append(goalRPM);
+      double voltage = indexerFeedfoward.calculate(goalVelocity);
+      goalVelocityLogger.append(goalVelocity);
       motor.setVoltage(voltage);
     }
 
