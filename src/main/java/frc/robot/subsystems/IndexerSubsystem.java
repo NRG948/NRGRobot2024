@@ -69,7 +69,7 @@ public class IndexerSubsystem extends SubsystemBase {
     goalVelocity = IntakeSubsystem.INTAKE_VELOCITY.getValue();
   }
 
-  public void outake() {
+  public void outtake() {
     isEnabled = true;
     goalVelocity = -IntakeSubsystem.INTAKE_VELOCITY.getValue();
   }
