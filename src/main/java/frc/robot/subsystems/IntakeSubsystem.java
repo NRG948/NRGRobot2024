@@ -7,8 +7,6 @@ package frc.robot.subsystems;
 import com.revrobotics.CANSparkFlex;
 import com.revrobotics.RelativeEncoder;
 import com.nrg948.preferences.RobotPreferences;
-import com.nrg948.preferences.RobotPreferencesLayout;
-import com.nrg948.preferences.RobotPreferences.DoubleValue;
 import com.nrg948.preferences.RobotPreferencesValue;
 import com.revrobotics.CANSparkBase.IdleMode;
 import com.revrobotics.CANSparkLowLevel.MotorType;

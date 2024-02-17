@@ -8,15 +8,12 @@ package frc.robot;
 import static frc.robot.Constants.ColorConstants.ORANGE;
 import static frc.robot.Constants.ColorConstants.RED;
 
-import java.util.Set;
-
 import com.nrg948.preferences.RobotPreferences;
 import com.nrg948.preferences.RobotPreferencesLayout;
 
 import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
 import edu.wpi.first.wpilibj2.command.Command;
-import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
 import frc.robot.Constants.RobotConstants.OperatorConstants;
@@ -30,7 +27,6 @@ import frc.robot.commands.ManualArmController;
 import frc.robot.commands.Pathfinding;
 import frc.robot.subsystems.ArmSubsystem;
 import frc.robot.subsystems.IndexerSubsystem;
-import frc.robot.subsystems.IntakeSubsystem;
 import frc.robot.subsystems.Subsystems;
 
 /**
