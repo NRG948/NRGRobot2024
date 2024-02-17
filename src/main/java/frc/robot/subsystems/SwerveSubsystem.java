@@ -66,8 +66,9 @@ public class SwerveSubsystem extends SubsystemBase {
   @RobotPreferencesValue
   public static RobotPreferences.EnumValue<SwerveDriveParameters> PARAMETERS = new RobotPreferences.EnumValue<SwerveDriveParameters>(
       "Drive", "Robot Base", SwerveDriveParameters.PracticeBase2024);
-
-  public static boolean ENABLE_DRIVE_TAB = true;
+  
+  @RobotPreferencesValue
+  public static RobotPreferences.BooleanValue ENABLE_DRIVE_TAB = new RobotPreferences.BooleanValue("Drive", "Enable Tab", false);
 
   public static boolean ENABLE_FIELD_TAB = false;
 
@@ -507,7 +508,7 @@ public class SwerveSubsystem extends SubsystemBase {
    * Adds a tab for swerve drive in Shuffleboard.
    */
   public void addShuffleboardTab() {
-    if (ENABLE_DRIVE_TAB) {
+    if (ENABLE_DRIVE_TAB.getValue()) {
       ShuffleboardTab swerveDriveTab = Shuffleboard.getTab("Drive");
 
       drivetrain.addShuffleboardLayouts(swerveDriveTab);
