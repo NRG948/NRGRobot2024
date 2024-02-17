@@ -48,7 +48,7 @@ public class ShooterSubsystem extends SubsystemBase {
   }
 
   private void setGoalRPMInternal(double goalRPM) {
-    goalRPM = goalRPM;
+    this.goalRPM = goalRPM;
     shooterPIDController.setSetpoint(goalRPM);
     goalRPMLogger.append(goalRPM);
   }

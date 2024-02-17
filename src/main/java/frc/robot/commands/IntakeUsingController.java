@@ -24,7 +24,6 @@ public class IntakeUsingController extends Command {
   @RobotPreferencesValue
 
   private static final double DEADBAND = 0.1;
-  private static final double INTAKE_SPEED = 0.04; //TODO settle on final value
 
   public RobotPreferences.DoubleValue intake_RPM = new RobotPreferences.DoubleValue("Intake", "intake_RPM", 1.0);
   /** Creates a new InakeUsingController. */
@@ -47,7 +46,6 @@ public class IntakeUsingController extends Command {
   public void execute() {
     double speed = -controller.getHID().getRightY();
     speed = MathUtil.applyDeadband(speed, DEADBAND);
-    //speed = MathUtil.clamp(speed, 0.5, 0.7);
     double voltage = speed * RobotConstants.MAX_BATTERY_VOLTAGE;
     intake.runMotor(voltage);
   }
