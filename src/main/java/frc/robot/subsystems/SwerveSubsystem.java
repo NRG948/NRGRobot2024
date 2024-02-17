@@ -70,8 +70,6 @@ public class SwerveSubsystem extends SubsystemBase {
   @RobotPreferencesValue
   public static RobotPreferences.BooleanValue ENABLE_DRIVE_TAB = new RobotPreferences.BooleanValue("Drive", "Enable Tab", false);
 
-  public static boolean ENABLE_FIELD_TAB = false;
-
   public static final double DRIVE_KP = 1.0;
 
   private static final byte NAVX_UPDATE_FREQUENCY_HZ = 50;
@@ -128,7 +126,6 @@ public class SwerveSubsystem extends SubsystemBase {
 
   private final SwerveDrive drivetrain;
   private final SwerveDrivePoseEstimator odometry;
-  private final Field2d field = new Field2d();
 
   // The current sensor state updated by the periodic method.
   private Rotation2d rawOrientation;
@@ -143,10 +140,6 @@ public class SwerveSubsystem extends SubsystemBase {
   private DoubleLogEntry poseXLog = new DoubleLogEntry(DataLogManager.getLog(), "/SwerveSubsystem/Pose X");
   private DoubleLogEntry poseYLog = new DoubleLogEntry(DataLogManager.getLog(), "/SwerveSubsystem/Pose Y");
   private DoubleLogEntry poseAngleLog = new DoubleLogEntry(DataLogManager.getLog(), "/SwerveSubsystem/Pose Angle");
-
-  // Simulation support.
-  private final boolean isSimulation;
-  private Rotation2d simOrientation = new Rotation2d();
 
   /**
    * Creates a {@link SwerveModule} object and intiailizes its motor controllers.
@@ -197,8 +190,6 @@ public class SwerveSubsystem extends SubsystemBase {
 
   /** Creates a new SwerveSubsystem. */
   public SwerveSubsystem() {
-    isSimulation = Robot.isSimulation();
-
     initializeSensorState();
 
     drivetrain = new SwerveDrive(PARAMETERS.getValue(), modules, () -> getOrientation());
@@ -221,7 +212,7 @@ public class SwerveSubsystem extends SubsystemBase {
    * sensor state is up to date.
    */
   private void updateSensorState() {
-    rawOrientation = !isSimulation ? Rotation2d.fromDegrees(-ahrs.getAngle()) : simOrientation;
+    rawOrientation = Rotation2d.fromDegrees(-ahrs.getAngle());
     rawOrientationLog.append(rawOrientation.getDegrees());
     orientation = rawOrientation.plus(rawOrientationOffset);
   }
@@ -472,36 +463,12 @@ public class SwerveSubsystem extends SubsystemBase {
     // states.
     odometry.update(getOrientation(), drivetrain.getModulesPositions());
 
-    // Send the robot and module location to the field
+    // Send the robot and module location to the logger
     Pose2d robotPose = getPosition();
-
-    field.setRobotPose(robotPose);
-
-    ArrayList<Pose2d> modulePoses = new ArrayList<Pose2d>(4);
-
-    for (Translation2d wheelPosition : PARAMETERS.getValue().getWheelPositions()) {
-      modulePoses.add(
-          new Pose2d(
-              wheelPosition.rotateBy(robotPose.getRotation())
-                  .plus(robotPose.getTranslation()),
-              robotPose.getRotation()));
-    }
-
-    field.getObject("Swerve Modules").setPoses(modulePoses);
 
     poseXLog.append(robotPose.getX());
     poseYLog.append(robotPose.getY());
     poseAngleLog.append(robotPose.getRotation().getDegrees());
-  }
-
-  @Override
-  public void simulationPeriodic() {
-    drivetrain.simulationPeriodic();
-
-    ChassisSpeeds chassisSpeeds = kinematics.toChassisSpeeds(getModuleStates());
-
-    simOrientation = new Rotation2d(
-        simOrientation.getRadians() + (chassisSpeeds.omegaRadiansPerSecond * Robot.kDefaultPeriod));
   }
 
   /**
@@ -539,16 +506,6 @@ public class SwerveSubsystem extends SubsystemBase {
           .withPosition(3, 0);
       positionLayout.addDouble("est. angle", () -> lastVisionMeasurement.getRotation().getDegrees())
           .withPosition(4, 0);    
-    }
-
-    if (ENABLE_FIELD_TAB) {
-      ShuffleboardTab fieldTab = Shuffleboard.getTab("Field");
-      ShuffleboardLayout fieldLayout = fieldTab.getLayout("Field", BuiltInLayouts.kGrid)
-          .withPosition(0, 0)
-          .withSize(6, 4)
-          .withProperties(Map.of("Number of columns", 1, "Number of rows", 1));
-
-      fieldLayout.add(field);
     }
   }
 }
