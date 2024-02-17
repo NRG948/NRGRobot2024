@@ -23,15 +23,18 @@ public class Subsystems {
   public final IndexerSubsystem indexerSubsystem = new IndexerSubsystem();
   public final AddressableLEDSubsystem addressableLEDSubsystem = new AddressableLEDSubsystem();
   public final ArmSubsystem armSubsystem = new ArmSubsystem();
-  public IntakeSubsystem intake = new IntakeSubsystem();
+  public final IntakeSubsystem intake = new IntakeSubsystem();
+  public final ShooterSubsystem shooter = new ShooterSubsystem();
 
   public final Subsystem[] all = new Subsystem[] {
       drivetrain,
       aprilTag,
       noteVision,
       indexerSubsystem,
+      intake,
       addressableLEDSubsystem,
-      armSubsystem
+      armSubsystem,
+      shooter
   };
 
   public void periodic() {
