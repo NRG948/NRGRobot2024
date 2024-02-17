@@ -28,6 +28,8 @@ import frc.robot.commands.InterruptAll;
 import frc.robot.commands.LEDs;
 import frc.robot.commands.ManualArmController;
 import frc.robot.commands.Pathfinding;
+import frc.robot.subsystems.IndexerSubsystem;
+import frc.robot.subsystems.IntakeSubsystem;
 import frc.robot.subsystems.Subsystems;
 
 /**
@@ -130,5 +132,12 @@ public class RobotContainer {
     m_subsystems.aprilTag.addShuffleboardTab();
     m_subsystems.noteVision.addShuffleboardTab();
     m_subsystems.armSubsystem.addShuffleBoardTab();
+    
+    if (IndexerSubsystem.ENABLE_TAB.getValue()) {
+      ShuffleboardTab intakeIndexerTab = Shuffleboard.getTab("Indexer+Intake");
+
+      m_subsystems.intake.addShuffleboardLayout(intakeIndexerTab);
+      m_subsystems.indexerSubsystem.addShuffleboardLayout(intakeIndexerTab);
+    }
   }
 }
