@@ -28,11 +28,11 @@ import frc.robot.Constants;
 import frc.robot.Constants.RobotConstants;
 import frc.robot.parameters.MotorParameters;
 
-@RobotPreferencesLayout(groupName = "Arm", row = 3, column = 4, width = 2, height = 4)
+@RobotPreferencesLayout(groupName = "Arm+Shooter", row = 0, column = 6, width = 2, height = 4)
 public class ArmSubsystem extends SubsystemBase {
   @RobotPreferencesValue
-  public static final RobotPreferences.BooleanValue enableTab = new RobotPreferences.BooleanValue(
-      "Arm", "Enable Tab", false);
+  public static final RobotPreferences.BooleanValue ENABLE_TAB = new RobotPreferences.BooleanValue(
+      "Arm+Shooter", "Enable Tab", false);
 
   public static final double GEAR_RATIO = 168.0;
   public static final double MASS = 0.5; // TODO determine actual arm mass
@@ -153,15 +153,11 @@ public class ArmSubsystem extends SubsystemBase {
     }
   }
 
-  public void addShuffleBoardTab() {
-    if (!enableTab.getValue()) {
-      return;
-    }
-
-    ShuffleboardTab armTab = Shuffleboard.getTab("Arm");
-    ShuffleboardLayout infolayout = armTab.getLayout("Arm Info", BuiltInLayouts.kList)
+  public void addShuffleboardLayout(ShuffleboardTab tab) {
+    ShuffleboardLayout infolayout = tab.getLayout("Arm Info", BuiltInLayouts.kList)
         .withPosition(0, 0)
         .withSize(2, 4);
-    infolayout.addDouble("Angle", () -> Math.toDegrees(getAngle()));
+    infolayout.addDouble("Current Angle", () -> Math.toDegrees(getAngle()));
+    infolayout.addDouble("Goal Angle", () -> Math.toDegrees(controller.getGoal().position));
   }
 }

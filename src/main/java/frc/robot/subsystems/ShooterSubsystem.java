@@ -12,6 +12,9 @@ import edu.wpi.first.math.controller.SimpleMotorFeedforward;
 import edu.wpi.first.util.datalog.BooleanLogEntry;
 import edu.wpi.first.util.datalog.DoubleLogEntry;
 import edu.wpi.first.wpilibj.DataLogManager;
+import edu.wpi.first.wpilibj.shuffleboard.BuiltInLayouts;
+import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardLayout;
+import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants.RobotConstants;
 import frc.robot.parameters.MotorParameters;
@@ -21,27 +24,11 @@ public class ShooterSubsystem extends SubsystemBase {
   private static final double KS = 0.15;
   private static final double KV = (RobotConstants.MAX_BATTERY_VOLTAGE - KS) * 3
       / MotorParameters.NeoV1_1.getFreeSpeedRPM();
-
-  public enum GoalShooterRPM {
-    STOP(0.0),
-    SHOOTING(69); // TODO: Get Real RPM
-
-    private final double rpm;
-
-    GoalShooterRPM(double rpm) {
-      this.rpm = rpm;
-    }
-
-    private double getRPM() {
-      return rpm;
-    }
-  }
-
   private final CANSparkFlex shooterMotor = new CANSparkFlex(
       RobotConstants.CAN.SparkMax.SHOOTER_PORT, MotorType.kBrushless);
 
-  private double currentShooterRPM;
-  private GoalShooterRPM currentGoalRPM = GoalShooterRPM.STOP;
+  private double currentRPM;
+  private double goalRPM = 0;
 
   private final RelativeEncoder shooterEncoder = shooterMotor.getEncoder();
 
@@ -60,13 +47,13 @@ public class ShooterSubsystem extends SubsystemBase {
     shooterEncoder.setVelocityConversionFactor(0.333);
   }
 
-  private void setGoalRPMInternal(GoalShooterRPM goalRPM) {
-    currentGoalRPM = goalRPM;
-    shooterPIDController.setSetpoint(goalRPM.getRPM());
-    goalRPMLogger.append(currentGoalRPM.getRPM());
+  private void setGoalRPMInternal(double goalRPM) {
+    goalRPM = goalRPM;
+    shooterPIDController.setSetpoint(goalRPM);
+    goalRPMLogger.append(goalRPM);
   }
 
-  public void setGoalRPM(GoalShooterRPM goalShooterRPM) {
+  public void setGoalRPM(double goalShooterRPM) {
     if (!isEnabled) {
       enabledLogger.append(true);
     }
@@ -85,7 +72,7 @@ public class ShooterSubsystem extends SubsystemBase {
     isEnabled = false;
     stopMotor();
     shooterPIDController.reset();
-    currentGoalRPM = GoalShooterRPM.STOP;
+    goalRPM = 0;
   }
 
   /** Stops Shooter Motor. */
@@ -102,11 +89,11 @@ public class ShooterSubsystem extends SubsystemBase {
   }
 
   public double getRPM() {
-    return currentShooterRPM;
+    return currentRPM;
   }
 
-  public GoalShooterRPM getCurrentGoalRPM() {
-    return currentGoalRPM;
+  public double getGoalRPM() {
+    return goalRPM;
   }
 
   public boolean isEnabled() {
@@ -116,15 +103,25 @@ public class ShooterSubsystem extends SubsystemBase {
   @Override
   public void periodic() {
 
-    currentShooterRPM = shooterEncoder.getVelocity();
+    currentRPM = shooterEncoder.getVelocity();
 
     if (isEnabled) {
-      double shooterFeedForwardVoltage = feedforward.calculate(currentGoalRPM.getRPM());
+      double shooterFeedForwardVoltage = feedforward.calculate(goalRPM);
 
-      shooterVoltage = shooterFeedForwardVoltage + shooterPIDController.calculate(currentShooterRPM);
+      shooterVoltage = shooterFeedForwardVoltage + shooterPIDController.calculate(currentRPM);
 
       setMotorVoltage(shooterVoltage);
     }
-    shooterRPMLogger.append(currentShooterRPM);
+    shooterRPMLogger.append(currentRPM);
+  }
+
+  public void addShuffleboardLayout(ShuffleboardTab tab) {
+    ShuffleboardLayout shooterLayout = tab.getLayout("Shooter", BuiltInLayouts.kList)
+      .withPosition(2,0)
+      .withSize(2, 3);
+
+    shooterLayout.addDouble("Goal RPM", () -> goalRPM);
+    shooterLayout.addDouble("Current RPM", () -> currentRPM);
+    shooterLayout.addBoolean("Enabled", () -> isEnabled);
   }
 }
