@@ -26,7 +26,7 @@ import frc.robot.Constants;
 import frc.robot.Constants.RobotConstants;
 import frc.robot.parameters.MotorParameters;
 
-@RobotPreferencesLayout(groupName = "Arm+Shooter", row = 0, column = 6, width = 2, height = 4)
+@RobotPreferencesLayout(groupName = "Arm+Shooter", row = 0, column = 2, width = 2, height = 1)
 public class ArmSubsystem extends SubsystemBase {
   @RobotPreferencesValue
   public static final RobotPreferences.BooleanValue ENABLE_TAB = new RobotPreferences.BooleanValue(
