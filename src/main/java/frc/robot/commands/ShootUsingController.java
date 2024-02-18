@@ -19,9 +19,6 @@ public class ShootUsingController extends Command {
   private static final double DEADBAND = 0.1;
   private static final double SHOOTER_SPEED = 1.0;
 
-
-
-
   public ShootUsingController(ShooterSubsystem shooterSubsystem, CommandXboxController controller) {
     // Use addRequirements() here to declare subsystem dependencies.
     this.controller = controller;
@@ -44,7 +41,7 @@ public class ShootUsingController extends Command {
     double speed = -controller.getHID().getLeftY();
     speed = MathUtil.applyDeadband(speed*SHOOTER_SPEED, DEADBAND);
     double voltage = speed * RobotConstants.MAX_BATTERY_VOLTAGE;
-    shooterSubsystem.setMotorVoltage(voltage);
+    shooterSubsystem.setMotorVoltages(voltage, voltage * ShooterSubsystem.SPIN_FACTOR);
 
   }
 
