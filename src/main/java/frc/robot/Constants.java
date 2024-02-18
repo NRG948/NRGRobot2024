@@ -93,7 +93,8 @@ public final class Constants {
      */
     public static class CAN {
       public static class SparkMax {
-        public static final int SHOOTER_PORT = 59;
+        public static final int SHOOTER_LEFT_PORT = 59; // TODO assign actual port
+        public static final int SHOOTER_RIGHT_PORT = 60; // TODO assign actual port
         public static final int INTAKE_PORT = 2; // TODO assign actual port
         public static final int ARM_LEFT_PORT = 1;
         public static final int ARM_RIGHT_PORT = 11; 
