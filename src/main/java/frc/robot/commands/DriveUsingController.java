@@ -23,9 +23,12 @@ import frc.robot.subsystems.SwerveSubsystem;
 
 public class DriveUsingController extends Command {
   private static final double DEADBAND = 0.05;
-  private static final double KP_APRIL_TAG = 1.0;
-  private static final double KI_APRIL_TAG = 0;
-  private static final double KD_APRIL_TAG = 0;
+  @RobotPreferencesValue
+  public static final RobotPreferences.DoubleValue KP_APRIL_TAG = new RobotPreferences.DoubleValue("AprilTag", "kP", 1.0);
+  @RobotPreferencesValue
+  public static final RobotPreferences.DoubleValue KI_APRIL_TAG = new RobotPreferences.DoubleValue("AprilTag", "kI", 0);
+  @RobotPreferencesValue
+  public static final RobotPreferences.DoubleValue KD_APRIL_TAG = new RobotPreferences.DoubleValue("AprilTag", "kD", 0);
   @RobotPreferencesValue
   public static final RobotPreferences.DoubleValue KP_NOTE = new RobotPreferences.DoubleValue("NoteVision", "kP", 0.7);
   @RobotPreferencesValue
@@ -53,7 +56,7 @@ public class DriveUsingController extends Command {
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
-    m_profiledPIDController = new ProfiledPIDController(KP_APRIL_TAG, 0, 0, SwerveSubsystem.getRotationalConstraints());
+    m_profiledPIDController = new ProfiledPIDController(KP_APRIL_TAG.getValue(), 0, 0, SwerveSubsystem.getRotationalConstraints());
     m_profiledPIDController.enableContinuousInput(-Math.PI, Math.PI);
     m_profiledPIDController.reset(m_drivetrain.getOrientation().getRadians());
   }
@@ -85,12 +88,12 @@ public class DriveUsingController extends Command {
     // Don't want to do both tag and note alignment so to choose one, tag takes
     // priority
     if (optionalTagTarget.isPresent()) {
-      Rotation2d angleToTarget = Rotation2d.fromDegrees(m_aprilTag.getAngleToBestTarget());
+      Rotation2d angleToTarget = Rotation2d.fromDegrees(-optionalTagTarget.get().getYaw());
       targetOrientation = targetOrientation.plus(angleToTarget);
-      m_profiledPIDController.setP(KP_APRIL_TAG);
-      m_profiledPIDController.setI(KI_APRIL_TAG);
-      m_profiledPIDController.setD(KD_APRIL_TAG);
-      rSpeed = m_profiledPIDController.calculate(currentOrientation.getRadians(), targetOrientation.getRadians());
+      m_profiledPIDController.setP(KP_APRIL_TAG.getValue());
+      m_profiledPIDController.setI(KI_APRIL_TAG.getValue());
+      m_profiledPIDController.setD(KD_APRIL_TAG.getValue());
+      rSpeed = Math.abs(ySpeed) * m_profiledPIDController.calculate(currentOrientation.getRadians(), targetOrientation.getRadians());
     } else if (optionalNoteTarget.isPresent()) {
       Rotation2d angleToTarget = Rotation2d.fromDegrees(m_noteVision.getAngleToBestTarget());
       targetOrientation = targetOrientation.plus(angleToTarget);
