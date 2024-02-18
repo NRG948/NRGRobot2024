@@ -15,18 +15,14 @@ import frc.robot.Constants.RobotConstants;
 import frc.robot.subsystems.IntakeSubsystem;
 import frc.robot.subsystems.Subsystems;
 
-@RobotPreferencesLayout(groupName = "Intake", column = 0, row = 1, width = 2, height = 3)
 public class IntakeUsingController extends Command {
 
   private final IntakeSubsystem intake;
   private final CommandXboxController controller;
   
-  @RobotPreferencesValue
-
   private static final double DEADBAND = 0.1;
 
-  public RobotPreferences.DoubleValue intake_RPM = new RobotPreferences.DoubleValue("Intake", "intake_RPM", 1.0);
-  /** Creates a new InakeUsingController. */
+  /** Creates a new IntakeUsingController. */
   public IntakeUsingController(Subsystems subsystems, CommandXboxController controller) {
     // Use addRequirements() here to declare subsystem dependencies.
     this.intake = subsystems.intake; //need to uncomment in Subsystems.java
