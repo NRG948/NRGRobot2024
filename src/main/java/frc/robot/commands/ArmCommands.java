@@ -24,7 +24,7 @@ public class ArmCommands {
    * @return A command to move the arm to to stowed position.
    */
   public static Command stow(Subsystems subsystems) {
-    ArmSubsystem arm = subsystems.armSubsystem;
+    ArmSubsystem arm = subsystems.arm;
 
     return Commands.sequence(
         Commands.runOnce(() -> arm.setGoalAngle(STOWED_ANGLE), arm), //
@@ -38,7 +38,7 @@ public class ArmCommands {
    * @return A command to move the arm to to amp position.
    */
   public static Command seekToAmp(Subsystems subsystems) {
-    ArmSubsystem arm = subsystems.armSubsystem;
+    ArmSubsystem arm = subsystems.arm;
 
     return Commands.sequence(
         Commands.runOnce(() -> arm.setGoalAngle(AMP_ANGLE), arm), //
@@ -52,7 +52,7 @@ public class ArmCommands {
    * @return A command to move the arm to to trap position.
    */
   public static Command seekToTrap(Subsystems subsystems) {
-    ArmSubsystem arm = subsystems.armSubsystem;
+    ArmSubsystem arm = subsystems.arm;
 
     return Commands.sequence(
         Commands.runOnce(() -> arm.setGoalAngle(TRAP_ANGLE), arm), //
@@ -66,7 +66,7 @@ public class ArmCommands {
    * @return A command to disable automatic seeking to goal angle.
    */
   public static Command disableSeek(Subsystems subsystems) {
-    ArmSubsystem arm = subsystems.armSubsystem;
+    ArmSubsystem arm = subsystems.arm;
 
     return Commands.runOnce(() -> arm.disable(), arm);
   }

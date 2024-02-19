@@ -22,7 +22,7 @@ public class ManualArmController extends Command {
   /** Creates a new ManualArmController. */
   public ManualArmController(Subsystems subsystems, CommandXboxController controller) {
     this.controller = controller;
-    this.arm = subsystems.armSubsystem;
+    this.arm = subsystems.arm;
     // Use addRequirements() here to declare subsystem dependencies.
     addRequirements(this.arm);
   }
