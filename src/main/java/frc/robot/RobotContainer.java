@@ -39,26 +39,24 @@ import frc.robot.subsystems.Subsystems;
 @RobotPreferencesLayout(groupName = "Preferences", column = 0, row = 0, width = 2, height = 1)
 public class RobotContainer {
   // The robot's subsystems and commands are defined here...
-  private final Subsystems m_subsystems = new Subsystems();
+  private final Subsystems subsystems = new Subsystems();
 
   // Robot autonomous must be initialized after the subsystems
-  private final RobotAutonomous m_autonomous = new RobotAutonomous(m_subsystems);
+  private final RobotAutonomous autonomous = new RobotAutonomous(subsystems);
 
   // Replace with CommandPS4Controller or CommandJoystick if needed
-  private final CommandXboxController m_driverController =
+  private final CommandXboxController driverController =
       new CommandXboxController(OperatorConstants.XboxControllerPort.DRIVER);
-  private final CommandXboxController m_operatorController =
+  private final CommandXboxController operatorController =
       new CommandXboxController(OperatorConstants.XboxControllerPort.MANIPULATOR);
 
   /** The container for the robot. Contains subsystems, OI devices, and commands. */
   public RobotContainer() {
     DriverStation.silenceJoystickConnectionWarning(true);
 
-    m_subsystems.drivetrain.setDefaultCommand(
-        new DriveUsingController(m_subsystems, m_driverController));
-    m_subsystems.arm.setDefaultCommand(new ManualArmController(m_subsystems, m_operatorController));
-    m_subsystems.intake.setDefaultCommand(
-        new IntakeUsingController(m_subsystems, m_operatorController));
+    subsystems.drivetrain.setDefaultCommand(new DriveUsingController(subsystems, driverController));
+    subsystems.arm.setDefaultCommand(new ManualArmController(subsystems, operatorController));
+    subsystems.intake.setDefaultCommand(new IntakeUsingController(subsystems, operatorController));
 
     // Configure the trigger bindings
     configureBindings();
@@ -80,22 +78,20 @@ public class RobotContainer {
     // Schedule `exampleMetdhodCommand` when the Xbox controller's B button is
     // pressed,
     // cancelling on release.
-    m_driverController.start().onTrue(DriveCommands.resetOrientation(m_subsystems));
-    m_driverController.back().onTrue(new InterruptAll(m_subsystems));
-    m_driverController.a().onTrue(Pathfinding.pathFindToSpeakerFront());
-    m_driverController.b().whileTrue(Pathfinding.pathFindToAmp());
-    m_driverController.y().whileTrue(Pathfinding.pathFindToAmp2());
-    // m_driverController.y().onTrue(Commands.defer(() -> DriveCommands.driveToAmp(m_subsystems),
-    //   Set.of(m_subsystems.drivetrain, m_subsystems.aprilTag)));
+    driverController.start().onTrue(DriveCommands.resetOrientation(subsystems));
+    driverController.back().onTrue(new InterruptAll(subsystems));
+    driverController.a().onTrue(Pathfinding.pathFindToSpeakerFront());
+    driverController.b().whileTrue(Pathfinding.pathFindToAmp());
+    driverController.y().whileTrue(Pathfinding.pathFindToAmp2());
 
-    m_operatorController.povUp().onTrue(ArmCommands.seekToTrap(m_subsystems));
-    m_operatorController.povRight().onTrue(ArmCommands.seekToAmp(m_subsystems));
-    m_operatorController.povDown().onTrue(ArmCommands.stow(m_subsystems));
-    m_operatorController.povLeft().onTrue(ArmCommands.disableSeek(m_subsystems));
+    operatorController.povUp().onTrue(ArmCommands.seekToTrap(subsystems));
+    operatorController.povRight().onTrue(ArmCommands.seekToAmp(subsystems));
+    operatorController.povDown().onTrue(ArmCommands.stow(subsystems));
+    operatorController.povLeft().onTrue(ArmCommands.disableSeek(subsystems));
 
-    Trigger noteDetected = new Trigger(m_subsystems.indexer::isNoteDetected);
-    noteDetected.onTrue(LEDs.fillColor(m_subsystems.addressableLED, ORANGE));
-    noteDetected.onFalse(LEDs.fillColor(m_subsystems.addressableLED, RED));
+    Trigger noteDetected = new Trigger(subsystems.indexer::isNoteDetected);
+    noteDetected.onTrue(LEDs.fillColor(subsystems.addressableLED, ORANGE));
+    noteDetected.onFalse(LEDs.fillColor(subsystems.addressableLED, RED));
   }
 
   /**
@@ -104,36 +100,36 @@ public class RobotContainer {
    * @return the command to run in autonomous
    */
   public Command getAutonomousCommand() {
-    return m_autonomous.getAutonomousCommand();
+    return autonomous.getAutonomousCommand();
   }
 
   public void periodic() {
-    m_subsystems.periodic();
+    subsystems.periodic();
   }
 
   public void initShuffleboard() {
     ShuffleboardTab operatorTab = Shuffleboard.getTab("Operator");
 
-    m_autonomous.addShuffleboardLayout(operatorTab);
+    autonomous.addShuffleboardLayout(operatorTab);
 
     RobotPreferences.addShuffleBoardTab();
 
-    m_subsystems.drivetrain.addShuffleboardTab();
-    m_subsystems.aprilTag.addShuffleboardTab();
-    m_subsystems.noteVision.addShuffleboardTab();
+    subsystems.drivetrain.addShuffleboardTab();
+    subsystems.aprilTag.addShuffleboardTab();
+    subsystems.noteVision.addShuffleboardTab();
 
     if (ArmSubsystem.ENABLE_TAB.getValue()) {
       ShuffleboardTab armShooterTab = Shuffleboard.getTab("Arm+Shooter");
 
-      m_subsystems.arm.addShuffleboardLayout(armShooterTab);
-      m_subsystems.shooter.addShuffleboardLayout(armShooterTab);
+      subsystems.arm.addShuffleboardLayout(armShooterTab);
+      subsystems.shooter.addShuffleboardLayout(armShooterTab);
     }
 
     if (IndexerSubsystem.ENABLE_TAB.getValue()) {
       ShuffleboardTab intakeIndexerTab = Shuffleboard.getTab("Indexer+Intake");
 
-      m_subsystems.intake.addShuffleboardLayout(intakeIndexerTab);
-      m_subsystems.indexer.addShuffleboardLayout(intakeIndexerTab);
+      subsystems.intake.addShuffleboardLayout(intakeIndexerTab);
+      subsystems.indexer.addShuffleboardLayout(intakeIndexerTab);
     }
   }
 }
