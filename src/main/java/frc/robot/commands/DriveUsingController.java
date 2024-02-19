@@ -1,16 +1,13 @@
-// Copyright (c) FIRST and other WPILib contributors.
-// Open Source Software; you can modify and/or share it under the terms of
-// the WPILib BSD license file in the root directory of this project.
-
+/*
+ * Copyright (c) 2024 Newport Robotics Group. All Rights Reserved.
+ *
+ * Open Source Software; you can modify and/or share it under the terms of
+ * the license file in the root directory of this project.
+ */
 package frc.robot.commands;
-
-import java.util.Optional;
-
-import org.photonvision.targeting.PhotonTrackedTarget;
 
 import com.nrg948.preferences.RobotPreferences;
 import com.nrg948.preferences.RobotPreferencesValue;
-
 import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.controller.ProfiledPIDController;
 import edu.wpi.first.math.geometry.Rotation2d;
@@ -20,22 +17,35 @@ import frc.robot.subsystems.AprilTagSubsystem;
 import frc.robot.subsystems.NoteVisionSubsystem;
 import frc.robot.subsystems.Subsystems;
 import frc.robot.subsystems.SwerveSubsystem;
+import java.util.Optional;
+import org.photonvision.targeting.PhotonTrackedTarget;
 
 public class DriveUsingController extends Command {
   private static final double DEADBAND = 0.05;
+
   @RobotPreferencesValue
-  public static final RobotPreferences.DoubleValue KP_APRIL_TAG = new RobotPreferences.DoubleValue("AprilTag", "kP", 1.0);
+  public static final RobotPreferences.DoubleValue KP_APRIL_TAG =
+      new RobotPreferences.DoubleValue("AprilTag", "kP", 1.0);
+
   @RobotPreferencesValue
-  public static final RobotPreferences.DoubleValue KI_APRIL_TAG = new RobotPreferences.DoubleValue("AprilTag", "kI", 0);
+  public static final RobotPreferences.DoubleValue KI_APRIL_TAG =
+      new RobotPreferences.DoubleValue("AprilTag", "kI", 0);
+
   @RobotPreferencesValue
-  public static final RobotPreferences.DoubleValue KD_APRIL_TAG = new RobotPreferences.DoubleValue("AprilTag", "kD", 0);
+  public static final RobotPreferences.DoubleValue KD_APRIL_TAG =
+      new RobotPreferences.DoubleValue("AprilTag", "kD", 0);
+
   @RobotPreferencesValue
-  public static final RobotPreferences.DoubleValue KP_NOTE = new RobotPreferences.DoubleValue("NoteVision", "kP", 0.7);
+  public static final RobotPreferences.DoubleValue KP_NOTE =
+      new RobotPreferences.DoubleValue("NoteVision", "kP", 0.7);
+
   @RobotPreferencesValue
-  public static final RobotPreferences.DoubleValue KI_NOTE = new RobotPreferences.DoubleValue("NoteVision", "kI", 0.0);
+  public static final RobotPreferences.DoubleValue KI_NOTE =
+      new RobotPreferences.DoubleValue("NoteVision", "kI", 0.0);
+
   @RobotPreferencesValue
-  public static final RobotPreferences.DoubleValue KD_NOTE = new RobotPreferences.DoubleValue("NoteVision", "kD", 0.0);
-  
+  public static final RobotPreferences.DoubleValue KD_NOTE =
+      new RobotPreferences.DoubleValue("NoteVision", "kD", 0.0);
 
   private final SwerveSubsystem m_drivetrain;
   private final AprilTagSubsystem m_aprilTag;
@@ -56,7 +66,9 @@ public class DriveUsingController extends Command {
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
-    m_profiledPIDController = new ProfiledPIDController(KP_APRIL_TAG.getValue(), 0, 0, SwerveSubsystem.getRotationalConstraints());
+    m_profiledPIDController =
+        new ProfiledPIDController(
+            KP_APRIL_TAG.getValue(), 0, 0, SwerveSubsystem.getRotationalConstraints());
     m_profiledPIDController.enableContinuousInput(-Math.PI, Math.PI);
     m_profiledPIDController.reset(m_drivetrain.getOrientation().getRadians());
   }
@@ -81,7 +93,8 @@ public class DriveUsingController extends Command {
     Optional<PhotonTrackedTarget> optionalNoteTarget = Optional.empty();
     if (m_xboxController.getHID().getRightBumper()) {
       optionalTagTarget = m_aprilTag.getTarget(AprilTagSubsystem.getSpeakerCenterAprilTagID());
-    } else if (m_xboxController.getHID().getXButton() && m_noteVision.hasTargets()) { // Nonpermanent X binding
+    } else if (m_xboxController.getHID().getXButton()
+        && m_noteVision.hasTargets()) { // Nonpermanent X binding
       optionalNoteTarget = Optional.of(m_noteVision.getBestTarget());
     }
 
@@ -93,24 +106,25 @@ public class DriveUsingController extends Command {
       m_profiledPIDController.setP(KP_APRIL_TAG.getValue());
       m_profiledPIDController.setI(KI_APRIL_TAG.getValue());
       m_profiledPIDController.setD(KD_APRIL_TAG.getValue());
-      rSpeed = Math.abs(ySpeed) * m_profiledPIDController.calculate(currentOrientation.getRadians(), targetOrientation.getRadians());
+      rSpeed =
+          Math.abs(ySpeed)
+              * m_profiledPIDController.calculate(
+                  currentOrientation.getRadians(), targetOrientation.getRadians());
     } else if (optionalNoteTarget.isPresent()) {
       Rotation2d angleToTarget = Rotation2d.fromDegrees(m_noteVision.getAngleToBestTarget());
       targetOrientation = targetOrientation.plus(angleToTarget);
       m_profiledPIDController.setP(KP_NOTE.getValue());
       m_profiledPIDController.setI(KI_NOTE.getValue());
       m_profiledPIDController.setD(KD_NOTE.getValue());
-      rSpeed = m_profiledPIDController.calculate(currentOrientation.getRadians(), targetOrientation.getRadians());
+      rSpeed =
+          m_profiledPIDController.calculate(
+              currentOrientation.getRadians(), targetOrientation.getRadians());
     } else {
       rSpeed = -m_xboxController.getRightX();
       rSpeed = MathUtil.applyDeadband(rSpeed, DEADBAND) * inputScalar;
     }
 
-    m_drivetrain.drive(
-        xSpeed,
-        ySpeed,
-        rSpeed,
-        true);
+    m_drivetrain.drive(xSpeed, ySpeed, rSpeed, true);
   }
 
   // Called once the command ends or is interrupted.

@@ -1,36 +1,35 @@
-// Copyright (c) FIRST and other WPILib contributors.
-// Open Source Software; you can modify and/or share it under the terms of
-// the WPILib BSD license file in the root directory of this project.
-
+/*
+ * Copyright (c) 2024 Newport Robotics Group. All Rights Reserved.
+ *
+ * Open Source Software; you can modify and/or share it under the terms of
+ * the license file in the root directory of this project.
+ */
 package frc.robot.commands;
-
-import frc.robot.subsystems.Subsystems;
-import frc.robot.subsystems.SwerveSubsystem;
-
-import java.io.File;
-import java.util.Arrays;
-import java.util.Collection;
-import java.util.Set;
-
-import org.javatuples.LabelValue;
 
 import com.nrg948.autonomous.AutonomousCommandGenerator;
 import com.pathplanner.lib.commands.PathPlannerAuto;
-
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.wpilibj.Filesystem;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
+import frc.robot.subsystems.Subsystems;
+import frc.robot.subsystems.SwerveSubsystem;
+import java.io.File;
+import java.util.Arrays;
+import java.util.Collection;
+import java.util.Set;
+import org.javatuples.LabelValue;
 
 public final class Autos {
   /**
    * Returns the collection of PathPlanner auto commands.
-   * 
+   *
    * @param subsystems The subsystem container.
    * @return A collection of PathPlanner auto commands.
    */
   @AutonomousCommandGenerator
-  public static Collection<LabelValue<String, Command>> generatePathPlannerAutos(Subsystems subsystems) {
+  public static Collection<LabelValue<String, Command>> generatePathPlannerAutos(
+      Subsystems subsystems) {
     File autosDir = new File(Filesystem.getDeployDirectory(), "pathplanner/autos");
     return Arrays.stream(autosDir.listFiles((file, name) -> name.endsWith(".auto")))
         .map((file) -> file.getName().split("\\.")[0])
@@ -40,8 +39,8 @@ public final class Autos {
   }
 
   /**
-   * Returns the PathPlanner auto command. 
-   * 
+   * Returns the PathPlanner auto command.
+   *
    * @param subsystems Subsystems container.
    * @param name Name of the PathPlanner auto.
    * @return The PathPlanner auto command.

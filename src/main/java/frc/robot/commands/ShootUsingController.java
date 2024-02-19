@@ -1,7 +1,9 @@
-// Copyright (c) FIRST and other WPILib contributors.
-// Open Source Software; you can modify and/or share it under the terms of
-// the WPILib BSD license file in the root directory of this project.
-
+/*
+ * Copyright (c) 2024 Newport Robotics Group. All Rights Reserved.
+ *
+ * Open Source Software; you can modify and/or share it under the terms of
+ * the license file in the root directory of this project.
+ */
 package frc.robot.commands;
 
 import edu.wpi.first.math.MathUtil;
@@ -12,8 +14,8 @@ import frc.robot.subsystems.ShooterSubsystem;
 
 public class ShootUsingController extends Command {
   /** Creates a new ShootByController. */
-
   private ShooterSubsystem shooterSubsystem;
+
   private CommandXboxController controller;
 
   private static final double DEADBAND = 0.1;
@@ -31,7 +33,6 @@ public class ShootUsingController extends Command {
   public void initialize() {
 
     shooterSubsystem.disable();
-
   }
 
   // Called every time the scheduler runs while the command is scheduled.
@@ -39,16 +40,14 @@ public class ShootUsingController extends Command {
   public void execute() {
 
     double speed = -controller.getHID().getLeftY();
-    speed = MathUtil.applyDeadband(speed*SHOOTER_SPEED, DEADBAND);
+    speed = MathUtil.applyDeadband(speed * SHOOTER_SPEED, DEADBAND);
     double voltage = speed * RobotConstants.MAX_BATTERY_VOLTAGE;
     shooterSubsystem.setMotorVoltages(voltage, voltage * ShooterSubsystem.SPIN_FACTOR);
-
   }
 
   // Called once the command ends or is interrupted.
   @Override
-  public void end(boolean interrupted) {
-  }
+  public void end(boolean interrupted) {}
 
   // Returns true when the command should end.
   @Override

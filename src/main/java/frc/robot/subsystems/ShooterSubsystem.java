@@ -1,12 +1,15 @@
-
+/*
+ * Copyright (c) 2024 Newport Robotics Group. All Rights Reserved.
+ *
+ * Open Source Software; you can modify and/or share it under the terms of
+ * the license file in the root directory of this project.
+ */
 package frc.robot.subsystems;
 
 import com.revrobotics.CANSparkBase.IdleMode;
 import com.revrobotics.CANSparkFlex;
-
-import com.revrobotics.RelativeEncoder;
 import com.revrobotics.CANSparkLowLevel.MotorType;
-
+import com.revrobotics.RelativeEncoder;
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.controller.SimpleMotorFeedforward;
 import edu.wpi.first.util.datalog.BooleanLogEntry;
@@ -22,6 +25,7 @@ import frc.robot.parameters.MotorParameters;
 public class ShooterSubsystem extends SubsystemBase {
   /** Creates a new ShooterSubsystem. */
   private static final MotorParameters MOTOR = MotorParameters.NeoV1_1;
+
   private static final double GEAR_RATIO = 1.0;
   public static final double MAX_RPM = MOTOR.getFreeSpeedRPM() / GEAR_RATIO;
   private static final double ENCODER_CONVERSION_FACTOR = 1 / GEAR_RATIO;
@@ -30,10 +34,10 @@ public class ShooterSubsystem extends SubsystemBase {
   public static final double SPIN_FACTOR = 0.80;
   private static final double RPM_TOLERANCE = 50.0;
 
-  private final CANSparkFlex leftMotor = new CANSparkFlex(
-      RobotConstants.CAN.SparkMax.SHOOTER_LEFT_PORT, MotorType.kBrushless);
-  private final CANSparkFlex rightMotor = new CANSparkFlex(
-    RobotConstants.CAN.SparkMax.SHOOTER_RIGHT_PORT, MotorType.kBrushless);
+  private final CANSparkFlex leftMotor =
+      new CANSparkFlex(RobotConstants.CAN.SparkMax.SHOOTER_LEFT_PORT, MotorType.kBrushless);
+  private final CANSparkFlex rightMotor =
+      new CANSparkFlex(RobotConstants.CAN.SparkMax.SHOOTER_RIGHT_PORT, MotorType.kBrushless);
 
   private double currentLeftRPM;
   private double currentRightRPM;
@@ -47,10 +51,14 @@ public class ShooterSubsystem extends SubsystemBase {
   private SimpleMotorFeedforward feedforward = new SimpleMotorFeedforward(KS, KV);
   private boolean isEnabled = false;
 
-  private BooleanLogEntry enabledLogger = new BooleanLogEntry(DataLogManager.getLog(), "/Shooter/Enabled");
-  private DoubleLogEntry goalRPMLogger = new DoubleLogEntry(DataLogManager.getLog(), "/Shooter/Goal RPM");
-  private DoubleLogEntry leftRPMLogger = new DoubleLogEntry(DataLogManager.getLog(), "/Shooter/Left RPM");
-  private DoubleLogEntry rightRPMLogger =new DoubleLogEntry(DataLogManager.getLog(), "/Shooter/Right RPM");
+  private BooleanLogEntry enabledLogger =
+      new BooleanLogEntry(DataLogManager.getLog(), "/Shooter/Enabled");
+  private DoubleLogEntry goalRPMLogger =
+      new DoubleLogEntry(DataLogManager.getLog(), "/Shooter/Goal RPM");
+  private DoubleLogEntry leftRPMLogger =
+      new DoubleLogEntry(DataLogManager.getLog(), "/Shooter/Left RPM");
+  private DoubleLogEntry rightRPMLogger =
+      new DoubleLogEntry(DataLogManager.getLog(), "/Shooter/Right RPM");
 
   /** Creates ShooterSubsystem. */
   public ShooterSubsystem() {
@@ -142,13 +150,12 @@ public class ShooterSubsystem extends SubsystemBase {
   }
 
   public void addShuffleboardLayout(ShuffleboardTab tab) {
-    ShuffleboardLayout shooterLayout = tab.getLayout("Shooter", BuiltInLayouts.kList)
-      .withPosition(2,0)
-      .withSize(2, 3);
+    ShuffleboardLayout shooterLayout =
+        tab.getLayout("Shooter", BuiltInLayouts.kList).withPosition(2, 0).withSize(2, 3);
 
     shooterLayout.addDouble("Goal RPM", () -> goalRPM);
     shooterLayout.addDouble("Left RPM", () -> currentLeftRPM);
-    shooterLayout.addDouble("Right RPM",() -> currentRightRPM);
+    shooterLayout.addDouble("Right RPM", () -> currentRightRPM);
     shooterLayout.addBoolean("Enabled", () -> isEnabled);
   }
 }

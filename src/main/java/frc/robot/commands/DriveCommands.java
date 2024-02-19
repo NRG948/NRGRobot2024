@@ -1,15 +1,13 @@
-// Copyright (c) FIRST and other WPILib contributors.
-// Open Source Software; you can modify and/or share it under the terms of
-// the WPILib BSD license file in the root directory of this project.
-
+/*
+ * Copyright (c) 2024 Newport Robotics Group. All Rights Reserved.
+ *
+ * Open Source Software; you can modify and/or share it under the terms of
+ * the license file in the root directory of this project.
+ */
 package frc.robot.commands;
-
-import java.util.Map;
-import java.util.Optional;
 
 import com.nrg948.preferences.RobotPreferences;
 import com.nrg948.preferences.RobotPreferencesValue;
-
 import edu.wpi.first.math.geometry.Pose3d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Rotation3d;
@@ -23,22 +21,25 @@ import frc.robot.Constants.RobotConstants;
 import frc.robot.subsystems.AprilTagSubsystem;
 import frc.robot.subsystems.Subsystems;
 import frc.robot.subsystems.SwerveSubsystem;
+import java.util.Map;
+import java.util.Optional;
 
 public final class DriveCommands {
   @RobotPreferencesValue
-  public static final RobotPreferences.BooleanValue USE_ESTIMATED_POSE = new RobotPreferences.BooleanValue("AprilTag", "Use Estimated Pose", false);
+  public static final RobotPreferences.BooleanValue USE_ESTIMATED_POSE =
+      new RobotPreferences.BooleanValue("AprilTag", "Use Estimated Pose", false);
 
   /** Returns a Command that drives to amp delivery position. */
   public static Command driveToAmp(Subsystems subsystems) {
-     
+
     var drivetrain = subsystems.drivetrain;
     var aprilTag = subsystems.aprilTag;
 
     var targetID = AprilTagSubsystem.getAmpAprilTagID();
     var targetOptional = aprilTag.getTarget(targetID);
-    if(targetOptional.isEmpty()){
+    if (targetOptional.isEmpty()) {
       return Commands.none(); // TODO blink LEDS red to tell driver we can't see the target
-    } 
+    }
 
     var target = targetOptional.get();
     var cameraToTarget = target.getBestCameraToTarget();
@@ -57,9 +58,10 @@ public final class DriveCommands {
     System.out.println("TARGET POSE = " + targetPose);
 
     // Find the scoring position pose.
-    var tagToGoal = new Transform3d(
-        new Translation3d(RobotConstants.SCORING_DISTANCE_FROM_AMP, 0, 0.0),
-        new Rotation3d(0, 0, Math.PI));
+    var tagToGoal =
+        new Transform3d(
+            new Translation3d(RobotConstants.SCORING_DISTANCE_FROM_AMP, 0, 0.0),
+            new Rotation3d(0, 0, Math.PI));
     var goalPose = targetPose.transformBy(tagToGoal).toPose2d();
 
     System.out.println("GOAL POSE = " + goalPose);
@@ -69,8 +71,9 @@ public final class DriveCommands {
   }
 
   /**
-   * Returns a command that resets the drivetrain orientation for teleop driving based on the current alliance.
-   * 
+   * Returns a command that resets the drivetrain orientation for teleop driving based on the
+   * current alliance.
+   *
    * @param subsystems The subsystems container.
    * @return A command to reset the drivetrain orientation.
    */
@@ -78,14 +81,15 @@ public final class DriveCommands {
     SwerveSubsystem drivetrain = subsystems.drivetrain;
 
     return Commands.select(
-      Map.of(
-        Alliance.Blue, Commands.runOnce(() -> drivetrain.resetOrientation(new Rotation2d()), drivetrain), 
-        Alliance.Red, Commands.runOnce(() -> drivetrain.resetOrientation(Rotation2d.fromDegrees(180)), drivetrain)
-      ), 
-      () -> {
-        Optional<Alliance> alliance = DriverStation.getAlliance();
-        return alliance.orElse(Alliance.Blue);
-      });
-
+        Map.of(
+            Alliance.Blue,
+                Commands.runOnce(() -> drivetrain.resetOrientation(new Rotation2d()), drivetrain),
+            Alliance.Red,
+                Commands.runOnce(
+                    () -> drivetrain.resetOrientation(Rotation2d.fromDegrees(180)), drivetrain)),
+        () -> {
+          Optional<Alliance> alliance = DriverStation.getAlliance();
+          return alliance.orElse(Alliance.Blue);
+        });
   }
 }

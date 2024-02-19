@@ -1,10 +1,10 @@
-// Copyright (c) FIRST and other WPILib contributors.
-// Open Source Software; you can modify and/or share it under the terms of
-// the WPILib BSD license file in the root directory of this project.
-
+/*
+ * Copyright (c) 2024 Newport Robotics Group. All Rights Reserved.
+ *
+ * Open Source Software; you can modify and/or share it under the terms of
+ * the license file in the root directory of this project.
+ */
 package frc.robot.commands;
-
-import java.util.function.Supplier;
 
 import edu.wpi.first.math.controller.HolonomicDriveController;
 import edu.wpi.first.math.geometry.Pose2d;
@@ -15,11 +15,9 @@ import edu.wpi.first.math.trajectory.TrapezoidProfile;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.subsystems.SwerveSubsystem;
+import java.util.function.Supplier;
 
-/**
- * A command to drive the robot on a straight line in using trapezoidal motion
- * profiling.
- */
+/** A command to drive the robot on a straight line in using trapezoidal motion profiling. */
 public class DriveStraight extends Command {
   private final SwerveSubsystem drivetrain;
   private final HolonomicDriveController controller;
@@ -34,44 +32,42 @@ public class DriveStraight extends Command {
   private TrapezoidProfile profile;
 
   /**
-   * Creates a new DriveStraight that drives robot along the specified vector at
-   * maximum speed while maintaining the current orientation of the robot.
-   * 
-   * @param drivetrain  The {@link SwerveSubsystem} representing the robot
-   *                    drivetrain.
-   * @param translation A {@link Translation2d} instance describing the line on
-   *                    which to travel. This is a vector relative to the current
-   *                    position.
+   * Creates a new DriveStraight that drives robot along the specified vector at maximum speed while
+   * maintaining the current orientation of the robot.
+   *
+   * @param drivetrain The {@link SwerveSubsystem} representing the robot drivetrain.
+   * @param translation A {@link Translation2d} instance describing the line on which to travel.
+   *     This is a vector relative to the current position.
    */
   public DriveStraight(SwerveSubsystem drivetrain, Translation2d translation) {
-    this(drivetrain, () -> translation, SwerveSubsystem.getMaxSpeed(), () -> drivetrain.getPosition().getRotation());
+    this(
+        drivetrain,
+        () -> translation,
+        SwerveSubsystem.getMaxSpeed(),
+        () -> drivetrain.getPosition().getRotation());
   }
 
   /**
-   * Creates a new DriveStraight that drives robot along the specified vector and
-   * speed while maintaining the current orientation of the robot.
-   * 
-   * @param drivetrain  The {@link SwerveSubsystem} representing the robot
-   *                    drivetrain.
-   * @param translation A {@link Translation2d} instance describing the line on
-   *                    which to travel. This is a vector relative to the current
-   *                    position.
-   * @param maxSpeed    The maximum speed at which to travel.
+   * Creates a new DriveStraight that drives robot along the specified vector and speed while
+   * maintaining the current orientation of the robot.
+   *
+   * @param drivetrain The {@link SwerveSubsystem} representing the robot drivetrain.
+   * @param translation A {@link Translation2d} instance describing the line on which to travel.
+   *     This is a vector relative to the current position.
+   * @param maxSpeed The maximum speed at which to travel.
    */
   public DriveStraight(SwerveSubsystem drivetrain, Translation2d translation, double maxSpeed) {
     this(drivetrain, () -> translation, maxSpeed, () -> drivetrain.getPosition().getRotation());
   }
 
   /**
-   * Creates a new DriveStraight that drives robot along the specified vector
-   * while rotating the robot to the desired orientation.
-   * 
-   * @param drivetrain  The {@link SwerveSubsystem} representing the robot
-   *                    drivetrain.
-   * @param translation A {@link Translation2d} instance describing the line on
-   *                    which to travel. This is a vector relative to the current
-   *                    position.
-   * @param maxSpeed    The maximum speed at which to travel.
+   * Creates a new DriveStraight that drives robot along the specified vector while rotating the
+   * robot to the desired orientation.
+   *
+   * @param drivetrain The {@link SwerveSubsystem} representing the robot drivetrain.
+   * @param translation A {@link Translation2d} instance describing the line on which to travel.
+   *     This is a vector relative to the current position.
+   * @param maxSpeed The maximum speed at which to travel.
    * @param orientation The desired orientation at the end of the command.
    */
   public DriveStraight(
@@ -83,14 +79,13 @@ public class DriveStraight extends Command {
   }
 
   /**
-   * Creates a new DriveStraight that drives robot to the specified absolute
-   * location and orientation on the field.
-   * 
-   * @param drivetrain The {@link SwerveSubsystem} representing the robot
-   *                   drivetrain.
-   * @param position   A {@link Pose2d} instance describing the absolute position
-   *                   and orientation to drive to.
-   * @param maxSpeed   The maximum speed at which to travel.
+   * Creates a new DriveStraight that drives robot to the specified absolute location and
+   * orientation on the field.
+   *
+   * @param drivetrain The {@link SwerveSubsystem} representing the robot drivetrain.
+   * @param position A {@link Pose2d} instance describing the absolute position and orientation to
+   *     drive to.
+   * @param maxSpeed The maximum speed at which to travel.
    */
   public DriveStraight(SwerveSubsystem drivetrain, Pose2d position, double maxSpeed) {
     this(
@@ -102,16 +97,13 @@ public class DriveStraight extends Command {
 
   /**
    * Constructs an instance of this class.
-   * 
-   * @param drivetrain          The {@link SwerveSubsystem} representing the robot
-   *                            drivetrain.
-   * @param translationSupplier Supplies a {@link Translation2d} instance
-   *                            describing the line on which to travel. This is a
-   *                            vector relative to the current position.
-   * @param maxSpeed            The maximum speed at which to travel.
-   * @param orientationSupplier Supplies the desired orientation at the end of the
-   *                            command.
-   * @param goalSpeed           The speed at the goal position.
+   *
+   * @param drivetrain The {@link SwerveSubsystem} representing the robot drivetrain.
+   * @param translationSupplier Supplies a {@link Translation2d} instance describing the line on
+   *     which to travel. This is a vector relative to the current position.
+   * @param maxSpeed The maximum speed at which to travel.
+   * @param orientationSupplier Supplies the desired orientation at the end of the command.
+   * @param goalSpeed The speed at the goal position.
    */
   private DriveStraight(
       SwerveSubsystem drivetrain,
@@ -135,14 +127,22 @@ public class DriveStraight extends Command {
     distance = translation.getNorm();
     heading = translation.getAngle();
     orientation = orientationSupplier.get();
-    profile = new TrapezoidProfile(
-        new TrapezoidProfile.Constraints(maxSpeed, SwerveSubsystem.getMaxAcceleration())); // new TrapezoidProfile.State(distance, goalSpeed)
+    profile =
+        new TrapezoidProfile(
+            new TrapezoidProfile.Constraints(
+                maxSpeed,
+                SwerveSubsystem
+                    .getMaxAcceleration())); // new TrapezoidProfile.State(distance, goalSpeed)
 
     System.out.println(
-        "BEGIN DriveStraight intitialPose = " + initialPose +
-            ", orientation = " + orientation +
-            ", distance = " + distance +
-            ", heading = " + heading);
+        "BEGIN DriveStraight intitialPose = "
+            + initialPose
+            + ", orientation = "
+            + orientation
+            + ", distance = "
+            + distance
+            + ", heading = "
+            + heading);
 
     timer.reset();
     timer.start();
@@ -162,8 +162,8 @@ public class DriveStraight extends Command {
     Pose2d nextPose = new Pose2d(initialPose.getTranslation().plus(offset), heading);
 
     // Calculate the swerve drive modules states needed to reach the next state.
-    ChassisSpeeds speeds = controller.calculate(
-        drivetrain.getPosition(), nextPose, state.velocity, orientation);
+    ChassisSpeeds speeds =
+        controller.calculate(drivetrain.getPosition(), nextPose, state.velocity, orientation);
 
     drivetrain.setChassisSpeeds(speeds);
   }

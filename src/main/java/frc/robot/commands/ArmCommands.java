@@ -1,7 +1,9 @@
-// Copyright (c) FIRST and other WPILib contributors.
-// Open Source Software; you can modify and/or share it under the terms of
-// the WPILib BSD license file in the root directory of this project.
-
+/*
+ * Copyright (c) 2024 Newport Robotics Group. All Rights Reserved.
+ *
+ * Open Source Software; you can modify and/or share it under the terms of
+ * the license file in the root directory of this project.
+ */
 package frc.robot.commands;
 
 import edu.wpi.first.wpilibj2.command.Command;
@@ -17,7 +19,7 @@ public class ArmCommands {
 
   /**
    * Returns a command to move the arm to the stowed position.
-   * 
+   *
    * @param subsystems The subsystems container.
    * @return A command to move the arm to to stowed position.
    */
@@ -31,7 +33,7 @@ public class ArmCommands {
 
   /**
    * Returns a command to move the arm to the amp position.
-   * 
+   *
    * @param subsystems The subsystems container.
    * @return A command to move the arm to to amp position.
    */
@@ -45,7 +47,7 @@ public class ArmCommands {
 
   /**
    * Returns a command to move the arm to the trap position.
-   * 
+   *
    * @param subsystems The subsystems container.
    * @return A command to move the arm to to trap position.
    */
@@ -59,9 +61,9 @@ public class ArmCommands {
 
   /**
    * Disables automatic seek to goal angle.
-   * 
+   *
    * @param subsystems The subsystems container.
-   * @return A command to disable automatic seeking to goal angle. 
+   * @return A command to disable automatic seeking to goal angle.
    */
   public static Command disableSeek(Subsystems subsystems) {
     ArmSubsystem arm = subsystems.armSubsystem;
