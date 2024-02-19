@@ -47,41 +47,41 @@ public class DriveUsingController extends Command {
   public static final RobotPreferences.DoubleValue KD_NOTE =
       new RobotPreferences.DoubleValue("NoteVision", "kD", 0.0);
 
-  private final SwerveSubsystem m_drivetrain;
-  private final AprilTagSubsystem m_aprilTag;
-  private final NoteVisionSubsystem m_noteVision;
-  private final CommandXboxController m_xboxController;
-  private ProfiledPIDController m_profiledPIDController;
+  private final SwerveSubsystem drivetrain;
+  private final AprilTagSubsystem aprilTag;
+  private final NoteVisionSubsystem noteVision;
+  private final CommandXboxController xboxController;
+  private ProfiledPIDController profiledPIDController;
 
   /** Creates a new DriveUsingController. */
   public DriveUsingController(Subsystems subsystems, CommandXboxController xboxController) {
     // Use addRequirements() here to declare subsystem dependencies.
-    m_drivetrain = subsystems.drivetrain;
-    m_aprilTag = subsystems.aprilTag;
-    m_noteVision = subsystems.noteVision;
-    m_xboxController = xboxController;
-    addRequirements(m_drivetrain);
+    drivetrain = subsystems.drivetrain;
+    aprilTag = subsystems.aprilTag;
+    noteVision = subsystems.noteVision;
+    this.xboxController = xboxController;
+    addRequirements(drivetrain);
   }
 
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
-    m_profiledPIDController =
+    profiledPIDController =
         new ProfiledPIDController(
             KP_APRIL_TAG.getValue(), 0, 0, SwerveSubsystem.getRotationalConstraints());
-    m_profiledPIDController.enableContinuousInput(-Math.PI, Math.PI);
-    m_profiledPIDController.reset(m_drivetrain.getOrientation().getRadians());
+    profiledPIDController.enableContinuousInput(-Math.PI, Math.PI);
+    profiledPIDController.reset(drivetrain.getOrientation().getRadians());
   }
 
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
     double rSpeed;
-    double xSpeed = -m_xboxController.getLeftY();
-    double ySpeed = -m_xboxController.getLeftX();
-    double inputScalar = Math.max(1.0 - m_xboxController.getRightTriggerAxis(), 0.15);
+    double xSpeed = -xboxController.getLeftY();
+    double ySpeed = -xboxController.getLeftX();
+    double inputScalar = Math.max(1.0 - xboxController.getRightTriggerAxis(), 0.15);
 
-    Rotation2d currentOrientation = m_drivetrain.getOrientation();
+    Rotation2d currentOrientation = drivetrain.getOrientation();
     Rotation2d targetOrientation = currentOrientation;
 
     // Applies deadbands to x and y joystick values and multiples all
@@ -91,11 +91,11 @@ public class DriveUsingController extends Command {
 
     Optional<PhotonTrackedTarget> optionalTagTarget = Optional.empty();
     Optional<PhotonTrackedTarget> optionalNoteTarget = Optional.empty();
-    if (m_xboxController.getHID().getRightBumper()) {
-      optionalTagTarget = m_aprilTag.getTarget(AprilTagSubsystem.getSpeakerCenterAprilTagID());
-    } else if (m_xboxController.getHID().getXButton()
-        && m_noteVision.hasTargets()) { // Nonpermanent X binding
-      optionalNoteTarget = Optional.of(m_noteVision.getBestTarget());
+    if (xboxController.getHID().getRightBumper()) {
+      optionalTagTarget = aprilTag.getTarget(AprilTagSubsystem.getSpeakerCenterAprilTagID());
+    } else if (xboxController.getHID().getXButton()
+        && noteVision.hasTargets()) { // Nonpermanent X binding
+      optionalNoteTarget = Optional.of(noteVision.getBestTarget());
     }
 
     // Don't want to do both tag and note alignment so to choose one, tag takes
@@ -103,34 +103,34 @@ public class DriveUsingController extends Command {
     if (optionalTagTarget.isPresent()) {
       Rotation2d angleToTarget = Rotation2d.fromDegrees(-optionalTagTarget.get().getYaw());
       targetOrientation = targetOrientation.plus(angleToTarget);
-      m_profiledPIDController.setP(KP_APRIL_TAG.getValue());
-      m_profiledPIDController.setI(KI_APRIL_TAG.getValue());
-      m_profiledPIDController.setD(KD_APRIL_TAG.getValue());
+      profiledPIDController.setP(KP_APRIL_TAG.getValue());
+      profiledPIDController.setI(KI_APRIL_TAG.getValue());
+      profiledPIDController.setD(KD_APRIL_TAG.getValue());
       rSpeed =
           Math.abs(ySpeed)
-              * m_profiledPIDController.calculate(
+              * profiledPIDController.calculate(
                   currentOrientation.getRadians(), targetOrientation.getRadians());
     } else if (optionalNoteTarget.isPresent()) {
-      Rotation2d angleToTarget = Rotation2d.fromDegrees(m_noteVision.getAngleToBestTarget());
+      Rotation2d angleToTarget = Rotation2d.fromDegrees(noteVision.getAngleToBestTarget());
       targetOrientation = targetOrientation.plus(angleToTarget);
-      m_profiledPIDController.setP(KP_NOTE.getValue());
-      m_profiledPIDController.setI(KI_NOTE.getValue());
-      m_profiledPIDController.setD(KD_NOTE.getValue());
+      profiledPIDController.setP(KP_NOTE.getValue());
+      profiledPIDController.setI(KI_NOTE.getValue());
+      profiledPIDController.setD(KD_NOTE.getValue());
       rSpeed =
-          m_profiledPIDController.calculate(
+          profiledPIDController.calculate(
               currentOrientation.getRadians(), targetOrientation.getRadians());
     } else {
-      rSpeed = -m_xboxController.getRightX();
+      rSpeed = -xboxController.getRightX();
       rSpeed = MathUtil.applyDeadband(rSpeed, DEADBAND) * inputScalar;
     }
 
-    m_drivetrain.drive(xSpeed, ySpeed, rSpeed, true);
+    drivetrain.drive(xSpeed, ySpeed, rSpeed, true);
   }
 
   // Called once the command ends or is interrupted.
   @Override
   public void end(boolean interrupted) {
-    m_drivetrain.stopMotors();
+    drivetrain.stopMotors();
   }
 
   // Returns true when the command should end.
