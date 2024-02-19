@@ -25,7 +25,7 @@ public class ArmCommands {
     ArmSubsystem arm = subsystems.armSubsystem;
 
     return Commands.sequence(
-        Commands.runOnce(() -> arm.setGoalAngle(STOWED_ANGLE), arm),
+        Commands.runOnce(() -> arm.setGoalAngle(STOWED_ANGLE), arm), //
         Commands.idle(arm));
   }
 
@@ -39,7 +39,7 @@ public class ArmCommands {
     ArmSubsystem arm = subsystems.armSubsystem;
 
     return Commands.sequence(
-        Commands.runOnce(() -> arm.setGoalAngle(AMP_ANGLE), arm),
+        Commands.runOnce(() -> arm.setGoalAngle(AMP_ANGLE), arm), //
         Commands.idle(arm));
   }
 
@@ -53,7 +53,7 @@ public class ArmCommands {
     ArmSubsystem arm = subsystems.armSubsystem;
 
     return Commands.sequence(
-        Commands.runOnce(() -> arm.setGoalAngle(TRAP_ANGLE), arm),
+        Commands.runOnce(() -> arm.setGoalAngle(TRAP_ANGLE), arm), //
         Commands.idle(arm));
   }
 

@@ -31,8 +31,8 @@ public class ShooterCommands {
      */
     public static Command setAndWaitForRPM(Subsystems subsystems, double rpm) {
         ShooterSubsystem shooter = subsystems.shooter;
-        return Commands.sequence(
-            setRPM(subsystems, rpm), 
+        return Commands.sequence( //
+            setRPM(subsystems, rpm), // 
             Commands.idle(shooter).until(shooter::atGoalRPM)
         );
     }
