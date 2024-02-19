@@ -1,16 +1,16 @@
-// Copyright (c) FIRST and other WPILib contributors.
-// Open Source Software; you can modify and/or share it under the terms of
-// the WPILib BSD license file in the root directory of this project.
-
+/*
+ * Copyright (c) 2024 Newport Robotics Group. All Rights Reserved.
+ *
+ * Open Source Software; you can modify and/or share it under the terms of
+ * the license file in the root directory of this project.
+ */
 package frc.robot;
-
 
 import static frc.robot.Constants.ColorConstants.ORANGE;
 import static frc.robot.Constants.ColorConstants.RED;
 
 import com.nrg948.preferences.RobotPreferences;
 import com.nrg948.preferences.RobotPreferencesLayout;
-
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
@@ -31,12 +31,9 @@ import frc.robot.subsystems.IndexerSubsystem;
 import frc.robot.subsystems.Subsystems;
 
 /**
- * This class is where the bulk of the robot should be declared. Since
- * Command-based is a
- * "declarative" paradigm, very little robot logic should actually be handled in
- * the {@link Robot}
- * periodic methods (other than the scheduler calls). Instead, the structure of
- * the robot (including
+ * This class is where the bulk of the robot should be declared. Since Command-based is a
+ * "declarative" paradigm, very little robot logic should actually be handled in the {@link Robot}
+ * periodic methods (other than the scheduler calls). Instead, the structure of the robot (including
  * subsystems, commands, and trigger mappings) should be declared here.
  */
 @RobotPreferencesLayout(groupName = "Preferences", column = 0, row = 0, width = 2, height = 1)
@@ -48,21 +45,22 @@ public class RobotContainer {
   private final RobotAutonomous m_autonomous = new RobotAutonomous(m_subsystems);
 
   // Replace with CommandPS4Controller or CommandJoystick if needed
-  private final CommandXboxController m_driverController = new CommandXboxController(
-      OperatorConstants.XboxControllerPort.DRIVER);
-  private final CommandXboxController m_operatorController = new CommandXboxController(
-      OperatorConstants.XboxControllerPort.MANIPULATOR);
+  private final CommandXboxController m_driverController =
+      new CommandXboxController(OperatorConstants.XboxControllerPort.DRIVER);
+  private final CommandXboxController m_operatorController =
+      new CommandXboxController(OperatorConstants.XboxControllerPort.MANIPULATOR);
 
-  /**
-   * The container for the robot. Contains subsystems, OI devices, and commands.
-   */
+  /** The container for the robot. Contains subsystems, OI devices, and commands. */
   public RobotContainer() {
     DriverStation.silenceJoystickConnectionWarning(true);
 
-    m_subsystems.drivetrain.setDefaultCommand(new DriveUsingController(m_subsystems, m_driverController));
-    m_subsystems.armSubsystem.setDefaultCommand(new ManualArmController(m_subsystems, m_operatorController));
-    m_subsystems.intake.setDefaultCommand(new IntakeUsingController(m_subsystems, m_operatorController));
-    
+    m_subsystems.drivetrain.setDefaultCommand(
+        new DriveUsingController(m_subsystems, m_driverController));
+    m_subsystems.armSubsystem.setDefaultCommand(
+        new ManualArmController(m_subsystems, m_operatorController));
+    m_subsystems.intake.setDefaultCommand(
+        new IntakeUsingController(m_subsystems, m_operatorController));
+
     // Configure the trigger bindings
     configureBindings();
 
@@ -70,17 +68,12 @@ public class RobotContainer {
   }
 
   /**
-   * Use this method to define your trigger->command mappings. Triggers can be
-   * created via the
-   * {@link Trigger#Trigger(java.util.function.BooleanSupplier)} constructor with
-   * an arbitrary
+   * Use this method to define your trigger->command mappings. Triggers can be created via the
+   * {@link Trigger#Trigger(java.util.function.BooleanSupplier)} constructor with an arbitrary
    * predicate, or via the named factories in {@link
-   * edu.wpi.first.wpilibj2.command.button.CommandGenericHID}'s subclasses for
-   * {@link
-   * CommandXboxController
-   * Xbox}/{@link edu.wpi.first.wpilibj2.command.button.CommandPS4Controller
-   * PS4} controllers or
-   * {@link edu.wpi.first.wpilibj2.command.button.CommandJoystick Flight
+   * edu.wpi.first.wpilibj2.command.button.CommandGenericHID}'s subclasses for {@link
+   * CommandXboxController Xbox}/{@link edu.wpi.first.wpilibj2.command.button.CommandPS4Controller
+   * PS4} controllers or {@link edu.wpi.first.wpilibj2.command.button.CommandJoystick Flight
    * joysticks}.
    */
   private void configureBindings() {
@@ -93,14 +86,13 @@ public class RobotContainer {
     m_driverController.a().onTrue(Pathfinding.pathFindToSpeakerFront());
     m_driverController.b().whileTrue(Pathfinding.pathFindToAmp());
     m_driverController.y().whileTrue(Pathfinding.pathFindToAmp2());
-    // m_driverController.y().onTrue(Commands.defer(() -> DriveCommands.driveToAmp(m_subsystems), 
+    // m_driverController.y().onTrue(Commands.defer(() -> DriveCommands.driveToAmp(m_subsystems),
     //   Set.of(m_subsystems.drivetrain, m_subsystems.aprilTag)));
 
     m_operatorController.povUp().onTrue(ArmCommands.seekToTrap(m_subsystems));
     m_operatorController.povRight().onTrue(ArmCommands.seekToAmp(m_subsystems));
     m_operatorController.povDown().onTrue(ArmCommands.stow(m_subsystems));
     m_operatorController.povLeft().onTrue(ArmCommands.disableSeek(m_subsystems));
-
 
     Trigger noteDetected = new Trigger(m_subsystems.indexerSubsystem::isNoteDetected);
     noteDetected.onTrue(LEDs.fillColor(m_subsystems.addressableLEDSubsystem, ORANGE));
@@ -116,28 +108,28 @@ public class RobotContainer {
     return m_autonomous.getAutonomousCommand();
   }
 
-  public void periodic(){
+  public void periodic() {
     m_subsystems.periodic();
   }
 
-  public void initShuffleboard(){
+  public void initShuffleboard() {
     ShuffleboardTab operatorTab = Shuffleboard.getTab("Operator");
-    
+
     m_autonomous.addShuffleboardLayout(operatorTab);
 
     RobotPreferences.addShuffleBoardTab();
-    
+
     m_subsystems.drivetrain.addShuffleboardTab();
     m_subsystems.aprilTag.addShuffleboardTab();
     m_subsystems.noteVision.addShuffleboardTab();
-    
+
     if (ArmSubsystem.ENABLE_TAB.getValue()) {
       ShuffleboardTab armShooterTab = Shuffleboard.getTab("Arm+Shooter");
-      
+
       m_subsystems.armSubsystem.addShuffleboardLayout(armShooterTab);
       m_subsystems.shooter.addShuffleboardLayout(armShooterTab);
     }
-    
+
     if (IndexerSubsystem.ENABLE_TAB.getValue()) {
       ShuffleboardTab intakeIndexerTab = Shuffleboard.getTab("Indexer+Intake");
 

@@ -1,12 +1,10 @@
-// Copyright (c) FIRST and other WPILib contributors.
-// Open Source Software; you can modify and/or share it under the terms of
-// the WPILib BSD license file in the root directory of this project.
-
+/*
+ * Copyright (c) 2024 Newport Robotics Group. All Rights Reserved.
+ *
+ * Open Source Software; you can modify and/or share it under the terms of
+ * the license file in the root directory of this project.
+ */
 package frc.robot.commands;
-
-import com.nrg948.preferences.RobotPreferences;
-import com.nrg948.preferences.RobotPreferencesLayout;
-import com.nrg948.preferences.RobotPreferencesValue;
 
 import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.wpilibj2.command.Command;
@@ -19,13 +17,13 @@ public class IntakeUsingController extends Command {
 
   private final IntakeSubsystem intake;
   private final CommandXboxController controller;
-  
+
   private static final double DEADBAND = 0.1;
 
   /** Creates a new IntakeUsingController. */
   public IntakeUsingController(Subsystems subsystems, CommandXboxController controller) {
     // Use addRequirements() here to declare subsystem dependencies.
-    this.intake = subsystems.intake; //need to uncomment in Subsystems.java
+    this.intake = subsystems.intake; // need to uncomment in Subsystems.java
     this.controller = controller;
 
     addRequirements(intake);
@@ -45,7 +43,6 @@ public class IntakeUsingController extends Command {
     double voltage = speed * RobotConstants.MAX_BATTERY_VOLTAGE;
     intake.runMotor(voltage);
   }
-
 
   // Called once the command ends or is interrupted.
   @Override

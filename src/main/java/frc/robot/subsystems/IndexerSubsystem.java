@@ -1,7 +1,9 @@
-// Copyright (c) FIRST and other WPILib contributors.
-// Open Source Software; you can modify and/or share it under the terms of
-// the WPILib BSD license file in the root directory of this project.
-
+/*
+ * Copyright (c) 2024 Newport Robotics Group. All Rights Reserved.
+ *
+ * Open Source Software; you can modify and/or share it under the terms of
+ * the license file in the root directory of this project.
+ */
 package frc.robot.subsystems;
 
 import com.nrg948.preferences.RobotPreferences;
@@ -11,7 +13,6 @@ import com.revrobotics.CANSparkBase.IdleMode;
 import com.revrobotics.CANSparkLowLevel.MotorType;
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.RelativeEncoder;
-
 import edu.wpi.first.math.controller.SimpleMotorFeedforward;
 import edu.wpi.first.util.datalog.BooleanLogEntry;
 import edu.wpi.first.util.datalog.DoubleLogEntry;
@@ -31,38 +32,41 @@ public class IndexerSubsystem extends SubsystemBase {
   public static double INDEXER_DIAMETER = 0.033; // Diameter in meters
   public static double ENCODER_CONVERSION_FACTOR = (Math.PI * INDEXER_DIAMETER) / GEAR_RATIO;
 
-  public static double MAX_VELOCITY = (MotorParameters.NeoV1_1.getFreeSpeedRPM() * Math.PI * INDEXER_DIAMETER)
-      / (GEAR_RATIO * 60);
-  public static double MAX_ACCELERATION = (2 * MotorParameters.NeoV1_1.getStallTorque() * GEAR_RATIO * Math.PI
-      * INDEXER_DIAMETER)
-      / RobotConstants.INDEXER_MASS;
+  public static double MAX_VELOCITY =
+      (MotorParameters.NeoV1_1.getFreeSpeedRPM() * Math.PI * INDEXER_DIAMETER) / (GEAR_RATIO * 60);
+  public static double MAX_ACCELERATION =
+      (2 * MotorParameters.NeoV1_1.getStallTorque() * GEAR_RATIO * Math.PI * INDEXER_DIAMETER)
+          / RobotConstants.INDEXER_MASS;
 
   public static double KS = 0.15;
   public static double KV = (RobotConstants.MAX_BATTERY_VOLTAGE - KS) / MAX_VELOCITY;
   public static double KA = (RobotConstants.MAX_BATTERY_VOLTAGE - KS) / MAX_ACCELERATION;
 
   @RobotPreferencesValue
-  public static final RobotPreferences.BooleanValue ENABLE_TAB = new RobotPreferences.BooleanValue("Indexer+Intake",
-      "Enable Tab", false);
+  public static final RobotPreferences.BooleanValue ENABLE_TAB =
+      new RobotPreferences.BooleanValue("Indexer+Intake", "Enable Tab", false);
 
   @RobotPreferencesValue
-  public static final RobotPreferences.DoubleValue FEED_VELOCITY = new RobotPreferences.DoubleValue("Indexer+Intake",
-      "Indexer Feed Velocity", 0.8 * MAX_VELOCITY);
+  public static final RobotPreferences.DoubleValue FEED_VELOCITY =
+      new RobotPreferences.DoubleValue(
+          "Indexer+Intake", "Indexer Feed Velocity", 0.8 * MAX_VELOCITY);
 
   private boolean noteDetected = false;
   private boolean isEnabled = false;
   private double goalVelocity = 0;
   private double currentVelocity = 0;
 
-  private final CANSparkMax motor = new CANSparkMax(RobotConstants.CAN.SparkMax.INDEXER_PORT, MotorType.kBrushless);
+  private final CANSparkMax motor =
+      new CANSparkMax(RobotConstants.CAN.SparkMax.INDEXER_PORT, MotorType.kBrushless);
   private final RelativeEncoder encoder = motor.getEncoder();
-  private final DigitalInput beamBreak = new DigitalInput(RobotConstants.DigitalIO.INDEXER_BEAM_BREAK);
+  private final DigitalInput beamBreak =
+      new DigitalInput(RobotConstants.DigitalIO.INDEXER_BEAM_BREAK);
   private final SimpleMotorFeedforward indexerFeedfoward = new SimpleMotorFeedforward(KS, KV, KA);
 
-  private final BooleanLogEntry noteDetectedLogger = new BooleanLogEntry(DataLogManager.getLog(),
-      "Indexer Note Detector");
-  private final DoubleLogEntry goalVelocityLogger = new DoubleLogEntry(DataLogManager.getLog(),
-      "Indexer/Goal Velocity");
+  private final BooleanLogEntry noteDetectedLogger =
+      new BooleanLogEntry(DataLogManager.getLog(), "Indexer Note Detector");
+  private final DoubleLogEntry goalVelocityLogger =
+      new DoubleLogEntry(DataLogManager.getLog(), "Indexer/Goal Velocity");
 
   /** Creates a new IndexerSubsystem. */
   public IndexerSubsystem() {
@@ -116,13 +120,11 @@ public class IndexerSubsystem extends SubsystemBase {
       goalVelocityLogger.append(goalVelocity);
       motor.setVoltage(voltage);
     }
-
   }
 
   public void addShuffleboardLayout(ShuffleboardTab tab) {
-    ShuffleboardLayout layout = tab.getLayout("Indexer", BuiltInLayouts.kList)
-        .withSize(2, 3)
-        .withPosition(2, 0);
+    ShuffleboardLayout layout =
+        tab.getLayout("Indexer", BuiltInLayouts.kList).withSize(2, 3).withPosition(2, 0);
     layout.addDouble("Goal Velocity", () -> goalVelocity);
     layout.addDouble("Current Velocity", () -> currentVelocity);
     layout.addBoolean("Enabled", () -> isEnabled);

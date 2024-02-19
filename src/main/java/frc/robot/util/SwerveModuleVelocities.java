@@ -1,7 +1,9 @@
-// Copyright (c) FIRST and other WPILib contributors.
-// Open Source Software; you can modify and/or share it under the terms of
-// the WPILib BSD license file in the root directory of this project.
-
+/*
+ * Copyright (c) 2024 Newport Robotics Group. All Rights Reserved.
+ *
+ * Open Source Software; you can modify and/or share it under the terms of
+ * the license file in the root directory of this project.
+ */
 package frc.robot.util;
 
 /** Represents swerve module velocities. */
@@ -14,8 +16,8 @@ public class SwerveModuleVelocities {
 
   /**
    * Creates a new SwerveModuleVelocities.
-   * 
-   * @param driveVelocity    The translational velocity of the wheel in m/s.
+   *
+   * @param driveVelocity The translational velocity of the wheel in m/s.
    * @param steeringVelocity The rotational velocity of the wheel in rad/s.
    */
   public SwerveModuleVelocities(double driveVelocity, double steeringVelocity) {

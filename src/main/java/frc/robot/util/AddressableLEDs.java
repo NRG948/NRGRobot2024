@@ -1,7 +1,9 @@
-// Copyright (c) FIRST and other WPILib contributors.
-// Open Source Software; you can modify and/or share it under the terms of
-// the WPILib BSD license file in the root directory of this project.
-
+/*
+ * Copyright (c) 2024 Newport Robotics Group. All Rights Reserved.
+ *
+ * Open Source Software; you can modify and/or share it under the terms of
+ * the license file in the root directory of this project.
+ */
 package frc.robot.util;
 
 import edu.wpi.first.wpilibj.AddressableLED;
@@ -30,14 +32,15 @@ public class AddressableLEDs {
     0xd7, 0xda, 0xdc, 0xdf, 0xe1, 0xe4, 0xe7, 0xe9, 0xec, 0xef, 0xf1, 0xf4, 0xf7, 0xf9, 0xfc, 0xff
   };
 
-  private static final AddressableLEDBuffer ledBuffer = new AddressableLEDBuffer(RobotConstants.LED_COUNT);
+  private static final AddressableLEDBuffer ledBuffer =
+      new AddressableLEDBuffer(RobotConstants.LED_COUNT);
   private static final AddressableLED leds = createAddressableLED(ledBuffer);
   private final int firstLED;
   private final int numberOfLEDs;
 
   /**
    * Creates and initializes an addressable LED.
-   * 
+   *
    * @param buffer The addressable LED buffer.
    */
   private static AddressableLED createAddressableLED(AddressableLEDBuffer buffer) {
@@ -50,8 +53,8 @@ public class AddressableLEDs {
 
   /**
    * Constructs an instance of this class.
-   * 
-   * @param firstLED     The index of the first LED.
+   *
+   * @param firstLED The index of the first LED.
    * @param numberOfLEDs The number of LEDs.
    */
   public AddressableLEDs(int firstLED, int numberOfLEDs) {
@@ -61,7 +64,7 @@ public class AddressableLEDs {
 
   /**
    * Fills the LED segment with a specific color.
-   * 
+   *
    * @param color The color it fills the LEDs.
    */
   public void fill(Color8Bit color) {
@@ -72,17 +75,16 @@ public class AddressableLEDs {
 
   /**
    * Sets the color at the given LED index.
-   * 
+   *
    * @param color The color it fills the LEDs.
    * @param index Where the LED is set.
    */
   public void setColor(Color8Bit color, int index) {
-    ledBuffer.setRGB(index, GAMMA_TABLE[color.red], GAMMA_TABLE[color.green], GAMMA_TABLE[color.blue]);
+    ledBuffer.setRGB(
+        index, GAMMA_TABLE[color.red], GAMMA_TABLE[color.green], GAMMA_TABLE[color.blue]);
   }
 
-  /**
-   * Sends the LED data to the LED string.
-   */
+  /** Sends the LED data to the LED string. */
   public void commitColor() {
     leds.setData(ledBuffer);
   }

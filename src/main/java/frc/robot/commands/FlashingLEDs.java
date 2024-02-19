@@ -1,7 +1,9 @@
-// Copyright (c) FIRST and other WPILib contributors.
-// Open Source Software; you can modify and/or share it under the terms of
-// the WPILib BSD license file in the root directory of this project.
-
+/*
+ * Copyright (c) 2024 Newport Robotics Group. All Rights Reserved.
+ *
+ * Open Source Software; you can modify and/or share it under the terms of
+ * the license file in the root directory of this project.
+ */
 package frc.robot.commands;
 
 import edu.wpi.first.wpilibj.Timer;
@@ -19,7 +21,8 @@ public class FlashingLEDs extends Command {
   private Color8Bit color;
 
   /** Creates a new FlashingLEDs. */
-  public FlashingLEDs(Color8Bit color1, Color8Bit color2, AddressableLEDSubsystem led, double blinkingSpeed) {
+  public FlashingLEDs(
+      Color8Bit color1, Color8Bit color2, AddressableLEDSubsystem led, double blinkingSpeed) {
     // Use addRequirements() here to declare subsystem dependencies.
     this.color1 = color1;
     this.color2 = color2;
@@ -51,8 +54,7 @@ public class FlashingLEDs extends Command {
 
   // Called once the command ends or is interrupted.
   @Override
-  public void end(boolean interrupted) {
-  }
+  public void end(boolean interrupted) {}
 
   // Returns true when the command should end.
   @Override
