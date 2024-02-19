@@ -56,8 +56,7 @@ public class RobotContainer {
 
     m_subsystems.drivetrain.setDefaultCommand(
         new DriveUsingController(m_subsystems, m_driverController));
-    m_subsystems.armSubsystem.setDefaultCommand(
-        new ManualArmController(m_subsystems, m_operatorController));
+    m_subsystems.arm.setDefaultCommand(new ManualArmController(m_subsystems, m_operatorController));
     m_subsystems.intake.setDefaultCommand(
         new IntakeUsingController(m_subsystems, m_operatorController));
 
@@ -94,9 +93,9 @@ public class RobotContainer {
     m_operatorController.povDown().onTrue(ArmCommands.stow(m_subsystems));
     m_operatorController.povLeft().onTrue(ArmCommands.disableSeek(m_subsystems));
 
-    Trigger noteDetected = new Trigger(m_subsystems.indexerSubsystem::isNoteDetected);
-    noteDetected.onTrue(LEDs.fillColor(m_subsystems.addressableLEDSubsystem, ORANGE));
-    noteDetected.onFalse(LEDs.fillColor(m_subsystems.addressableLEDSubsystem, RED));
+    Trigger noteDetected = new Trigger(m_subsystems.indexer::isNoteDetected);
+    noteDetected.onTrue(LEDs.fillColor(m_subsystems.addressableLED, ORANGE));
+    noteDetected.onFalse(LEDs.fillColor(m_subsystems.addressableLED, RED));
   }
 
   /**
@@ -126,7 +125,7 @@ public class RobotContainer {
     if (ArmSubsystem.ENABLE_TAB.getValue()) {
       ShuffleboardTab armShooterTab = Shuffleboard.getTab("Arm+Shooter");
 
-      m_subsystems.armSubsystem.addShuffleboardLayout(armShooterTab);
+      m_subsystems.arm.addShuffleboardLayout(armShooterTab);
       m_subsystems.shooter.addShuffleboardLayout(armShooterTab);
     }
 
@@ -134,7 +133,7 @@ public class RobotContainer {
       ShuffleboardTab intakeIndexerTab = Shuffleboard.getTab("Indexer+Intake");
 
       m_subsystems.intake.addShuffleboardLayout(intakeIndexerTab);
-      m_subsystems.indexerSubsystem.addShuffleboardLayout(intakeIndexerTab);
+      m_subsystems.indexer.addShuffleboardLayout(intakeIndexerTab);
     }
   }
 }

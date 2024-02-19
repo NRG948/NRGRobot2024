@@ -20,22 +20,15 @@ public class Subsystems {
   public final SwerveSubsystem drivetrain = new SwerveSubsystem();
   public final AprilTagSubsystem aprilTag = new AprilTagSubsystem();
   public final NoteVisionSubsystem noteVision = new NoteVisionSubsystem();
-  public final IndexerSubsystem indexerSubsystem = new IndexerSubsystem();
-  public final AddressableLEDSubsystem addressableLEDSubsystem = new AddressableLEDSubsystem();
-  public final ArmSubsystem armSubsystem = new ArmSubsystem();
+  public final IndexerSubsystem indexer = new IndexerSubsystem();
+  public final AddressableLEDSubsystem addressableLED = new AddressableLEDSubsystem();
+  public final ArmSubsystem arm = new ArmSubsystem();
   public final IntakeSubsystem intake = new IntakeSubsystem();
   public final ShooterSubsystem shooter = new ShooterSubsystem();
 
   public final Subsystem[] all =
       new Subsystem[] {
-        drivetrain,
-        aprilTag,
-        noteVision,
-        indexerSubsystem,
-        intake,
-        addressableLEDSubsystem,
-        armSubsystem,
-        shooter
+        drivetrain, aprilTag, noteVision, indexer, intake, addressableLED, arm, shooter
       };
 
   public void periodic() {

@@ -24,7 +24,7 @@ public class NoteCommands {
    */
   public static Command intake(Subsystems subsystems) {
     IntakeSubsystem intake = subsystems.intake;
-    IndexerSubsystem indexer = subsystems.indexerSubsystem;
+    IndexerSubsystem indexer = subsystems.indexer;
     return Commands.race( //
             Commands.runOnce(intake::in, intake), //
             Commands.runOnce(indexer::intake, indexer)) //
@@ -46,7 +46,7 @@ public class NoteCommands {
    */
   public static Command outtake(Subsystems subsystems) {
     IntakeSubsystem intake = subsystems.intake;
-    IndexerSubsystem indexer = subsystems.indexerSubsystem;
+    IndexerSubsystem indexer = subsystems.indexer;
     return Commands.race( //
             Commands.runOnce(intake::out, intake), //
             Commands.runOnce(indexer::outtake, indexer)) //
@@ -62,7 +62,7 @@ public class NoteCommands {
    * @return The command sequence.
    */
   public static Command shoot(Subsystems subsystems, double rpm) {
-    IndexerSubsystem indexer = subsystems.indexerSubsystem;
+    IndexerSubsystem indexer = subsystems.indexer;
     ShooterSubsystem shooter = subsystems.shooter;
     return Commands.either( //
         Commands.sequence( //
