@@ -28,6 +28,7 @@ public class ShooterSubsystem extends SubsystemBase {
   private static final double KS = 0.15;
   private static final double KV = (RobotConstants.MAX_BATTERY_VOLTAGE - KS) / MAX_RPM;
   public static final double SPIN_FACTOR = 0.80;
+  private static final double RPM_TOLERANCE = 50.0;
 
   private final CANSparkFlex leftMotor = new CANSparkFlex(
       RobotConstants.CAN.SparkMax.SHOOTER_LEFT_PORT, MotorType.kBrushless);
@@ -59,6 +60,8 @@ public class ShooterSubsystem extends SubsystemBase {
     rightMotor.setInverted(false);
     leftEncoder.setVelocityConversionFactor(ENCODER_CONVERSION_FACTOR);
     rightEncoder.setVelocityConversionFactor(ENCODER_CONVERSION_FACTOR);
+    leftController.setTolerance(RPM_TOLERANCE);
+    rightController.setTolerance(RPM_TOLERANCE);
   }
 
   private void setGoalRPMInternal(double goalRPM) {
@@ -75,6 +78,10 @@ public class ShooterSubsystem extends SubsystemBase {
 
     isEnabled = true;
     setGoalRPMInternal(goalShooterRPM);
+  }
+
+  public boolean atGoalRPM() {
+    return leftController.atSetpoint();
   }
 
   /** Disables the Shooter PID controller and stops the motor. */
