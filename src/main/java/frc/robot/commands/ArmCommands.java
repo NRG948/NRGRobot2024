@@ -13,7 +13,7 @@ import frc.robot.subsystems.Subsystems;
 
 /** Add your docs here. */
 public class ArmCommands {
-  public static double STOWED_ANGLE = Math.toRadians(-27);
+  public static double STOWED_ANGLE = Math.toRadians(-11);
   public static double AMP_ANGLE = Math.toRadians(0);
   public static double TRAP_ANGLE = Math.toRadians(45);
 
