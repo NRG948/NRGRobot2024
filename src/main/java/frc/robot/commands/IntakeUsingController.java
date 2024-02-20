@@ -10,12 +10,14 @@ import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import frc.robot.Constants.RobotConstants;
+import frc.robot.subsystems.IndexerSubsystem;
 import frc.robot.subsystems.IntakeSubsystem;
 import frc.robot.subsystems.Subsystems;
 
 public class IntakeUsingController extends Command {
 
   private final IntakeSubsystem intake;
+  private final IndexerSubsystem indexer;
   private final CommandXboxController controller;
 
   private static final double DEADBAND = 0.1;
@@ -24,9 +26,10 @@ public class IntakeUsingController extends Command {
   public IntakeUsingController(Subsystems subsystems, CommandXboxController controller) {
     // Use addRequirements() here to declare subsystem dependencies.
     this.intake = subsystems.intake; // need to uncomment in Subsystems.java
+    this.indexer = subsystems.indexer;
     this.controller = controller;
 
-    addRequirements(intake);
+    addRequirements(intake, indexer);
   }
 
   // Called when the command is initially scheduled.
@@ -41,7 +44,8 @@ public class IntakeUsingController extends Command {
     double speed = -controller.getHID().getRightY();
     speed = MathUtil.applyDeadband(speed, DEADBAND);
     double voltage = speed * RobotConstants.MAX_BATTERY_VOLTAGE;
-    intake.runMotor(voltage);
+    intake.setMotorVoltage(voltage);
+    indexer.setMotorVoltage(voltage);
   }
 
   // Called once the command ends or is interrupted.

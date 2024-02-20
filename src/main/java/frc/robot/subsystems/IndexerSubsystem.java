@@ -60,7 +60,7 @@ public class IndexerSubsystem extends SubsystemBase {
   private final CANSparkMax motor =
       new CANSparkMax(RobotConstants.CAN.SparkMax.INDEXER_PORT, MotorType.kBrushless);
   private final RelativeEncoder encoder = motor.getEncoder();
-  private final SparkLimitSwitch beamBreak = motor.getForwardLimitSwitch(Type.kNormallyClosed);
+  private final SparkLimitSwitch beamBreak = motor.getForwardLimitSwitch(Type.kNormallyOpen);
   private final SimpleMotorFeedforward indexerFeedfoward = new SimpleMotorFeedforward(KS, KV, KA);
 
   private final BooleanLogEntry noteDetectedLogger =
@@ -71,6 +71,7 @@ public class IndexerSubsystem extends SubsystemBase {
   /** Creates a new IndexerSubsystem. */
   public IndexerSubsystem() {
     motor.setIdleMode(IdleMode.kBrake);
+    motor.setInverted(true);
     encoder.setVelocityConversionFactor(ENCODER_CONVERSION_FACTOR);
     encoder.setPositionConversionFactor(ENCODER_CONVERSION_FACTOR);
     beamBreak.enableLimitSwitch(false);
@@ -101,8 +102,8 @@ public class IndexerSubsystem extends SubsystemBase {
     motor.stopMotor();
   }
 
-  public void runMotor(double power) {
-    motor.set(power);
+  public void setMotorVoltage(double voltage) {
+    motor.setVoltage(voltage);
   }
 
   @Override

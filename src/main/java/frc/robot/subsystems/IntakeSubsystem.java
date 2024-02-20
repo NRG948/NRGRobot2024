@@ -61,10 +61,10 @@ public class IntakeSubsystem extends SubsystemBase {
   /**
    * Runs the motor
    *
-   * @param power
+   * @param voltage
    */
-  public void runMotor(double power) {
-    motor.set(power);
+  public void setMotorVoltage(double voltage) {
+    motor.setVoltage(voltage);
   }
 
   /** Stops the motor */
