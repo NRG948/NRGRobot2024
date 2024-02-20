@@ -26,6 +26,7 @@ import frc.robot.commands.IntakeUsingController;
 import frc.robot.commands.InterruptAll;
 import frc.robot.commands.LEDs;
 import frc.robot.commands.ManualArmController;
+import frc.robot.commands.NoteCommands;
 import frc.robot.commands.Pathfinding;
 import frc.robot.subsystems.ArmSubsystem;
 import frc.robot.subsystems.IndexerSubsystem;
@@ -91,6 +92,7 @@ public class RobotContainer {
     operatorController.povRight().onTrue(ArmCommands.seekToAmp(subsystems));
     operatorController.povDown().onTrue(ArmCommands.stow(subsystems));
     operatorController.povLeft().onTrue(ArmCommands.disableSeek(subsystems));
+    operatorController.rightBumper().onTrue(NoteCommands.intake(subsystems));
 
     Trigger noteDetected = new Trigger(subsystems.indexer::isNoteDetected);
     noteDetected.onTrue(LEDs.fillColor(subsystems.addressableLED, ORANGE));
