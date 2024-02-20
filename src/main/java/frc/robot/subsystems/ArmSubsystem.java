@@ -33,8 +33,12 @@ public class ArmSubsystem extends SubsystemBase {
   public static final RobotPreferences.BooleanValue ENABLE_TAB =
       new RobotPreferences.BooleanValue("Arm+Shooter", "Enable Tab", false);
 
+  @RobotPreferencesValue
+  public static final RobotPreferences.DoubleValue KP =
+      new RobotPreferences.DoubleValue("Arm+Shooter", "kP", 1.0);
+
   public static final double GEAR_RATIO = 168.0;
-  public static final double MASS = 0.5; // TODO determine actual arm mass
+  public static final double MASS = 10; // TODO determine actual arm mass
   public static final double RADIANS_PER_REVOLUTION = (2 * Math.PI) / GEAR_RATIO;
   public static final MotorParameters MOTOR = MotorParameters.NeoV1_1;
   public static final double MAX_ANGULAR_SPEED =
@@ -43,15 +47,15 @@ public class ArmSubsystem extends SubsystemBase {
       (2 * MOTOR.getStallTorque() * GEAR_RATIO) / MASS;
   public static final TrapezoidProfile.Constraints CONSTRAINTS =
       new TrapezoidProfile.Constraints(MAX_ANGULAR_SPEED * 0.5, MAX_ANGULAR_ACCELERATION);
-  public static final double KS = 3.0;
+  public static final double KS = 0.15;
   public static final double KV = (RobotConstants.MAX_BATTERY_VOLTAGE - KS) / MAX_ANGULAR_SPEED;
   public static final double KA =
       (RobotConstants.MAX_BATTERY_VOLTAGE - KS) / MAX_ANGULAR_ACCELERATION;
   public static final double KG = 0; // KA * 9.81;
   public static final double STOWED_ANGLE = -31.3;
   public static final double ARM_RADIANS_PER_MOTOR_ROTATION = (2 * Math.PI) / GEAR_RATIO;
-  private static final double LOWER_ANGLE_LIMIT = Math.toRadians(-27);
-  private static final double UPPER_ANGLE_LIMIT = Math.toRadians(80);
+  private static final double LOWER_ANGLE_LIMIT = Math.toRadians(-11);
+  private static final double UPPER_ANGLE_LIMIT = Math.toRadians(70);
 
   private final CANSparkMax leftMotor =
       new CANSparkMax(RobotConstants.CAN.SparkMax.ARM_LEFT_PORT, MotorType.kBrushless);
@@ -62,20 +66,20 @@ public class ArmSubsystem extends SubsystemBase {
   private final DutyCycleEncoder absoluteEncoder =
       new DutyCycleEncoder(Constants.RobotConstants.DigitalIO.ARM_ABSOLUTE_ENCODER);
 
-  private double rawAngleOffset = Math.toRadians(9.15);
+  private double rawAngleOffset = Math.toRadians(7.39);
 
   private double currentAngle = STOWED_ANGLE;
 
   private final ArmFeedforward feedForward = new ArmFeedforward(KS, KV, KA, KG);
   private final ProfiledPIDController controller =
-      new ProfiledPIDController(35.0, 0.0, 0.0, CONSTRAINTS);
+      new ProfiledPIDController(KP.getValue(), 0.0, 0.0, CONSTRAINTS);
   private boolean enablePeriodicControl = false;
 
   /** Creates a new ArmSubsystem. */
   public ArmSubsystem() {
     rightMotor.follow(leftMotor, true);
-    leftMotor.setIdleMode(IdleMode.kCoast); // TODO kBreak
-    rightMotor.setIdleMode(IdleMode.kCoast); // TODO kBreak
+    leftMotor.setIdleMode(IdleMode.kBrake); // TODO kBreak
+    rightMotor.setIdleMode(IdleMode.kBrake); // TODO kBreak
     leftEncoder.setPositionConversionFactor(ARM_RADIANS_PER_MOTOR_ROTATION);
     leftEncoder.setVelocityConversionFactor(ARM_RADIANS_PER_MOTOR_ROTATION);
     absoluteEncoder.setDutyCycleRange(1.0 / 1025.0, 1024.0 / 1025.0);
