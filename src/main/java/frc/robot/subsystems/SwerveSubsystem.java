@@ -541,7 +541,7 @@ public class SwerveSubsystem extends SubsystemBase {
       ShuffleboardLayout positionLayout =
           odometryLayout
               .getLayout("Position", BuiltInLayouts.kGrid)
-              .withProperties(Map.of("Number of columns", 5, "Number of rows", 1));
+              .withProperties(Map.of("Number of columns", 3, "Number of rows", 2));
 
       positionLayout
           .addDouble("X", () -> odometry.getEstimatedPosition().getX())
@@ -550,11 +550,11 @@ public class SwerveSubsystem extends SubsystemBase {
           .addDouble("Y", () -> odometry.getEstimatedPosition().getY())
           .withPosition(1, 0);
 
-      positionLayout.addDouble("est. X", () -> lastVisionMeasurement.getX()).withPosition(2, 0);
-      positionLayout.addDouble("est. Y", () -> lastVisionMeasurement.getY()).withPosition(3, 0);
+      positionLayout.addDouble("est. X", () -> lastVisionMeasurement.getX()).withPosition(0, 1);
+      positionLayout.addDouble("est. Y", () -> lastVisionMeasurement.getY()).withPosition(1, 1);
       positionLayout
           .addDouble("est. angle", () -> lastVisionMeasurement.getRotation().getDegrees())
-          .withPosition(4, 0);
+          .withPosition(2, 1);
     }
   }
 }
