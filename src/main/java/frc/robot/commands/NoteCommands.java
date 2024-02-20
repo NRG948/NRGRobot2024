@@ -28,9 +28,9 @@ public class NoteCommands {
     return Commands.race( //
             Commands.runOnce(intake::in, intake), //
             Commands.runOnce(indexer::intake, indexer)) //
-        .andThen(Commands.idle(intake, indexer)) //
+        .andThen(Commands.idle(intake, indexer)) //  // Suppress default commands
         .until(indexer::isNoteDetected) //
-        .andThen(
+        .andThen( //
             Commands.race( //
                 Commands.runOnce(intake::disable, intake), //
                 Commands.runOnce(indexer::disable, indexer)));
@@ -68,9 +68,12 @@ public class NoteCommands {
         Commands.sequence( //
             ShooterCommands.setAndWaitForRPM(subsystems, rpm), //
             Commands.runOnce(indexer::feed, indexer), //
-            Commands.idle(shooter, indexer).until(() -> !indexer.isNoteDetected()), //
-            Commands.waitSeconds(0.5), //
-            Commands.runOnce(shooter::disable, shooter)), //
+            Commands.idle(shooter, indexer) //  // Suppress default commands
+                .until(() -> !indexer.isNoteDetected()),
+            Commands.idle(shooter, indexer) //  // Suppress default commands
+                .withTimeout(0.5),
+            Commands.race(Commands.runOnce(shooter::disable, shooter)), //
+            Commands.runOnce(indexer::disable, indexer)), //
         Commands.none(), //
         indexer::isNoteDetected);
   }
