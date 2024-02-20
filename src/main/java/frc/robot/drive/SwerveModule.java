@@ -345,7 +345,8 @@ public class SwerveModule {
   public ShuffleboardLayout addShuffleboardLayout(ShuffleboardTab tab) {
     ShuffleboardLayout moduleLayout =
         tab.getLayout(name, BuiltInLayouts.kGrid)
-            .withProperties(Map.of("Number of columns", 2, "Number of rows", 1));
+            .withProperties(
+                Map.of("Number of columns", 2, "Number of rows", 1, "Label position", "HIDDEN"));
 
     moduleLayout
         .add(
@@ -362,7 +363,10 @@ public class SwerveModule {
         .withPosition(0, 0);
 
     ShuffleboardLayout translationLayout =
-        moduleLayout.getLayout("Translation", BuiltInLayouts.kList).withPosition(1, 0);
+        moduleLayout
+            .getLayout("State", BuiltInLayouts.kGrid)
+            .withProperties(Map.of("Number of columns", 1, "Number of rows", 3))
+            .withPosition(1, 0);
     translationLayout.addDouble("Position", () -> getPosition().distanceMeters).withPosition(0, 0);
     translationLayout
         .addDouble("Velocity", () -> getState().speedMetersPerSecond)
