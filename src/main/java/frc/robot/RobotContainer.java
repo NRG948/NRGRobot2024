@@ -12,6 +12,7 @@ import static frc.robot.Constants.ColorConstants.RED;
 import com.nrg948.preferences.RobotPreferences;
 import com.nrg948.preferences.RobotPreferencesLayout;
 import edu.wpi.first.wpilibj.DriverStation;
+import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
 import edu.wpi.first.wpilibj2.command.Command;
@@ -49,6 +50,8 @@ public class RobotContainer {
       new CommandXboxController(OperatorConstants.XboxControllerPort.DRIVER);
   private final CommandXboxController operatorController =
       new CommandXboxController(OperatorConstants.XboxControllerPort.MANIPULATOR);
+
+  private Timer coastModeTimer = new Timer();
 
   /** The container for the robot. Contains subsystems, OI devices, and commands. */
   public RobotContainer() {
@@ -101,6 +104,25 @@ public class RobotContainer {
    */
   public Command getAutonomousCommand() {
     return autonomous.getAutonomousCommand();
+  }
+
+  public void disabledInit() {
+    coastModeTimer.restart();
+  }
+
+  public void disabledPeriodic() {
+    if (coastModeTimer.advanceIfElapsed(3)) {
+      subsystems.drivetrain.setBrakeMode(false);
+      coastModeTimer.stop();
+    }
+  }
+
+  public void autonomousInit() {
+    subsystems.drivetrain.setBrakeMode(true);
+  }
+
+  public void teleopInit() {
+    subsystems.drivetrain.setBrakeMode(true);
   }
 
   public void periodic() {
