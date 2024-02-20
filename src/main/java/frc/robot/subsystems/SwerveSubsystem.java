@@ -489,6 +489,29 @@ public class SwerveSubsystem extends SubsystemBase {
     poseAngleLog.append(robotPose.getRotation().getDegrees());
   }
 
+  public void setBrakeMode(boolean brakeMode) {
+    NeutralModeValue neutralMode;
+    IdleMode idleMode;
+
+    if (brakeMode) {
+      neutralMode = NeutralModeValue.Brake;
+      idleMode = IdleMode.kBrake;
+    } else {
+      neutralMode = NeutralModeValue.Coast;
+      idleMode = IdleMode.kCoast;
+    }
+
+    frontLeftDriveMotor.setNeutralMode(neutralMode);
+    frontRightDriveMotor.setNeutralMode(neutralMode);
+    backLeftDriveMotor.setNeutralMode(neutralMode);
+    backRightDriveMotor.setNeutralMode(neutralMode);
+
+    frontLeftSteeringMotor.setIdleMode(idleMode);
+    frontRightSteeringMotor.setIdleMode(idleMode);
+    backLeftSteeringMotor.setIdleMode(idleMode);
+    backRightSteeringMotor.setIdleMode(idleMode);
+  }
+
   /** Adds a tab for swerve drive in Shuffleboard. */
   public void addShuffleboardTab() {
     if (ENABLE_DRIVE_TAB.getValue()) {
