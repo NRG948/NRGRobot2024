@@ -13,11 +13,12 @@ import com.revrobotics.CANSparkBase.IdleMode;
 import com.revrobotics.CANSparkLowLevel.MotorType;
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.RelativeEncoder;
+import com.revrobotics.SparkLimitSwitch;
+import com.revrobotics.SparkLimitSwitch.Type;
 import edu.wpi.first.math.controller.SimpleMotorFeedforward;
 import edu.wpi.first.util.datalog.BooleanLogEntry;
 import edu.wpi.first.util.datalog.DoubleLogEntry;
 import edu.wpi.first.wpilibj.DataLogManager;
-import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.shuffleboard.BuiltInLayouts;
 import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardLayout;
 import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
@@ -59,8 +60,7 @@ public class IndexerSubsystem extends SubsystemBase {
   private final CANSparkMax motor =
       new CANSparkMax(RobotConstants.CAN.SparkMax.INDEXER_PORT, MotorType.kBrushless);
   private final RelativeEncoder encoder = motor.getEncoder();
-  private final DigitalInput beamBreak =
-      new DigitalInput(RobotConstants.DigitalIO.INDEXER_BEAM_BREAK);
+  private final SparkLimitSwitch beamBreak = motor.getForwardLimitSwitch(Type.kNormallyClosed);
   private final SimpleMotorFeedforward indexerFeedfoward = new SimpleMotorFeedforward(KS, KV, KA);
 
   private final BooleanLogEntry noteDetectedLogger =
@@ -73,6 +73,7 @@ public class IndexerSubsystem extends SubsystemBase {
     motor.setIdleMode(IdleMode.kBrake);
     encoder.setVelocityConversionFactor(ENCODER_CONVERSION_FACTOR);
     encoder.setPositionConversionFactor(ENCODER_CONVERSION_FACTOR);
+    beamBreak.enableLimitSwitch(false);
   }
 
   public boolean isNoteDetected() {
@@ -107,7 +108,7 @@ public class IndexerSubsystem extends SubsystemBase {
   @Override
   public void periodic() {
     // This method will be called once per scheduler run
-    boolean noteDetected = !beamBreak.get();
+    boolean noteDetected = beamBreak.isPressed();
     if (this.noteDetected != noteDetected) {
       noteDetectedLogger.append(noteDetected);
       this.noteDetected = noteDetected;
