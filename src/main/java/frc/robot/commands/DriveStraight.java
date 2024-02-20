@@ -30,6 +30,8 @@ public class DriveStraight extends Command {
   private Rotation2d heading;
   private Rotation2d orientation;
   private TrapezoidProfile profile;
+  private TrapezoidProfile.State initialState;
+  private TrapezoidProfile.State goalState;
 
   /**
    * Creates a new DriveStraight that drives robot along the specified vector at maximum speed while
@@ -103,7 +105,6 @@ public class DriveStraight extends Command {
    *     which to travel. This is a vector relative to the current position.
    * @param maxSpeed The maximum speed at which to travel.
    * @param orientationSupplier Supplies the desired orientation at the end of the command.
-   * @param goalSpeed The speed at the goal position.
    */
   private DriveStraight(
       SwerveSubsystem drivetrain,
@@ -129,10 +130,10 @@ public class DriveStraight extends Command {
     orientation = orientationSupplier.get();
     profile =
         new TrapezoidProfile(
-            new TrapezoidProfile.Constraints(
-                maxSpeed,
-                SwerveSubsystem
-                    .getMaxAcceleration())); // new TrapezoidProfile.State(distance, goalSpeed)
+            new TrapezoidProfile.Constraints(maxSpeed, SwerveSubsystem.getMaxAcceleration()));
+
+    initialState = new TrapezoidProfile.State(0, 0);
+    goalState = new TrapezoidProfile.State(distance, 0);
 
     System.out.println(
         "BEGIN DriveStraight intitialPose = "
@@ -152,9 +153,7 @@ public class DriveStraight extends Command {
   public void execute() {
     // Calculate the next state (position and velocity) of motion using the
     // trapezoidal profile.
-    TrapezoidProfile.State current = new TrapezoidProfile.State(0, 0);
-    TrapezoidProfile.State goal = new TrapezoidProfile.State(5, 3);
-    TrapezoidProfile.State state = profile.calculate(timer.get(), current, goal);
+    TrapezoidProfile.State state = profile.calculate(timer.get(), initialState, goalState);
 
     // Determine the next position on the field by offsetting the initial position
     // by the distance moved along the line of travel.
