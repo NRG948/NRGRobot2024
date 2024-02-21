@@ -22,10 +22,8 @@ import frc.robot.Constants.RobotConstants.OperatorConstants;
 import frc.robot.commands.ArmCommands;
 import frc.robot.commands.DriveCommands;
 import frc.robot.commands.DriveUsingController;
-import frc.robot.commands.IntakeUsingController;
 import frc.robot.commands.InterruptAll;
 import frc.robot.commands.LEDs;
-import frc.robot.commands.ManualArmController;
 import frc.robot.commands.NoteCommands;
 import frc.robot.commands.Pathfinding;
 import frc.robot.subsystems.ArmSubsystem;
@@ -59,8 +57,11 @@ public class RobotContainer {
     DriverStation.silenceJoystickConnectionWarning(true);
 
     subsystems.drivetrain.setDefaultCommand(new DriveUsingController(subsystems, driverController));
-    subsystems.arm.setDefaultCommand(new ManualArmController(subsystems, operatorController));
-    subsystems.intake.setDefaultCommand(new IntakeUsingController(subsystems, operatorController));
+    // subsystems.arm.setDefaultCommand(new ManualArmController(subsystems, operatorController));
+    //  subsystems.intake.setDefaultCommand(new IntakeUsingController(subsystems,
+    // operatorController));
+    // subsystems.shooter.setDefaultCommand(
+    // new ShootUsingController(subsystems.shooter, operatorController));
 
     // Configure the trigger bindings
     configureBindings();
@@ -146,7 +147,7 @@ public class RobotContainer {
       ShuffleboardTab armShooterTab = Shuffleboard.getTab("Arm+Shooter");
 
       subsystems.arm.addShuffleboardLayout(armShooterTab);
-      subsystems.shooter.addShuffleboardLayout(armShooterTab);
+      subsystems.shooter.addShuffleboardLayout(armShooterTab, subsystems);
     }
 
     if (IndexerSubsystem.ENABLE_TAB.getValue()) {
