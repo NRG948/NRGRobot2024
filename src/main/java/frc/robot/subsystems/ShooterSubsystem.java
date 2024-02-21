@@ -12,15 +12,20 @@ import com.revrobotics.CANSparkLowLevel.MotorType;
 import com.revrobotics.RelativeEncoder;
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.controller.SimpleMotorFeedforward;
+import edu.wpi.first.networktables.GenericEntry;
 import edu.wpi.first.util.datalog.BooleanLogEntry;
 import edu.wpi.first.util.datalog.DoubleLogEntry;
 import edu.wpi.first.wpilibj.DataLogManager;
 import edu.wpi.first.wpilibj.shuffleboard.BuiltInLayouts;
 import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardLayout;
 import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
+import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants.RobotConstants;
+import frc.robot.commands.NoteCommands;
 import frc.robot.parameters.MotorParameters;
+import java.util.Map;
+import java.util.Set;
 
 public class ShooterSubsystem extends SubsystemBase {
   /** Creates a new ShooterSubsystem. */
@@ -149,13 +154,35 @@ public class ShooterSubsystem extends SubsystemBase {
     rightRPMLogger.append(currentRightRPM);
   }
 
-  public void addShuffleboardLayout(ShuffleboardTab tab) {
+  public void addShuffleboardLayout(ShuffleboardTab tab, Subsystems subsystems) {
     ShuffleboardLayout shooterLayout =
-        tab.getLayout("Shooter", BuiltInLayouts.kList).withPosition(2, 0).withSize(2, 3);
+        tab.getLayout("Shooter", BuiltInLayouts.kGrid)
+            .withProperties(Map.of("Number of columns", 2, "Number of rows", 4))
+            .withPosition(2, 0)
+            .withSize(2, 4);
 
-    shooterLayout.addDouble("Goal RPM", () -> goalRPM);
-    shooterLayout.addDouble("Left RPM", () -> currentLeftRPM);
-    shooterLayout.addDouble("Right RPM", () -> currentRightRPM);
-    shooterLayout.addBoolean("Enabled", () -> isEnabled);
+    shooterLayout.addDouble("Goal RPM", () -> goalRPM).withPosition(0, 0);
+    shooterLayout.addDouble("Left RPM", () -> currentLeftRPM).withPosition(1, 0);
+    shooterLayout.addDouble("Right RPM", () -> currentRightRPM).withPosition(0, 1);
+    shooterLayout.addBoolean("Enabled", () -> isEnabled).withPosition(1, 1);
+    GenericEntry rpmEntry = shooterLayout.add("RPM", 0).withPosition(0, 2).getEntry();
+    shooterLayout
+        .add(
+            "Shoot",
+            Commands.defer(
+                () -> {
+                  double rpm = rpmEntry.getDouble(100);
+                  return Commands.sequence(
+                      Commands.print("SHOOT AT " + rpm), NoteCommands.shoot(subsystems, rpm));
+                },
+                Set.of(subsystems.shooter, subsystems.indexer)))
+        .withPosition(0, 3);
+    shooterLayout
+        .add(
+            "Cancel",
+            Commands.race(
+                Commands.runOnce(subsystems.indexer::disable, subsystems.indexer),
+                Commands.runOnce(subsystems.shooter::disable, subsystems.shooter)))
+        .withPosition(1, 3);
   }
 }
