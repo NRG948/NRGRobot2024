@@ -22,7 +22,7 @@ import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
 import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants.RobotConstants;
-import frc.robot.commands.NoteCommands;
+import frc.robot.commands.ShooterCommands;
 import frc.robot.parameters.MotorParameters;
 import java.util.Map;
 import java.util.Set;
@@ -32,7 +32,8 @@ public class ShooterSubsystem extends SubsystemBase {
   private static final MotorParameters MOTOR = MotorParameters.NeoV1_1;
 
   private static final double GEAR_RATIO = 1.0;
-  public static final double MAX_RPM = MOTOR.getFreeSpeedRPM() / GEAR_RATIO;
+  private static final double EFFICIENCY = 0.9;
+  public static final double MAX_RPM = (MOTOR.getFreeSpeedRPM() / GEAR_RATIO) * EFFICIENCY;
   private static final double ENCODER_CONVERSION_FACTOR = 1 / GEAR_RATIO;
   private static final double KS = 0.15;
   private static final double KV = (RobotConstants.MAX_BATTERY_VOLTAGE - KS) / MAX_RPM;
@@ -173,7 +174,9 @@ public class ShooterSubsystem extends SubsystemBase {
                 () -> {
                   double rpm = rpmEntry.getDouble(100);
                   return Commands.sequence(
-                      Commands.print("SHOOT AT " + rpm), NoteCommands.shoot(subsystems, rpm));
+                      Commands.print("SHOOT AT " + rpm), ShooterCommands.setRPM(subsystems, rpm)
+                      // NoteCommands.shoot(subsystems, rpm));
+                      );
                 },
                 Set.of(subsystems.shooter, subsystems.indexer)))
         .withPosition(0, 3);
