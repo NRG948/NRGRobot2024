@@ -30,6 +30,7 @@ import java.util.Map;
 
 @RobotPreferencesLayout(groupName = "Arm+Shooter", row = 0, column = 2, width = 2, height = 1)
 public class ArmSubsystem extends SubsystemBase {
+
   @RobotPreferencesValue
   public static final RobotPreferences.BooleanValue ENABLE_TAB =
       new RobotPreferences.BooleanValue("Arm+Shooter", "Enable Tab", false);
@@ -38,23 +39,24 @@ public class ArmSubsystem extends SubsystemBase {
   public static final RobotPreferences.DoubleValue KP =
       new RobotPreferences.DoubleValue("Arm+Shooter", "kP", 1.0);
 
-  public static final double GEAR_RATIO = 1 / (5 * 4 * 3 * 42 / 15.0);
+  public static final double GEAR_RATIO = (5 * 4 * 3 * 42 / 15.0);
   public static final double MASS = 10; // TODO determine actual arm mass
   public static final double RADIANS_PER_REVOLUTION = (2 * Math.PI) / GEAR_RATIO;
   public static final MotorParameters MOTOR = MotorParameters.NeoV1_1;
-  public static final double EFFICIENCY = 0.8;
+  public static final double EFFICIENCY = 1.0;
   public static final double MAX_ANGULAR_SPEED =
       EFFICIENCY * MOTOR.getFreeSpeedRPM() * RADIANS_PER_REVOLUTION / 60.0;
-  public static final double ARM_TORQUE_RATIO = 14.0 / 55.0;
+  public static final double ARM_LENGTH = 0.55;
   public static final double MAX_ANGULAR_ACCELERATION =
-      EFFICIENCY * ((2 * MOTOR.getStallTorque() * GEAR_RATIO) / MASS) * ARM_TORQUE_RATIO;
+      EFFICIENCY * ((2 * MOTOR.getStallTorque() * GEAR_RATIO) / (MASS * ARM_LENGTH));
   public static final TrapezoidProfile.Constraints CONSTRAINTS =
-      new TrapezoidProfile.Constraints(MAX_ANGULAR_SPEED * 0.5, MAX_ANGULAR_ACCELERATION);
+      new TrapezoidProfile.Constraints(MAX_ANGULAR_SPEED * 0.2, MAX_ANGULAR_ACCELERATION * 0.5);
   public static final double KS = 0.15;
   public static final double KV = (RobotConstants.MAX_BATTERY_VOLTAGE - KS) / MAX_ANGULAR_SPEED;
   public static final double KA =
       (RobotConstants.MAX_BATTERY_VOLTAGE - KS) / MAX_ANGULAR_ACCELERATION;
   public static final double KG = KA * 9.81;
+  private static final double CG_ANGLE_OFFSET = Math.toRadians(7.0);
   public static final double STOWED_ANGLE = -31.3;
   public static final double ARM_RADIANS_PER_MOTOR_ROTATION = (2 * Math.PI) / GEAR_RATIO;
   private static final double LOWER_ANGLE_LIMIT = Math.toRadians(-11);
@@ -75,7 +77,7 @@ public class ArmSubsystem extends SubsystemBase {
 
   private double currentMotorVoltage = 0;
 
-  private final ArmFeedforward feedForward = new ArmFeedforward(KS, KV, KA, KG);
+  private final ArmFeedforward feedForward = new ArmFeedforward(KS, KG, KV, KA);
   private final ProfiledPIDController controller =
       new ProfiledPIDController(KP.getValue(), 0.0, 0.0, CONSTRAINTS);
   private boolean enablePeriodicControl = false;
@@ -158,13 +160,14 @@ public class ArmSubsystem extends SubsystemBase {
     currentAngle = MathUtil.angleModulus(rawAngleOffset - absoluteEncoder.getDistance());
 
     if (enablePeriodicControl) {
-      // double feedback = controller.calculate(currentAngle);
-      // double feedForward =
-      //     this.feedForward.calculate(currentAngle, controller.getSetpoint().velocity);
-      // setMotorVoltages(feedForward + feedback);
-      double feedback = KP.getValue() * (controller.getGoal().position - currentAngle);
-      feedback += 0.54 * Math.cos(currentAngle + Math.toRadians(7.0));
-      setMotorVoltages(feedback);
+      double feedback = controller.calculate(currentAngle);
+      double feedForward =
+          this.feedForward.calculate(
+              currentAngle + CG_ANGLE_OFFSET, controller.getSetpoint().velocity);
+      setMotorVoltages(feedForward + feedback);
+      // double feedback = KP.getValue() * (controller.getGoal().position - currentAngle);
+      // feedback += 0.54 * Math.cos(currentAngle + Math.toRadians(7.0));
+      // setMotorVoltages(feedback);
     }
   }
 
@@ -173,19 +176,21 @@ public class ArmSubsystem extends SubsystemBase {
         tab.getLayout("Arm Info", BuiltInLayouts.kGrid)
             .withPosition(0, 0)
             .withSize(2, 4)
-            .withProperties(Map.of("Number of columns", 2, "Number of rows", 4));
+            .withProperties(Map.of("Number of columns", 3, "Number of rows", 4));
     infolayout
         .addDouble("Current Angle", () -> Math.toDegrees(getAngle()))
         .withPosition(0, 0)
         .withSize(1, 1);
     infolayout
         .addDouble("Goal Angle", () -> Math.toDegrees(controller.getGoal().position))
-        .withPosition(2, 0)
+        .withPosition(1, 0)
         .withSize(1, 1);
-    infolayout.addDouble("Voltage", () -> currentMotorVoltage).withPosition(0, 1).withSize(1, 1);
-    infolayout.add("Max Velocity", MAX_ANGULAR_SPEED).withPosition(0, 2).withSize(1, 1);
-    infolayout.add("Max Accel", MAX_ANGULAR_ACCELERATION).withPosition(1, 2).withSize(1, 1);
-    infolayout.add("KV", KV).withPosition(0, 3).withSize(1, 1);
-    infolayout.add("KA", KA).withPosition(1, 3).withSize(1, 1);
+    infolayout.addDouble("Voltage", () -> currentMotorVoltage).withPosition(2, 0).withSize(1, 1);
+    infolayout.add("Max Velocity", MAX_ANGULAR_SPEED).withPosition(0, 1).withSize(1, 1);
+    infolayout.add("Max Accel", MAX_ANGULAR_ACCELERATION).withPosition(1, 1).withSize(1, 1);
+    infolayout.addBoolean("Enabled", () -> enablePeriodicControl).withPosition(2, 1).withSize(1, 1);
+    infolayout.add("KV", KV).withPosition(0, 2).withSize(1, 1);
+    infolayout.add("KA", KA).withPosition(1, 2).withSize(1, 1);
+    infolayout.add("KG", KG).withPosition(2, 2).withSize(1, 1);
   }
 }
