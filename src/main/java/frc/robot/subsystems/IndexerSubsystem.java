@@ -50,7 +50,7 @@ public class IndexerSubsystem extends SubsystemBase {
   @RobotPreferencesValue
   public static final RobotPreferences.DoubleValue FEED_VELOCITY =
       new RobotPreferences.DoubleValue(
-          "Indexer+Intake", "Indexer Feed Velocity", 0.8 * MAX_VELOCITY);
+          "Indexer+Intake", "Indexer Feed Velocity", 1.0 * MAX_VELOCITY);
 
   private boolean noteDetected = false;
   private boolean isEnabled = false;
