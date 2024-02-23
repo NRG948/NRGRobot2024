@@ -6,15 +6,23 @@
  */
 package frc.robot.commands;
 
+import com.nrg948.preferences.RobotPreferences;
+import com.nrg948.preferences.RobotPreferencesValue;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
 import frc.robot.subsystems.ArmSubsystem;
 import frc.robot.subsystems.Subsystems;
+import java.util.Set;
 
 /** Add your docs here. */
 public class ArmCommands {
+
   public static double STOWED_ANGLE = Math.toRadians(-11);
-  public static double AMP_ANGLE = Math.toRadians(5);
+
+  @RobotPreferencesValue
+  public static RobotPreferences.DoubleValue AMP_ANGLE =
+      new RobotPreferences.DoubleValue("Arm+Shooter", "Amp Angle", 10);
+
   public static double TRAP_ANGLE = Math.toRadians(45);
 
   /**
@@ -34,7 +42,9 @@ public class ArmCommands {
    * @return A command to move the arm to to amp position.
    */
   public static Command seekToAmp(Subsystems subsystems) {
-    return seekToAngle(subsystems, AMP_ANGLE);
+    return Commands.defer(
+        () -> seekToAngle(subsystems, Math.toRadians(AMP_ANGLE.getValue())),
+        Set.of(subsystems.arm));
   }
 
   /**
@@ -44,15 +54,15 @@ public class ArmCommands {
    * @return A command to move the arm to to trap position.
    */
   public static Command seekToTrap(Subsystems subsystems) {
-      return seekToAngle(subsystems, TRAP_ANGLE);
+    return seekToAngle(subsystems, TRAP_ANGLE);
   }
 
   public static Command seekToAngle(Subsystems subsystems, double angle) {
     ArmSubsystem arm = subsystems.arm;
-    
+
     return Commands.sequence(
-      Commands.runOnce(() -> arm.setGoalAngle(angle), arm), //
-      Commands.idle(arm));
+        Commands.runOnce(() -> arm.setGoalAngle(angle), arm), //
+        Commands.idle(arm));
   }
 
   /**
