@@ -30,6 +30,13 @@ public class NoteCommands {
             Commands.runOnce(indexer::intake, indexer)) //
         .andThen(Commands.idle(intake, indexer)) //  // Suppress default commands
         .until(indexer::isNoteDetected) //
+        .andThen(Commands.waitSeconds(0.2)) //
+        .andThen( //
+            Commands.parallel( //
+                Commands.runOnce(intake::out, intake), //
+                Commands.runOnce(indexer::outtake, indexer) //
+                )) //
+        .andThen(Commands.waitSeconds(0.3)) //
         .andThen( //
             Commands.parallel( //
                 Commands.runOnce(intake::disable, intake), //
