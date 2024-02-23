@@ -40,7 +40,7 @@ public class ArmSubsystem extends SubsystemBase {
       new RobotPreferences.DoubleValue("Arm+Shooter", "kP", 1.0);
 
   public static final double GEAR_RATIO = (5 * 4 * 3 * 42 / 15.0);
-  public static final double MASS = 10; // TODO determine actual arm mass
+  public static final double MASS = 10.5;
   public static final double RADIANS_PER_REVOLUTION = (2 * Math.PI) / GEAR_RATIO;
   public static final MotorParameters MOTOR = MotorParameters.NeoV1_1;
   public static final double EFFICIENCY = 1.0;
