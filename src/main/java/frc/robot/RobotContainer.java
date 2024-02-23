@@ -22,6 +22,7 @@ import frc.robot.Constants.RobotConstants.OperatorConstants;
 import frc.robot.commands.ArmCommands;
 import frc.robot.commands.DriveCommands;
 import frc.robot.commands.DriveUsingController;
+import frc.robot.commands.IntakeUsingController;
 import frc.robot.commands.InterruptAll;
 import frc.robot.commands.LEDs;
 import frc.robot.commands.NoteCommands;
@@ -58,8 +59,7 @@ public class RobotContainer {
 
     subsystems.drivetrain.setDefaultCommand(new DriveUsingController(subsystems, driverController));
     // subsystems.arm.setDefaultCommand(new ManualArmController(subsystems, operatorController));
-    //  subsystems.intake.setDefaultCommand(new IntakeUsingController(subsystems,
-    // operatorController));
+    subsystems.intake.setDefaultCommand(new IntakeUsingController(subsystems, operatorController));
     // subsystems.shooter.setDefaultCommand(
     // new ShootUsingController(subsystems.shooter, operatorController));
 
@@ -89,11 +89,12 @@ public class RobotContainer {
     driverController.b().whileTrue(Pathfinding.pathFindToAmp());
     driverController.y().whileTrue(Pathfinding.pathFindToAmp2());
 
+    operatorController.back().onTrue(new InterruptAll(subsystems));
     operatorController.povUp().onTrue(ArmCommands.seekToTrap(subsystems));
     operatorController.povRight().onTrue(ArmCommands.seekToAmp(subsystems));
     operatorController.povDown().onTrue(ArmCommands.stow(subsystems));
     operatorController.povLeft().onTrue(ArmCommands.disableSeek(subsystems));
-    operatorController.rightBumper().onTrue(NoteCommands.intake(subsystems));
+    operatorController.rightBumper().whileTrue(NoteCommands.intake(subsystems));
 
     Trigger noteDetected = new Trigger(subsystems.indexer::isNoteDetected);
     noteDetected.onTrue(LEDs.fillColor(subsystems.addressableLED, ORANGE));
