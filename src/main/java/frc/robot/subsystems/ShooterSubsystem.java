@@ -22,7 +22,7 @@ import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
 import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants.RobotConstants;
-import frc.robot.commands.ShooterCommands;
+import frc.robot.commands.NoteCommands;
 import frc.robot.parameters.MotorParameters;
 import java.util.Map;
 import java.util.Set;
@@ -174,9 +174,8 @@ public class ShooterSubsystem extends SubsystemBase {
                 () -> {
                   double rpm = rpmEntry.getDouble(100);
                   return Commands.sequence(
-                      Commands.print("SHOOT AT " + rpm), ShooterCommands.setRPM(subsystems, rpm)
-                      // NoteCommands.shoot(subsystems, rpm));
-                      );
+                      Commands.print("SHOOT AT " + rpm), // ShooterCommands.setRPM(subsystems, rpm)
+                      NoteCommands.shoot(subsystems, rpm));
                 },
                 Set.of(subsystems.shooter, subsystems.indexer)))
         .withPosition(0, 3);
