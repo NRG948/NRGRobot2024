@@ -9,12 +9,10 @@ package frc.robot.commands;
 import com.nrg948.autonomous.AutonomousCommandGenerator;
 import com.pathplanner.lib.commands.PathPlannerAuto;
 import com.pathplanner.lib.path.PathPlannerTrajectory;
-
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.wpilibj.Filesystem;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
-import frc.robot.subsystems.ShooterSubsystem;
 import frc.robot.subsystems.Subsystems;
 import frc.robot.subsystems.SwerveSubsystem;
 import java.io.File;
@@ -61,16 +59,16 @@ public final class Autos {
   }
 
   private static Map<String, Command> getPathplannerEventMap(
-    Subsystems subsystems,
-    String pathGroupName,
-    List<PathPlannerTrajectory> pathGroup){
-      Map<String, Command> eventMaps = new HashMap<String, Command>();
-    
-      eventMaps.put("SetShooterRPM", ShooterCommands.setAndWaitForRPM(subsystems, 0.0)).withTimeout(1);
-      eventMaps.put("SetArmAngle", ArmCommands.seekToAngle(subsystems, 15)).withTimeout(1);
-      eventMaps.put("", null)
-      return eventMaps;
-    }
+      Subsystems subsystems, String pathGroupName, List<PathPlannerTrajectory> pathGroup) {
+    Map<String, Command> eventMaps = new HashMap<String, Command>();
+
+    eventMaps
+        .put("SetShooterRPM", ShooterCommands.setAndWaitForRPM(subsystems, 0.0))
+        .withTimeout(1);
+    eventMaps.put("SetArmAngle", ArmCommands.seekToAngle(subsystems, 15)).withTimeout(1);
+    eventMaps.put("", null);
+    return eventMaps;
+  }
 
   private Autos() {
     throw new UnsupportedOperationException("This is a utility class!");
