@@ -6,8 +6,6 @@
  */
 package frc.robot.commands;
 
-import com.nrg948.preferences.RobotPreferences;
-import com.nrg948.preferences.RobotPreferencesValue;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
 import frc.robot.subsystems.ArmSubsystem;
@@ -17,14 +15,6 @@ import java.util.Set;
 /** Add your docs here. */
 public class ArmCommands {
 
-  public static double STOWED_ANGLE = Math.toRadians(-11);
-
-  @RobotPreferencesValue
-  public static RobotPreferences.DoubleValue AMP_ANGLE =
-      new RobotPreferences.DoubleValue("Arm+Shooter", "Amp Angle", 10);
-
-  public static double TRAP_ANGLE = Math.toRadians(45);
-
   /**
    * Returns a command to move the arm to the stowed position.
    *
@@ -32,7 +22,7 @@ public class ArmCommands {
    * @return A command to move the arm to to stowed position.
    */
   public static Command stow(Subsystems subsystems) {
-    return seekToAngle(subsystems, STOWED_ANGLE);
+    return seekToAngle(subsystems, ArmSubsystem.STOWED_ANGLE);
   }
 
   /**
@@ -43,7 +33,7 @@ public class ArmCommands {
    */
   public static Command seekToAmp(Subsystems subsystems) {
     return Commands.defer(
-        () -> seekToAngle(subsystems, Math.toRadians(AMP_ANGLE.getValue())),
+        () -> seekToAngle(subsystems, Math.toRadians(ArmSubsystem.AMP_ANGLE.getValue())),
         Set.of(subsystems.arm));
   }
 
@@ -54,7 +44,7 @@ public class ArmCommands {
    * @return A command to move the arm to to trap position.
    */
   public static Command seekToTrap(Subsystems subsystems) {
-    return seekToAngle(subsystems, TRAP_ANGLE);
+    return seekToAngle(subsystems, Math.toRadians(ArmSubsystem.TRAP_ANGLE.getValue()));
   }
 
   public static Command seekToAngle(Subsystems subsystems, double angle) {
