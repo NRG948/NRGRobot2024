@@ -14,8 +14,9 @@ import frc.robot.subsystems.ShooterSubsystem;
 import frc.robot.subsystems.Subsystems;
 
 public class NoteCommands {
-/**
-   * Returns a sequence of commands to intake the note into the indexer until interrupted by another command.
+  /**
+   * Returns a sequence of commands to intake the note into the indexer until interrupted by another
+   * command.
    *
    * <p>This command should be bound to a button using whileTrue.
    *
@@ -27,13 +28,15 @@ public class NoteCommands {
     IndexerSubsystem indexer = subsystems.indexer;
     return Commands.sequence(
         Commands.parallel(
-            Commands.runOnce(intake::in, intake), Commands.runOnce(indexer::intake, indexer)),
+            Commands.runOnce(intake::in, intake), //
+            Commands.runOnce(indexer::intake, indexer)), //
         Commands.idle(intake, indexer) // Supress default commands.
         );
   }
 
   /**
-   * Returns a sequence of commands to intake the note into the indexer until beam break is triggered.
+   * Returns a sequence of commands to intake the note into the indexer until beam break is
+   * triggered.
    *
    * <p>This command should be bound to a button using whileTrue.
    *
@@ -41,22 +44,14 @@ public class NoteCommands {
    * @return The command sequence.
    */
   public static Command intakeUntilNoteDetected(Subsystems subsystems) {
-    IntakeSubsystem intake = subsystems.intake;
     IndexerSubsystem indexer = subsystems.indexer;
     return intake(subsystems)
         .until(indexer::isNoteDetected) //
         .andThen(Commands.waitSeconds(0.2)) //
-        .andThen( //
-            Commands.parallel( //
-                Commands.runOnce(intake::out, intake), //
-                Commands.runOnce(indexer::outtake, indexer) //
-                )) //
-        .andThen(Commands.waitSeconds(0.3)) //
-        .finallyDo(
-            () -> {
-              intake.disable();
-              indexer.disable();
-            });
+        .andThen(outtake(subsystems)) //
+        .until(() -> !indexer.isNoteDetected()) //
+        .andThen(intake(subsystems))
+        .until(indexer::isNoteDetected);
   }
 
   /**
