@@ -43,6 +43,14 @@ public class ArmSubsystem extends SubsystemBase {
   public static final RobotPreferences.DoubleValue KP =
       new RobotPreferences.DoubleValue("Arm+Shooter", "kP", 1.0);
 
+  @RobotPreferencesValue
+  public static RobotPreferences.DoubleValue AMP_ANGLE =
+      new RobotPreferences.DoubleValue("Arm+Shooter", "Amp Angle", 10);
+
+  @RobotPreferencesValue
+  public static RobotPreferences.DoubleValue TRAP_ANGLE =
+      new RobotPreferences.DoubleValue("Arm+Shooter", "Trap Angle", 45);
+
   public static final double GEAR_RATIO = (5 * 4 * 3 * 42 / 15.0);
   public static final double MASS = 10.5;
   public static final double RADIANS_PER_REVOLUTION = (2 * Math.PI) / GEAR_RATIO;
@@ -61,9 +69,10 @@ public class ArmSubsystem extends SubsystemBase {
       (RobotConstants.MAX_BATTERY_VOLTAGE - KS) / MAX_ANGULAR_ACCELERATION;
   public static final double KG = KA * 9.81;
   private static final double CG_ANGLE_OFFSET = Math.toRadians(7.0);
-  public static final double STOWED_ANGLE = -31.3;
-  public static final double ARM_RADIANS_PER_MOTOR_ROTATION = (2 * Math.PI) / GEAR_RATIO;
-  private static final double LOWER_ANGLE_LIMIT = Math.toRadians(-11);
+  public static final double STOWED_ANGLE = Math.toRadians(-11.0);
+  private static final double NEARLY_STOWED_ANGLE = STOWED_ANGLE + Math.toRadians(1.5);
+  private static final double ARM_RADIANS_PER_MOTOR_ROTATION = (2 * Math.PI) / GEAR_RATIO;
+  private static final double LOWER_ANGLE_LIMIT = STOWED_ANGLE;
   private static final double UPPER_ANGLE_LIMIT = Math.toRadians(70);
   private static final double ANGLE_TOLERANCE = Math.toRadians(.5);
 
@@ -79,6 +88,7 @@ public class ArmSubsystem extends SubsystemBase {
   private double rawAngleOffset = Math.toRadians(7.39);
 
   private double currentAngle = STOWED_ANGLE;
+  private double currentGoal = STOWED_ANGLE;
 
   private double currentMotorVoltage = 0;
 
@@ -90,8 +100,8 @@ public class ArmSubsystem extends SubsystemBase {
   /** Creates a new ArmSubsystem. */
   public ArmSubsystem() {
     rightMotor.follow(leftMotor, true);
-    leftMotor.setIdleMode(IdleMode.kBrake); // TODO kBreak
-    rightMotor.setIdleMode(IdleMode.kBrake); // TODO kBreak
+    leftMotor.setIdleMode(IdleMode.kBrake);
+    rightMotor.setIdleMode(IdleMode.kBrake);
     leftEncoder.setPositionConversionFactor(ARM_RADIANS_PER_MOTOR_ROTATION);
     leftEncoder.setVelocityConversionFactor(ARM_RADIANS_PER_MOTOR_ROTATION);
     absoluteEncoder.setDutyCycleRange(1.0 / 1025.0, 1024.0 / 1025.0);
@@ -109,8 +119,10 @@ public class ArmSubsystem extends SubsystemBase {
    * @param goalAngle The goal angle in radians.
    */
   public void setGoalAngle(double goalAngle) {
+    this.currentGoal = goalAngle;
     controller.reset(currentAngle);
     controller.setGoal(goalAngle);
+    controller.setP(KP.getValue());
     enablePeriodicControl = true;
   }
 
@@ -118,6 +130,7 @@ public class ArmSubsystem extends SubsystemBase {
   public void disable() {
     enablePeriodicControl = false;
     leftMotor.stopMotor();
+    currentMotorVoltage = 0;
   }
 
   /** Returns whether the arm is at the goal angle. */
@@ -166,14 +179,16 @@ public class ArmSubsystem extends SubsystemBase {
     currentAngle = MathUtil.angleModulus(rawAngleOffset - absoluteEncoder.getDistance());
 
     if (enablePeriodicControl) {
-      double feedback = controller.calculate(currentAngle);
-      double feedForward =
-          this.feedForward.calculate(
-              currentAngle + CG_ANGLE_OFFSET, controller.getSetpoint().velocity);
-      setMotorVoltages(feedForward + feedback);
-      // double feedback = KP.getValue() * (controller.getGoal().position - currentAngle);
-      // feedback += 0.54 * Math.cos(currentAngle + Math.toRadians(7.0));
-      // setMotorVoltages(feedback);
+      // Turn off PID when nearly stowed
+      if (currentAngle <= NEARLY_STOWED_ANGLE && currentGoal <= STOWED_ANGLE) {
+        disable();
+      } else {
+        double feedback = controller.calculate(currentAngle);
+        double feedForward =
+            this.feedForward.calculate(
+                currentAngle + CG_ANGLE_OFFSET, controller.getSetpoint().velocity);
+        setMotorVoltages(feedForward + feedback);
+      }
     }
   }
 
