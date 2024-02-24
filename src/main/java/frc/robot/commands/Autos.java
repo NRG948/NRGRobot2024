@@ -77,7 +77,8 @@ public final class Autos {
     eventMaps.put("SetShooterRPMSourceFarShot", ShooterCommands.setAndWaitForRPM(subsystems, 5000));
     eventMaps.put("SetArmAngleSpike", ArmCommands.seekToAngle(subsystems, Math.toRadians(15)));
     eventMaps.put("SetArmAngleAmpFarShot", ArmCommands.seekToAngle(subsystems, Math.toRadians(10)));
-    eventMaps.put("SetArmAngleSourceFarShot", ArmCommands.seekToAngle(subsystems, Math.toRadians(10)));
+    eventMaps.put(
+        "SetArmAngleSourceFarShot", ArmCommands.seekToAngle(subsystems, Math.toRadians(10)));
     eventMaps.put("FeedIndexerFullPower", Commands.runOnce(() -> subsystems.indexer.feed()));
     eventMaps.put("StowArm", ArmCommands.stow(subsystems));
     eventMaps.put("Intake", NoteCommands.intake(subsystems)); // will run our intake sequence
