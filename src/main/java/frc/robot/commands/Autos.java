@@ -63,12 +63,22 @@ public final class Autos {
           "Autonomous", "Subwoofer Side Shot RPM", 2000); // TODO: RPM needs to be tested.
 
   @RobotPreferencesValue
+  public static RobotPreferences.DoubleValue SUBWOOFER_SHOT_RPM =
+      new RobotPreferences.DoubleValue(
+          "Autonomous", "Subwoofer Side Shot RPM", 2000); // TODO: RPM needs to be tested.
+
+  @RobotPreferencesValue
   public static RobotPreferences.DoubleValue SOURCE_FARSHOT_ANGLE =
       new RobotPreferences.DoubleValue(
           "Autonomous", "Source Far Shot Angle", 10); // TODO: Angle needs to be tested.
 
   @RobotPreferencesValue
   public static RobotPreferences.DoubleValue SUBWOOFER_SIDE_SHOT_ANGLE =
+      new RobotPreferences.DoubleValue(
+          "Autonomous", "Subwoofer Side Shot Angle", 10); // TODO: Angle needs to be tested.
+
+  @RobotPreferencesValue
+  public static RobotPreferences.DoubleValue SUBWOOFER_SHOT_ANGLE =
       new RobotPreferences.DoubleValue(
           "Autonomous", "Subwoofer Side Shot Angle", 10); // TODO: Angle needs to be tested.
 
@@ -133,6 +143,7 @@ public final class Autos {
     eventMaps.put("SetShooterRPMMidSpikeShot", setShooterRPM(subsystems, MID_SPIKE_SHOT_RPM));
     eventMaps.put(
         "SetShooterRPMSubwooferSideShot", setShooterRPM(subsystems, SUBWOOFER_SIDE_SHOT_RPM));
+    eventMaps.put("SetShooterRPMSubwooferShot", setShooterRPM(subsystems, SUBWOOFER_SHOT_RPM));
 
     eventMaps.put("SetArmAngleSpikeShot", setArmAngle(subsystems, SPIKE_SHOT_ANGLE));
     eventMaps.put("SetArmAngleAmpFarShot", setArmAngle(subsystems, AMP_FARSHOT_ANGLE));
@@ -140,12 +151,14 @@ public final class Autos {
     eventMaps.put("SetArmAngleMidSpikeShot", setArmAngle(subsystems, MID_SPIKE_SHOT_ANGLE));
     eventMaps.put(
         "SetArmAngleSubwooferSideShot", setArmAngle(subsystems, SUBWOOFER_SIDE_SHOT_ANGLE));
+    eventMaps.put("SetArmAngleSubwooferShot", setArmAngle(subsystems, SUBWOOFER_SHOT_ANGLE));
 
     eventMaps.put("ShootSourceFarShot", shoot(subsystems, SOURCE_FARSHOT_RPM));
     eventMaps.put("ShootAmpFarShot", shoot(subsystems, AMP_FARSHOT_RPM));
     eventMaps.put("ShootSpikeShot", shoot(subsystems, SPIKE_SHOT_RPM));
     eventMaps.put("ShootMidSPikeShot", shoot(subsystems, MID_SPIKE_SHOT_RPM));
     eventMaps.put("ShootSubwooferSideShot", shoot(subsystems, SUBWOOFER_SIDE_SHOT_RPM));
+    eventMaps.put("ShootSubwooferShot", shoot(subsystems, SUBWOOFER_SHOT_RPM));
 
     eventMaps.put("FeedIndexerFullPower", Commands.runOnce(() -> subsystems.indexer.feed()));
     eventMaps.put("StowArm", ArmCommands.stow(subsystems));
