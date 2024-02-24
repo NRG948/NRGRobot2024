@@ -17,16 +17,20 @@ import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.controller.ArmFeedforward;
 import edu.wpi.first.math.controller.ProfiledPIDController;
 import edu.wpi.first.math.trajectory.TrapezoidProfile;
+import edu.wpi.first.networktables.GenericEntry;
 import edu.wpi.first.wpilibj.DutyCycleEncoder;
 import edu.wpi.first.wpilibj.RobotController;
 import edu.wpi.first.wpilibj.shuffleboard.BuiltInLayouts;
 import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardLayout;
 import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
+import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
 import frc.robot.Constants.RobotConstants;
+import frc.robot.commands.ArmCommands;
 import frc.robot.parameters.MotorParameters;
 import java.util.Map;
+import java.util.Set;
 
 @RobotPreferencesLayout(groupName = "Arm+Shooter", row = 0, column = 2, width = 2, height = 1)
 public class ArmSubsystem extends SubsystemBase {
@@ -61,6 +65,7 @@ public class ArmSubsystem extends SubsystemBase {
   public static final double ARM_RADIANS_PER_MOTOR_ROTATION = (2 * Math.PI) / GEAR_RATIO;
   private static final double LOWER_ANGLE_LIMIT = Math.toRadians(-11);
   private static final double UPPER_ANGLE_LIMIT = Math.toRadians(70);
+  private static final double ANGLE_TOLERANCE = Math.toRadians(.5);
 
   private final CANSparkMax leftMotor =
       new CANSparkMax(RobotConstants.CAN.SparkMax.ARM_LEFT_PORT, MotorType.kBrushless);
@@ -92,6 +97,7 @@ public class ArmSubsystem extends SubsystemBase {
     absoluteEncoder.setDutyCycleRange(1.0 / 1025.0, 1024.0 / 1025.0);
     absoluteEncoder.setDistancePerRotation(2 * Math.PI);
     controller.enableContinuousInput(-Math.PI, Math.PI);
+    controller.setTolerance(ANGLE_TOLERANCE);
 
     System.out.println("Arm max velocity: " + Math.toDegrees(MAX_ANGULAR_SPEED));
     System.out.println("Arm max accel: " + Math.toDegrees(MAX_ANGULAR_ACCELERATION));
@@ -171,7 +177,7 @@ public class ArmSubsystem extends SubsystemBase {
     }
   }
 
-  public void addShuffleboardLayout(ShuffleboardTab tab) {
+  public void addShuffleboardLayout(ShuffleboardTab tab, Subsystems subsystems) {
     ShuffleboardLayout infolayout =
         tab.getLayout("Arm Info", BuiltInLayouts.kGrid)
             .withPosition(0, 0)
@@ -192,5 +198,15 @@ public class ArmSubsystem extends SubsystemBase {
     infolayout.add("KV", KV).withPosition(0, 2).withSize(1, 1);
     infolayout.add("KA", KA).withPosition(1, 2).withSize(1, 1);
     infolayout.add("KG", KG).withPosition(2, 2).withSize(1, 1);
+
+    ShuffleboardLayout controlLayout =
+        tab.getLayout("Arm Control", BuiltInLayouts.kList).withPosition(2, 0).withSize(2, 4);
+    GenericEntry armAngle = controlLayout.add("Arm Angle", 0).getEntry();
+    controlLayout.add(
+        Commands.defer(
+            () ->
+                ArmCommands.seekToAngle(subsystems, Math.toRadians(armAngle.getDouble(ARM_LENGTH)))
+                    .until(() -> this.atGoalAngle()),
+            Set.of(subsystems.arm)));
   }
 }
