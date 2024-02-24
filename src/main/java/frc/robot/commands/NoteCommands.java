@@ -14,8 +14,8 @@ import frc.robot.subsystems.ShooterSubsystem;
 import frc.robot.subsystems.Subsystems;
 
 public class NoteCommands {
-  /**
-   * Returns a sequence of commands to intake the note into the indexer.
+/**
+   * Returns a sequence of commands to intake the note into the indexer until interrupted by another command.
    *
    * <p>This command should be bound to a button using whileTrue.
    *
@@ -25,10 +25,25 @@ public class NoteCommands {
   public static Command intake(Subsystems subsystems) {
     IntakeSubsystem intake = subsystems.intake;
     IndexerSubsystem indexer = subsystems.indexer;
-    return Commands.parallel( //
-            Commands.runOnce(intake::in, intake), //
-            Commands.runOnce(indexer::intake, indexer)) //
-        .andThen(Commands.idle(intake, indexer)) //  // Suppress default commands
+    return Commands.sequence(
+        Commands.parallel(
+            Commands.runOnce(intake::in, intake), Commands.runOnce(indexer::intake, indexer)),
+        Commands.idle(intake, indexer) // Supress default commands.
+        );
+  }
+
+  /**
+   * Returns a sequence of commands to intake the note into the indexer until beam break is triggered.
+   *
+   * <p>This command should be bound to a button using whileTrue.
+   *
+   * @param subsystems The subsystems container.
+   * @return The command sequence.
+   */
+  public static Command intakeUntilNoteDetected(Subsystems subsystems) {
+    IntakeSubsystem intake = subsystems.intake;
+    IndexerSubsystem indexer = subsystems.indexer;
+    return intake(subsystems)
         .until(indexer::isNoteDetected) //
         .andThen(Commands.waitSeconds(0.2)) //
         .andThen( //
