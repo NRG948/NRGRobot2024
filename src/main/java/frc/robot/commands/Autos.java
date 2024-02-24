@@ -36,7 +36,7 @@ public final class Autos {
 
   @RobotPreferencesValue
   public static RobotPreferences.DoubleValue AMP_FARSHOT_RPM =
-      new RobotPreferences.DoubleValue("Autonomous", "Amp Far Shot RPM", 4500);
+      new RobotPreferences.DoubleValue("Autonomous", "Amp Far Shot RPM", 4500); //TODO: RPM needs to be tested
 
   @RobotPreferencesValue
   public static RobotPreferences.DoubleValue SPIKE_SHOT_RPM =
