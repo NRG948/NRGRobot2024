@@ -7,8 +7,8 @@
 package frc.robot.commands;
 
 import com.nrg948.autonomous.AutonomousCommandGenerator;
+import com.pathplanner.lib.auto.NamedCommands;
 import com.pathplanner.lib.commands.PathPlannerAuto;
-import com.pathplanner.lib.path.PathPlannerTrajectory;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.wpilibj.Filesystem;
 import edu.wpi.first.wpilibj2.command.Command;
@@ -19,7 +19,6 @@ import java.io.File;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import org.javatuples.LabelValue;
@@ -53,22 +52,40 @@ public final class Autos {
     SwerveSubsystem driveTrain = subsystems.drivetrain;
     Pose2d startPose = PathPlannerAuto.getStaringPoseFromAutoFile(name);
 
+    // Map<String, Command> map = getPathplannerEventMap(subsystems, name);
+    // map.get(name);
+    NamedCommands.registerCommands(getPathplannerEventMap(subsystems, name));
+    // Command test = get
+
     return Commands.sequence(
         Commands.runOnce(() -> driveTrain.resetPosition(startPose), driveTrain),
         Commands.defer(() -> new PathPlannerAuto(name), Set.of(driveTrain)));
+    // Commands.runOnce(() -> )
   }
+
+  // public static void registerCommands(Map<String, Command> commands){
+  // NamedCommands.re;
+  // }
 
   private static Map<String, Command> getPathplannerEventMap(
-      Subsystems subsystems, String pathGroupName, List<PathPlannerTrajectory> pathGroup) {
-    Map<String, Command> eventMaps = new HashMap<String, Command>();
+      Subsystems subsystems, String pathGroupName) {
 
-    eventMaps
-        .put("SetShooterRPM", ShooterCommands.setAndWaitForRPM(subsystems, 0.0))
-        .withTimeout(1);
-    eventMaps.put("SetArmAngle", ArmCommands.seekToAngle(subsystems, 15)).withTimeout(1);
-    eventMaps.put("", null);
+    Map<String, Command> eventMaps =
+        new HashMap<String, Command>(); // TODO: Replace placeholder parameters
+    eventMaps.put("SetShooterRPMSpike", ShooterCommands.setAndWaitForRPM(subsystems, 2000));
+    eventMaps.put("SetShooterRPMAmpFarShot", ShooterCommands.setAndWaitForRPM(subsystems, 5000));
+    eventMaps.put("SetShooterRPMSourceFarShot", ShooterCommands.setAndWaitForRPM(subsystems, 5000));
+    eventMaps.put("SetArmAngleSpike", ArmCommands.seekToAngle(subsystems, Math.toRadians(15)));
+    eventMaps.put("SetArmAngleAmpFarShot", ArmCommands.seekToAngle(subsystems, Math.toRadians(10)));
+    eventMaps.put("SetArmAngleSourceFarShot", ArmCommands.seekToAngle(subsystems, Math.toRadians(10)));
+    eventMaps.put("FeedIndexerFullPower", Commands.runOnce(() -> subsystems.indexer.feed()));
+    eventMaps.put("StowArm", ArmCommands.stow(subsystems));
+    eventMaps.put("Intake", NoteCommands.intake(subsystems)); // will run our intake sequence
+
     return eventMaps;
   }
+
+  public static void NamedCommands() {}
 
   private Autos() {
     throw new UnsupportedOperationException("This is a utility class!");
