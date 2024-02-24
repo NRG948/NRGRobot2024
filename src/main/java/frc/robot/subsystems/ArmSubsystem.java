@@ -32,7 +32,7 @@ import frc.robot.parameters.MotorParameters;
 import java.util.Map;
 import java.util.Set;
 
-@RobotPreferencesLayout(groupName = "Arm+Shooter", row = 0, column = 2, width = 2, height = 1)
+@RobotPreferencesLayout(groupName = "Arm+Shooter", column = 5, row = 0, width = 1, height = 3)
 public class ArmSubsystem extends SubsystemBase {
 
   @RobotPreferencesValue

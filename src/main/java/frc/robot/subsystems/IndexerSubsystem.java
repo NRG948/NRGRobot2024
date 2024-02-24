@@ -26,7 +26,7 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants.RobotConstants;
 import frc.robot.parameters.MotorParameters;
 
-@RobotPreferencesLayout(groupName = "Indexer+Intake", column = 2, row = 1, width = 2, height = 3)
+@RobotPreferencesLayout(groupName = "Indexer+Intake", column = 0, row = 1, width = 1, height = 2)
 public class IndexerSubsystem extends SubsystemBase {
 
   public static double GEAR_RATIO = 3 * 26 / 15;

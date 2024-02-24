@@ -57,7 +57,7 @@ import frc.robot.util.SwerveModuleVelocities;
 import frc.robot.util.SwerveModuleVoltages;
 import java.util.Map;
 
-@RobotPreferencesLayout(groupName = "Drive", column = 0, row = 1, width = 2, height = 3)
+@RobotPreferencesLayout(groupName = "Drive", column = 1, row = 0, width = 2, height = 2)
 public class SwerveSubsystem extends SubsystemBase {
   @RobotPreferencesValue
   public static RobotPreferences.EnumValue<SwerveDriveParameters> PARAMETERS =

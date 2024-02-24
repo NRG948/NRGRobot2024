@@ -39,7 +39,7 @@ import org.photonvision.PhotonPoseEstimator.PoseStrategy;
 import org.photonvision.targeting.PhotonTrackedTarget;
 
 /** This subsystem is responsible for getting target information from PhotonVision. */
-@RobotPreferencesLayout(groupName = "AprilTag", row = 0, column = 6, width = 2, height = 5)
+@RobotPreferencesLayout(groupName = "AprilTag", row = 0, column = 3, width = 1, height = 4)
 public class AprilTagSubsystem extends PhotonVisionSubsystemBase {
   public static final Matrix<N3, N1> SINGLE_TAG_STD_DEVS = VecBuilder.fill(4, 4, 8);
   public static final Matrix<N3, N1> MULTI_TAG_STD_DEVS = VecBuilder.fill(0.5, 0.5, 1);
