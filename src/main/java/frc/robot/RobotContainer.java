@@ -22,7 +22,6 @@ import frc.robot.Constants.RobotConstants.OperatorConstants;
 import frc.robot.commands.ArmCommands;
 import frc.robot.commands.DriveCommands;
 import frc.robot.commands.DriveUsingController;
-import frc.robot.commands.IntakeUsingController;
 import frc.robot.commands.InterruptAll;
 import frc.robot.commands.LEDs;
 import frc.robot.commands.NoteCommands;
@@ -59,9 +58,10 @@ public class RobotContainer {
 
     subsystems.drivetrain.setDefaultCommand(new DriveUsingController(subsystems, driverController));
     // subsystems.arm.setDefaultCommand(new ManualArmController(subsystems, operatorController));
-    subsystems.intake.setDefaultCommand(new IntakeUsingController(subsystems, operatorController));
-    // subsystems.shooter.setDefaultCommand(
-    // new ShootUsingController(subsystems.shooter, operatorController));
+    // subsystems.intake.setDefaultCommand(new IntakeUsingController(subsystems,
+    // operatorController));
+    // subsystems.shooter.setDefaultCommand(new ShootUsingController(subsystems.shooter,
+    // operatorController));
 
     // Configure the trigger bindings
     configureBindings();
@@ -95,6 +95,7 @@ public class RobotContainer {
     operatorController.povDown().onTrue(ArmCommands.stow(subsystems));
     operatorController.povLeft().onTrue(ArmCommands.disableSeek(subsystems));
     operatorController.rightBumper().whileTrue(NoteCommands.intake(subsystems));
+    operatorController.leftTrigger().whileTrue(NoteCommands.outtake(subsystems));
 
     Trigger noteDetected = new Trigger(subsystems.indexer::isNoteDetected);
     noteDetected.onTrue(LEDs.fillColor(subsystems.addressableLED, ORANGE));
@@ -112,21 +113,28 @@ public class RobotContainer {
 
   public void disabledInit() {
     coastModeTimer.restart();
+    subsystems.intake.disable();
+    subsystems.indexer.disable();
+    subsystems.shooter.disable();
+    subsystems.arm.disable();
   }
 
   public void disabledPeriodic() {
     if (coastModeTimer.advanceIfElapsed(3)) {
       subsystems.drivetrain.setBrakeMode(false);
+      subsystems.indexer.setBrakeMode(false);
       coastModeTimer.stop();
     }
   }
 
   public void autonomousInit() {
     subsystems.drivetrain.setBrakeMode(true);
+    subsystems.indexer.setBrakeMode(true);
   }
 
   public void teleopInit() {
     subsystems.drivetrain.setBrakeMode(true);
+    subsystems.indexer.setBrakeMode(true);
   }
 
   public void periodic() {
@@ -147,7 +155,7 @@ public class RobotContainer {
     if (ArmSubsystem.ENABLE_TAB.getValue()) {
       ShuffleboardTab armShooterTab = Shuffleboard.getTab("Arm+Shooter");
 
-      subsystems.arm.addShuffleboardLayout(armShooterTab);
+      subsystems.arm.addShuffleboardLayout(armShooterTab, subsystems);
       subsystems.shooter.addShuffleboardLayout(armShooterTab, subsystems);
     }
 
