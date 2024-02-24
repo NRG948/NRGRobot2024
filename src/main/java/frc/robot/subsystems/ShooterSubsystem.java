@@ -94,9 +94,8 @@ public class ShooterSubsystem extends SubsystemBase {
   public void setGoalRPM(double goalShooterRPM) {
     if (!isEnabled) {
       enabledLogger.append(true);
+      isEnabled = true;
     }
-
-    isEnabled = true;
     setGoalRPMInternal(goalShooterRPM);
   }
 

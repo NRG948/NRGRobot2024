@@ -26,6 +26,7 @@ import frc.robot.commands.InterruptAll;
 import frc.robot.commands.LEDs;
 import frc.robot.commands.NoteCommands;
 import frc.robot.commands.Pathfinding;
+import frc.robot.commands.SetShooterContinous;
 import frc.robot.subsystems.ArmSubsystem;
 import frc.robot.subsystems.IndexerSubsystem;
 import frc.robot.subsystems.Subsystems;
@@ -79,10 +80,6 @@ public class RobotContainer {
    * joysticks}.
    */
   private void configureBindings() {
-
-    // Schedule `exampleMetdhodCommand` when the Xbox controller's B button is
-    // pressed,
-    // cancelling on release.
     driverController.start().onTrue(DriveCommands.resetOrientation(subsystems));
     driverController.back().onTrue(new InterruptAll(subsystems));
     driverController.a().onTrue(Pathfinding.pathFindToSpeakerFront());
@@ -90,6 +87,7 @@ public class RobotContainer {
     driverController.y().whileTrue(Pathfinding.pathFindToAmp2());
 
     operatorController.back().onTrue(new InterruptAll(subsystems));
+    operatorController.b().whileTrue(new SetShooterContinous(subsystems));
     operatorController.povUp().onTrue(ArmCommands.seekToTrap(subsystems));
     operatorController.povRight().onTrue(ArmCommands.seekToAmp(subsystems));
     operatorController.povDown().onTrue(ArmCommands.stow(subsystems));
