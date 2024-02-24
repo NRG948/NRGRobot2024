@@ -40,6 +40,12 @@
                     {
                       "type": "named",
                       "data": {
+                        "name": "IntakeUntilNoteDetected"
+                      }
+                    },
+                    {
+                      "type": "named",
+                      "data": {
                         "name": "SetArmAngleSpikeShot"
                       }
                     },
@@ -47,12 +53,6 @@
                       "type": "named",
                       "data": {
                         "name": "ShootSpikeShot"
-                      }
-                    },
-                    {
-                      "type": "named",
-                      "data": {
-                        "name": "StowArm"
                       }
                     }
                   ]

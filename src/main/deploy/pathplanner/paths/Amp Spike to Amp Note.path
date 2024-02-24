@@ -49,7 +49,7 @@
       }
     },
     {
-      "name": "New Event Marker",
+      "name": "Intake",
       "waypointRelativePos": 0.55,
       "command": {
         "type": "parallel",
