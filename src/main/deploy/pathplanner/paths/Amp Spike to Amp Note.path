@@ -43,7 +43,7 @@
     "rotateFast": false
   },
   "reversed": false,
-  "folder": null,
+  "folder": "Amp Sweep",
   "previewStartingState": {
     "rotation": 25.273481017149432,
     "velocity": 0
