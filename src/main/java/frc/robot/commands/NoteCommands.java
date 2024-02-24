@@ -37,10 +37,11 @@ public class NoteCommands {
                 Commands.runOnce(indexer::outtake, indexer) //
                 )) //
         .andThen(Commands.waitSeconds(0.3)) //
-        .andThen( //
-            Commands.parallel( //
-                Commands.runOnce(intake::disable, intake), //
-                Commands.runOnce(indexer::disable, indexer)));
+        .finallyDo(
+            () -> {
+              intake.disable();
+              indexer.disable();
+            });
   }
 
   /**
@@ -57,7 +58,12 @@ public class NoteCommands {
     return Commands.parallel( //
             Commands.runOnce(intake::out, intake), //
             Commands.runOnce(indexer::outtake, indexer)) //
-        .andThen(Commands.idle(intake, indexer));
+        .andThen(Commands.idle(intake, indexer)) //
+        .finallyDo(
+            () -> {
+              intake.disable();
+              indexer.disable();
+            });
   }
 
   /**
@@ -73,14 +79,17 @@ public class NoteCommands {
     ShooterSubsystem shooter = subsystems.shooter;
     return Commands.either( //
         Commands.sequence( //
-            ShooterCommands.setAndWaitForRPM(subsystems, rpm), //
-            Commands.runOnce(indexer::feed, indexer), //
-            Commands.idle(shooter, indexer) //  // Suppress default commands
-                .until(() -> !indexer.isNoteDetected()),
-            Commands.idle(shooter, indexer) //  // Suppress default commands
-                .withTimeout(0.5),
-            Commands.parallel(Commands.runOnce(shooter::disable, shooter)), //
-            Commands.runOnce(indexer::disable, indexer)), //
+                ShooterCommands.setAndWaitForRPM(subsystems, rpm), //
+                Commands.runOnce(indexer::feed, indexer), //
+                Commands.idle(shooter, indexer) //  // Suppress default commands
+                    .until(() -> !indexer.isNoteDetected()),
+                Commands.idle(shooter, indexer) //  // Suppress default commands
+                    .withTimeout(0.5))
+            .finallyDo(
+                () -> {
+                  shooter.disable();
+                  indexer.disable();
+                }), //
         Commands.none(), //
         indexer::isNoteDetected);
   }
