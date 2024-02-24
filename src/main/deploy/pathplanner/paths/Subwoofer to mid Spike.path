@@ -43,7 +43,7 @@
     "rotateFast": false
   },
   "reversed": false,
-  "folder": "Miscellaneous",
+  "folder": null,
   "previewStartingState": null,
   "useDefaultConstraints": false
 }

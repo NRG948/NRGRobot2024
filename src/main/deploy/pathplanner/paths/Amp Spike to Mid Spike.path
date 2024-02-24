@@ -75,7 +75,7 @@
     "rotateFast": false
   },
   "reversed": false,
-  "folder": "Spike Sweep",
+  "folder": null,
   "previewStartingState": {
     "rotation": 17.659586777636193,
     "velocity": 0

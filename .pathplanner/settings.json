@@ -3,11 +3,11 @@
   "robotLength": 0.851,
   "holonomicMode": true,
   "pathFolders": [
-    "Amp Sweep",
-    "Drive Straight",
     "Miscellaneous",
-    "Source Sweep",
-    "Spike Sweep"
+    "Drive Out",
+    "Speaker Amp Sweep",
+    "Speaker Source Sweep",
+    "Speaker Spike Sweep"
   ],
   "autoFolders": [],
   "defaultMaxVel": 3.0,

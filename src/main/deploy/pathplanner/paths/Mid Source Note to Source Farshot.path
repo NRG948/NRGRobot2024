@@ -30,7 +30,31 @@
   ],
   "rotationTargets": [],
   "constraintZones": [],
-  "eventMarkers": [],
+  "eventMarkers": [
+    {
+      "name": "Prepare to Shoot",
+      "waypointRelativePos": 0.3,
+      "command": {
+        "type": "parallel",
+        "data": {
+          "commands": [
+            {
+              "type": "named",
+              "data": {
+                "name": "SetShooterRPMSourceFarShot"
+              }
+            },
+            {
+              "type": "named",
+              "data": {
+                "name": "SetArmAngleSourceFarShot"
+              }
+            }
+          ]
+        }
+      }
+    }
+  ],
   "globalConstraints": {
     "maxVelocity": 3.0,
     "maxAcceleration": 3.0,
@@ -43,7 +67,7 @@
     "rotateFast": false
   },
   "reversed": false,
-  "folder": "Source Sweep",
+  "folder": null,
   "previewStartingState": {
     "rotation": 32.00538320808345,
     "velocity": 0
