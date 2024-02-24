@@ -94,7 +94,7 @@ public class RobotContainer {
     operatorController.povRight().onTrue(ArmCommands.seekToAmp(subsystems));
     operatorController.povDown().onTrue(ArmCommands.stow(subsystems));
     operatorController.povLeft().onTrue(ArmCommands.disableSeek(subsystems));
-    operatorController.rightBumper().whileTrue(NoteCommands.intake(subsystems));
+    operatorController.rightBumper().whileTrue(NoteCommands.intakeUntilNoteDetected(subsystems));
     operatorController.leftTrigger().whileTrue(NoteCommands.outtake(subsystems));
 
     Trigger noteDetected = new Trigger(subsystems.indexer::isNoteDetected);
