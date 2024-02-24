@@ -124,6 +124,17 @@ public class IndexerSubsystem extends SubsystemBase {
     }
   }
 
+  public void setBrakeMode(boolean brakeMode) {
+    IdleMode idleMode;
+
+    if (brakeMode) {
+      idleMode = IdleMode.kBrake;
+    } else {
+      idleMode = IdleMode.kCoast;
+    }
+    motor.setIdleMode(idleMode);
+  }
+
   public void addShuffleboardLayout(ShuffleboardTab tab) {
     ShuffleboardLayout layout =
         tab.getLayout("Indexer", BuiltInLayouts.kList).withSize(2, 3).withPosition(2, 0);
