@@ -119,10 +119,14 @@ public class ArmSubsystem extends SubsystemBase {
    * @param goalAngle The goal angle in radians.
    */
   public void setGoalAngle(double goalAngle) {
-    this.currentGoal = goalAngle;
+    setGoalAngleContinous(goalAngle);
     controller.reset(currentAngle);
-    controller.setGoal(goalAngle);
     controller.setP(KP.getValue());
+  }
+
+  public void setGoalAngleContinous(double goalAngle) {
+    this.currentGoal = goalAngle;
+    controller.setGoal(goalAngle);
     enablePeriodicControl = true;
   }
 
