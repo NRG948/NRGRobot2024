@@ -32,12 +32,25 @@
   "constraintZones": [],
   "eventMarkers": [
     {
-      "name": "SetShooterRPMSourceFarShot",
+      "name": "Prepare to Shoot",
       "waypointRelativePos": 0.3,
       "command": {
-        "type": "sequential",
+        "type": "parallel",
         "data": {
-          "commands": []
+          "commands": [
+            {
+              "type": "named",
+              "data": {
+                "name": "SetArmAngleSourceFarShot"
+              }
+            },
+            {
+              "type": "named",
+              "data": {
+                "name": "SetShooterRPMSourceFarShot"
+              }
+            }
+          ]
         }
       }
     }
@@ -54,7 +67,7 @@
     "rotateFast": false
   },
   "reversed": false,
-  "folder": "Source Sweep",
+  "folder": null,
   "previewStartingState": {
     "rotation": 0,
     "velocity": 0
