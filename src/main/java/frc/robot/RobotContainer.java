@@ -36,7 +36,7 @@ import frc.robot.subsystems.Subsystems;
  * periodic methods (other than the scheduler calls). Instead, the structure of the robot (including
  * subsystems, commands, and trigger mappings) should be declared here.
  */
-@RobotPreferencesLayout(groupName = "Preferences", column = 0, row = 0, width = 2, height = 1)
+@RobotPreferencesLayout(groupName = "Preferences", column = 0, row = 0, width = 1, height = 1)
 public class RobotContainer {
   // The robot's subsystems and commands are defined here...
   private final Subsystems subsystems = new Subsystems();

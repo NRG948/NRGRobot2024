@@ -8,6 +8,7 @@ package frc.robot.commands;
 
 import com.nrg948.autonomous.AutonomousCommandGenerator;
 import com.nrg948.preferences.RobotPreferences;
+import com.nrg948.preferences.RobotPreferencesLayout;
 import com.nrg948.preferences.RobotPreferencesValue;
 import com.pathplanner.lib.auto.NamedCommands;
 import com.pathplanner.lib.commands.PathPlannerAuto;
@@ -28,6 +29,13 @@ import java.util.Map;
 import java.util.Set;
 import org.javatuples.LabelValue;
 
+@RobotPreferencesLayout(
+    groupName = "Autonomous",
+    column = 6,
+    row = 0,
+    width = 3,
+    height = 3,
+    type = "Grid Layout")
 public final class Autos {
   @RobotPreferencesValue
   public static RobotPreferences.DoubleValue SOURCE_FARSHOT_RPM =
@@ -36,7 +44,8 @@ public final class Autos {
 
   @RobotPreferencesValue
   public static RobotPreferences.DoubleValue AMP_FARSHOT_RPM =
-      new RobotPreferences.DoubleValue("Autonomous", "Amp Far Shot RPM", 4500); //TODO: RPM needs to be tested
+      new RobotPreferences.DoubleValue(
+          "Autonomous", "Amp Far Shot RPM", 4500); // TODO: RPM needs to be tested
 
   @RobotPreferencesValue
   public static RobotPreferences.DoubleValue SPIKE_SHOT_RPM =
@@ -48,7 +57,7 @@ public final class Autos {
       new RobotPreferences.DoubleValue(
           "Autonomous", "Mid Spike Shot RPM", 2000); // TODO: RPM needs to be tested.
 
-   @RobotPreferencesValue
+  @RobotPreferencesValue
   public static RobotPreferences.DoubleValue SUBWOOFER_SIDE_SHOT_RPM =
       new RobotPreferences.DoubleValue(
           "Autonomous", "Subwoofer Side Shot RPM", 2000); // TODO: RPM needs to be tested.
@@ -58,7 +67,7 @@ public final class Autos {
       new RobotPreferences.DoubleValue(
           "Autonomous", "Source Far Shot Angle", 10); // TODO: Angle needs to be tested.
 
-    @RobotPreferencesValue
+  @RobotPreferencesValue
   public static RobotPreferences.DoubleValue SUBWOOFER_SIDE_SHOT_ANGLE =
       new RobotPreferences.DoubleValue(
           "Autonomous", "Subwoofer Side Shot Angle", 10); // TODO: Angle needs to be tested.
@@ -78,31 +87,6 @@ public final class Autos {
       new RobotPreferences.DoubleValue(
           "Autonomous", "Mid Spike Shot Angle", 10); // TODO: Angle needs to be tested.
 
-  @RobotPreferencesValue
-  public static RobotPreferences.DoubleValue SHOOT_SOURCE_FARSHOT =
-      new RobotPreferences.DoubleValue(
-          "Autonomous", "Source Far Shot Angle", 10); // TODO: Angle needs to be tested.
-
-  @RobotPreferencesValue
-  public static RobotPreferences.DoubleValue SHOOT_AMP_FARSHOT =
-      new RobotPreferences.DoubleValue(
-          "Autonomous", "Amp Far Shot Angle", 22); // TODO: Angle needs to be tested.
-
-  @RobotPreferencesValue
-  public static RobotPreferences.DoubleValue SHOOT_SPIKE_SHOT =
-      new RobotPreferences.DoubleValue(
-          "Autonomous", "Spike Shot Angle", 12); // TODO: Angle needs to be tested.
-
-  @RobotPreferencesValue
-  public static RobotPreferences.DoubleValue SHOOT_MID_SPIKE_SHOT =
-      new RobotPreferences.DoubleValue(
-          "Autonomous", "Mid Spike Shot Angle", 10); // TODO: Angle needs to be tested.
-
-          
-  @RobotPreferencesValue
-  public static RobotPreferences.DoubleValue SHOOT_SUBWOOFER_SIDE_SHOT =
-      new RobotPreferences.DoubleValue(
-          "Autonomous", "Shoot Subwoofer Side Shot", 10); // TODO: Angle needs to be tested.
   /**
    * Returns the collection of PathPlanner auto commands.
    *
@@ -147,19 +131,21 @@ public final class Autos {
     eventMaps.put("SetShooterRPMSourceFarShot", setShooterRPM(subsystems, SOURCE_FARSHOT_RPM));
     eventMaps.put("SetShooterRPMSpikeShot", setShooterRPM(subsystems, SPIKE_SHOT_RPM));
     eventMaps.put("SetShooterRPMMidSpikeShot", setShooterRPM(subsystems, MID_SPIKE_SHOT_RPM));
-    eventMaps.put("SetShooterRPMSubwooferSideShot", setShooterRPM(subsystems, SUBWOOFER_SIDE_SHOT_RPM));
+    eventMaps.put(
+        "SetShooterRPMSubwooferSideShot", setShooterRPM(subsystems, SUBWOOFER_SIDE_SHOT_RPM));
 
     eventMaps.put("SetArmAngleSpikeShot", setArmAngle(subsystems, SPIKE_SHOT_ANGLE));
     eventMaps.put("SetArmAngleAmpFarShot", setArmAngle(subsystems, AMP_FARSHOT_ANGLE));
     eventMaps.put("SetArmAngleSourceFarShot", setArmAngle(subsystems, SOURCE_FARSHOT_ANGLE));
     eventMaps.put("SetArmAngleMidSpikeShot", setArmAngle(subsystems, MID_SPIKE_SHOT_ANGLE));
-    eventMaps.put("SetArmAngleSubwooferSideShot", setArmAngle(subsystems, SUBWOOFER_SIDE_SHOT_ANGLE));
+    eventMaps.put(
+        "SetArmAngleSubwooferSideShot", setArmAngle(subsystems, SUBWOOFER_SIDE_SHOT_ANGLE));
 
-    eventMaps.put("ShootSourceFarShot", shoot(subsystems, SHOOT_SOURCE_FARSHOT));
-    eventMaps.put("ShootAmpFarShot", shoot(subsystems, SHOOT_AMP_FARSHOT));
-    eventMaps.put("ShootSpikeShot", shoot(subsystems, SHOOT_SPIKE_SHOT));
-    eventMaps.put("ShootMidSPikeShot", shoot(subsystems, SHOOT_MID_SPIKE_SHOT));
-    eventMaps.put("ShootSubwooferSideShot", shoot(subsystems, SHOOT_SUBWOOFER_SIDE_SHOT));
+    eventMaps.put("ShootSourceFarShot", shoot(subsystems, SOURCE_FARSHOT_RPM));
+    eventMaps.put("ShootAmpFarShot", shoot(subsystems, AMP_FARSHOT_RPM));
+    eventMaps.put("ShootSpikeShot", shoot(subsystems, SPIKE_SHOT_RPM));
+    eventMaps.put("ShootMidSPikeShot", shoot(subsystems, MID_SPIKE_SHOT_RPM));
+    eventMaps.put("ShootSubwooferSideShot", shoot(subsystems, SUBWOOFER_SIDE_SHOT_RPM));
 
     eventMaps.put("FeedIndexerFullPower", Commands.runOnce(() -> subsystems.indexer.feed()));
     eventMaps.put("StowArm", ArmCommands.stow(subsystems));
