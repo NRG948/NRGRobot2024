@@ -42,7 +42,7 @@ public class ShootUsingController extends Command {
     double speed = -controller.getHID().getLeftY();
     speed = MathUtil.applyDeadband(speed * SHOOTER_SPEED, DEADBAND);
     double voltage = speed * RobotConstants.MAX_BATTERY_VOLTAGE;
-    shooterSubsystem.setMotorVoltages(voltage, voltage * ShooterSubsystem.SPIN_FACTOR);
+    shooterSubsystem.setMotorVoltages(voltage, voltage * ShooterSubsystem.SPIN_FACTOR.getValue());
   }
 
   // Called once the command ends or is interrupted.

@@ -6,6 +6,8 @@
  */
 package frc.robot.subsystems;
 
+import com.nrg948.preferences.RobotPreferences;
+import com.nrg948.preferences.RobotPreferencesValue;
 import com.revrobotics.CANSparkBase.IdleMode;
 import com.revrobotics.CANSparkFlex;
 import com.revrobotics.CANSparkLowLevel.MotorType;
@@ -37,7 +39,11 @@ public class ShooterSubsystem extends SubsystemBase {
   private static final double ENCODER_CONVERSION_FACTOR = 1 / GEAR_RATIO;
   private static final double KS = 0.15;
   private static final double KV = (RobotConstants.MAX_BATTERY_VOLTAGE - KS) / MAX_RPM;
-  public static final double SPIN_FACTOR = 0.80;
+
+  @RobotPreferencesValue
+  public static final RobotPreferences.DoubleValue SPIN_FACTOR =
+      new RobotPreferences.DoubleValue("Arm+Shooter", "Spin Factor", 0.8);
+
   private static final double RPM_TOLERANCE = 50.0;
 
   private final CANSparkFlex leftMotor =
@@ -52,8 +58,8 @@ public class ShooterSubsystem extends SubsystemBase {
   private final RelativeEncoder leftEncoder = leftMotor.getEncoder();
   private final RelativeEncoder rightEncoder = rightMotor.getEncoder();
 
-  private PIDController leftController = new PIDController(0.002088, 0, 0); // TODO assign value
-  private PIDController rightController = new PIDController(0.002088, 0, 0); // TODO assign value
+  private PIDController leftController = new PIDController(0.004, 0, 0); // TODO assign value
+  private PIDController rightController = new PIDController(0.003, 0, 0); // TODO assign value
   private SimpleMotorFeedforward feedforward = new SimpleMotorFeedforward(KS, KV);
   private boolean isEnabled = false;
 
@@ -80,8 +86,8 @@ public class ShooterSubsystem extends SubsystemBase {
 
   private void setGoalRPMInternal(double goalRPM) {
     this.goalRPM = goalRPM;
-    leftController.setSetpoint(goalRPM);
-    rightController.setSetpoint(goalRPM * SPIN_FACTOR);
+    leftController.setSetpoint(goalRPM * SPIN_FACTOR.getValue());
+    rightController.setSetpoint(goalRPM);
     goalRPMLogger.append(goalRPM);
   }
 
@@ -95,7 +101,7 @@ public class ShooterSubsystem extends SubsystemBase {
   }
 
   public boolean atGoalRPM() {
-    return leftController.atSetpoint();
+    return rightController.atSetpoint();
   }
 
   /** Disables the Shooter PID controller and stops the motor. */
@@ -143,7 +149,7 @@ public class ShooterSubsystem extends SubsystemBase {
 
     if (isEnabled) {
       double leftVoltage = feedforward.calculate(goalRPM);
-      double rightVoltage = feedforward.calculate(goalRPM * SPIN_FACTOR);
+      double rightVoltage = feedforward.calculate(goalRPM);
 
       leftVoltage += leftController.calculate(currentLeftRPM);
       rightVoltage += rightController.calculate(currentRightRPM);
@@ -159,7 +165,7 @@ public class ShooterSubsystem extends SubsystemBase {
     ShuffleboardLayout shooterLayout =
         tab.getLayout("Shooter", BuiltInLayouts.kGrid)
             .withProperties(Map.of("Number of columns", 2, "Number of rows", 4))
-            .withPosition(2, 0)
+            .withPosition(4, 0)
             .withSize(2, 4);
 
     shooterLayout.addDouble("Goal RPM", () -> goalRPM).withPosition(0, 0);
@@ -182,7 +188,7 @@ public class ShooterSubsystem extends SubsystemBase {
     shooterLayout
         .add(
             "Cancel",
-            Commands.race(
+            Commands.race( // should this be parallel?
                 Commands.runOnce(subsystems.indexer::disable, subsystems.indexer),
                 Commands.runOnce(subsystems.shooter::disable, subsystems.shooter)))
         .withPosition(1, 3);
