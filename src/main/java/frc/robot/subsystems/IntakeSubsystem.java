@@ -46,7 +46,7 @@ public class IntakeSubsystem extends SubsystemBase {
 
   @RobotPreferencesValue
   public static final RobotPreferences.DoubleValue INTAKE_VELOCITY =
-      new RobotPreferences.DoubleValue("Indexer+Intake", "Indexer Intake Velocity", 0.2);
+      new RobotPreferences.DoubleValue("Indexer+Intake", "Indexer Intake Velocity", 1.0);
 
   private final SimpleMotorFeedforward feedforward = new SimpleMotorFeedforward(KS, KV, KA);
 
