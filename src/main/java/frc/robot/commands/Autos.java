@@ -65,7 +65,7 @@ public final class Autos {
   @RobotPreferencesValue
   public static RobotPreferences.DoubleValue SUBWOOFER_SHOT_RPM =
       new RobotPreferences.DoubleValue(
-          "Autonomous", "Subwoofer Side Shot RPM", 2000); // TODO: RPM needs to be tested.
+          "Autonomous", "Subwoofer Shot RPM", 2000); // TODO: RPM needs to be tested.
 
   @RobotPreferencesValue
   public static RobotPreferences.DoubleValue SOURCE_FARSHOT_ANGLE =
@@ -80,7 +80,7 @@ public final class Autos {
   @RobotPreferencesValue
   public static RobotPreferences.DoubleValue SUBWOOFER_SHOT_ANGLE =
       new RobotPreferences.DoubleValue(
-          "Autonomous", "Subwoofer Side Shot Angle", 10); // TODO: Angle needs to be tested.
+          "Autonomous", "Subwoofer Shot Angle", 10); // TODO: Angle needs to be tested.
 
   @RobotPreferencesValue
   public static RobotPreferences.DoubleValue AMP_FARSHOT_ANGLE =
