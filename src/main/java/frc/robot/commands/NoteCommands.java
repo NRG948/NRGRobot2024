@@ -14,6 +14,12 @@ import frc.robot.subsystems.ShooterSubsystem;
 import frc.robot.subsystems.Subsystems;
 
 public class NoteCommands {
+  /** The initial intake time when autoCenterNote is in sequence with intakeUntilNoteDetected. */
+  public static double AUTO_CENTER_NOTE_CONTINUATION = 0.2;
+
+  /** The inital intake time when autoCenterNote is used standalone. */
+  public static double AUTO_CENTER_NOTE_STANDALONE = 0.25;
+
   /**
    * Returns a sequence of commands to intake the note into the indexer until interrupted by another
    * command.
@@ -45,17 +51,62 @@ public class NoteCommands {
    * @return The command sequence.
    */
   public static Command intakeUntilNoteDetected(Subsystems subsystems) {
+    return intakeUntilNoteDetected(subsystems, true);
+  }
+
+  /**
+   * Returns a sequence of commands to intake the note into the indexer until beam break is
+   * triggered.
+   *
+   * @param subsystems The subsystems container.
+   * @param disableIndexer If true, disables the indexer at the end of the command.
+   * @return The command sequence.
+   */
+  public static Command intakeUntilNoteDetected(Subsystems subsystems, boolean disableIndexer) {
     IntakeSubsystem intake = subsystems.intake;
     IndexerSubsystem indexer = subsystems.indexer;
 
-    return Commands.sequence(
-            intake(subsystems).until(indexer::isNoteDetected), //
-            Commands.waitSeconds(0.2), //
-            outtake(subsystems).until(() -> !indexer.isNoteDetected()), //
-            intake(subsystems).until(indexer::isNoteDetected)) //
+    return intake(subsystems)
+        .until(indexer::isNoteDetected) //
         .finallyDo(
             () -> {
               intake.disable();
+              if (disableIndexer) {
+                indexer.disable();
+              }
+            });
+  }
+
+  /**
+   * Returns a sequence of commands to automatically center the note.
+   *
+   * <p>This command is intended to be used standalone.
+   *
+   * @param subsystems The subsystems container.
+   * @return The command sequence.
+   */
+  public static Command autoCenterNote(Subsystems subsystems) {
+    return autoCenterNote(subsystems, AUTO_CENTER_NOTE_STANDALONE);
+  }
+
+  /**
+   * Returns a sequence of commands to automatically center the note.
+   *
+   * @param subsystems The subsystems container.
+   * @param initialIntakeSeconds The initial intake time in seconds.
+   * @return The command sequence.
+   */
+  public static Command autoCenterNote(Subsystems subsystems, double initialIntakeSeconds) {
+    IndexerSubsystem indexer = subsystems.indexer;
+    return Commands.sequence(
+            Commands.runOnce(() -> indexer.intake(), indexer), //
+            Commands.idle(indexer).withTimeout(initialIntakeSeconds), //
+            Commands.runOnce(() -> indexer.outtake(), indexer), //
+            Commands.idle(indexer).until(() -> !indexer.isNoteDetected()), //
+            Commands.runOnce(() -> indexer.intake(), indexer), //
+            Commands.idle(indexer).until(indexer::isNoteDetected)) //
+        .finallyDo(
+            () -> {
               indexer.disable();
             });
   }
