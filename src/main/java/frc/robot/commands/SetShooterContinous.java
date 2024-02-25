@@ -25,7 +25,7 @@ public class SetShooterContinous extends Command {
   private record ShooterParams(double distance, double armAngleDegrees, int rpm) {}
 
   /** A array of shooter params sorted from nearest to farthest. */
-  private final ShooterParams[] shooterParams = { //TODO Determine accurate parameters
+  private final ShooterParams[] shooterParams = { // TODO Determine accurate parameters
     new ShooterParams(1.0, -11, 2200),
     new ShooterParams(2.0, 5, 2800),
     new ShooterParams(3.0, 16, 3200),
@@ -53,7 +53,7 @@ public class SetShooterContinous extends Command {
     if (distance == 0) { // if target is not detected
       return;
     }
-    if (distance > shooterParams[shooterParams.length - 1].distance) { 
+    if (distance > shooterParams[shooterParams.length - 1].distance) {
       return; // if target is greater than farthest point (last index)
     }
     ShooterParams computedShooterParams = computeShooterParams(distance);
@@ -89,7 +89,7 @@ public class SetShooterContinous extends Command {
   }
 
   // Ref: https://en.wikipedia.org/wiki/Linear_interpolation
-  private double interpolate(double x, double x0, double x1, double y0, double y1) { 
-    return (y0 * (x1 - x) + y1 * (x - x0)) / (x1 - x0); 
+  private double interpolate(double x, double x0, double x1, double y0, double y1) {
+    return (y0 * (x1 - x) + y1 * (x - x0)) / (x1 - x0);
   }
 }
