@@ -42,7 +42,7 @@ public class ShooterSubsystem extends SubsystemBase {
 
   @RobotPreferencesValue
   public static final RobotPreferences.DoubleValue SPIN_FACTOR =
-      new RobotPreferences.DoubleValue("Arm+Shooter", "Spin Factor", 0.8);
+      new RobotPreferences.DoubleValue("Arm+Shooter", "Spin Factor", 0.85);
 
   private static final double RPM_TOLERANCE = 50.0;
 

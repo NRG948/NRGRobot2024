@@ -41,11 +41,11 @@ public class ArmSubsystem extends SubsystemBase {
 
   @RobotPreferencesValue
   public static final RobotPreferences.DoubleValue KP =
-      new RobotPreferences.DoubleValue("Arm+Shooter", "kP", 1.0);
+      new RobotPreferences.DoubleValue("Arm+Shooter", "kP", 3.0);
 
   @RobotPreferencesValue
   public static RobotPreferences.DoubleValue AMP_ANGLE =
-      new RobotPreferences.DoubleValue("Arm+Shooter", "Amp Angle", 10);
+      new RobotPreferences.DoubleValue("Arm+Shooter", "Amp Angle", 8.0);
 
   @RobotPreferencesValue
   public static RobotPreferences.DoubleValue TRAP_ANGLE =
