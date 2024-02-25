@@ -177,7 +177,10 @@ public final class Autos {
   private static Command setArmAngle(Subsystems subsystems, RobotPreferences.DoubleValue angle) {
     ArmSubsystem arm = subsystems.arm;
     return Commands.defer(
-        () -> ArmCommands.seekToAngle(subsystems, Math.toRadians(angle.getValue())), Set.of(arm));
+        () ->
+            ArmCommands.seekToAngle(subsystems, Math.toRadians(angle.getValue()))
+                .until(arm::atGoalAngle),
+        Set.of(arm));
   }
 
   public static Command shoot(Subsystems subsystems, RobotPreferences.DoubleValue rpm) {
