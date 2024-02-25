@@ -44,14 +44,32 @@ public class NoteCommands {
    * @return The command sequence.
    */
   public static Command intakeUntilNoteDetected(Subsystems subsystems) {
+    IntakeSubsystem intake = subsystems.intake;
     IndexerSubsystem indexer = subsystems.indexer;
+    // return Commands.sequence(
+    //         Commands.parallel(
+    //             Commands.runOnce(intake::in, intake), //
+    //             Commands.runOnce(indexer::intake, indexer)), //
+    //         Commands.idle(intake, indexer)
+    //             .until(indexer::isNoteDetected) // Supress default commands.
+    //         )
+    //     .finallyDo(
+    //         () -> {
+    //           intake.disable();
+    //           indexer.disable();
+    //         });
     return intake(subsystems)
         .until(indexer::isNoteDetected) //
-        .andThen(Commands.waitSeconds(0.2)) //
-        .andThen(outtake(subsystems)) //
-        .until(() -> !indexer.isNoteDetected()) //
-        .andThen(intake(subsystems))
-        .until(indexer::isNoteDetected);
+        // .andThen(Commands.waitSeconds(0.1)) //
+        // .andThen(outtake(subsystems)) //
+        // .until(() -> !indexer.isNoteDetected()) //
+        // .andThen(intake(subsystems))
+        // .until(indexer::isNoteDetected)
+        .finallyDo(
+            () -> {
+              intake.disable();
+              indexer.disable();
+            });
   }
 
   /**
