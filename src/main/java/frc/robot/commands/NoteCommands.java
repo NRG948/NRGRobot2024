@@ -26,6 +26,7 @@ public class NoteCommands {
   public static Command intake(Subsystems subsystems) {
     IntakeSubsystem intake = subsystems.intake;
     IndexerSubsystem indexer = subsystems.indexer;
+
     return Commands.sequence(
         Commands.parallel(
             Commands.runOnce(intake::in, intake), //
@@ -46,25 +47,14 @@ public class NoteCommands {
   public static Command intakeUntilNoteDetected(Subsystems subsystems) {
     IntakeSubsystem intake = subsystems.intake;
     IndexerSubsystem indexer = subsystems.indexer;
-    // return Commands.sequence(
-    //         Commands.parallel(
-    //             Commands.runOnce(intake::in, intake), //
-    //             Commands.runOnce(indexer::intake, indexer)), //
-    //         Commands.idle(intake, indexer)
-    //             .until(indexer::isNoteDetected) // Supress default commands.
-    //         )
-    //     .finallyDo(
-    //         () -> {
-    //           intake.disable();
-    //           indexer.disable();
-    //         });
+
     return intake(subsystems)
         .until(indexer::isNoteDetected) //
         // .andThen(Commands.waitSeconds(0.1)) //
         // .andThen(outtake(subsystems)) //
         // .until(() -> !indexer.isNoteDetected()) //
-        // .andThen(intake(subsystems))
-        // .until(indexer::isNoteDetected)
+        // .andThen(intake(subsystems)) //
+        // .until(indexer::isNoteDetected) //
         .finallyDo(
             () -> {
               intake.disable();
@@ -83,10 +73,12 @@ public class NoteCommands {
   public static Command outtake(Subsystems subsystems) {
     IntakeSubsystem intake = subsystems.intake;
     IndexerSubsystem indexer = subsystems.indexer;
-    return Commands.parallel( //
-            Commands.runOnce(intake::out, intake), //
-            Commands.runOnce(indexer::outtake, indexer)) //
-        .andThen(Commands.idle(intake, indexer)) //
+
+    return Commands.sequence(
+            Commands.parallel( //
+                Commands.runOnce(intake::out, intake), //
+                Commands.runOnce(indexer::outtake, indexer)), //
+            Commands.idle(intake, indexer)) //
         .finallyDo(
             () -> {
               intake.disable();
@@ -109,9 +101,9 @@ public class NoteCommands {
         Commands.sequence( //
                 ShooterCommands.setAndWaitForRPM(subsystems, rpm), //
                 Commands.runOnce(indexer::feed, indexer), //
-                Commands.idle(shooter, indexer) //  // Suppress default commands
+                Commands.idle(shooter, indexer) // Suppress default commands
                     .until(() -> !indexer.isNoteDetected()),
-                Commands.idle(shooter, indexer) //  // Suppress default commands
+                Commands.idle(shooter, indexer) // Suppress default commands
                     .withTimeout(0.5))
             .finallyDo(
                 () -> {
