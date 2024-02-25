@@ -48,13 +48,11 @@ public class NoteCommands {
     IntakeSubsystem intake = subsystems.intake;
     IndexerSubsystem indexer = subsystems.indexer;
 
-    return intake(subsystems)
-        .until(indexer::isNoteDetected) //
-        // .andThen(Commands.waitSeconds(0.1)) //
-        // .andThen(outtake(subsystems)) //
-        // .until(() -> !indexer.isNoteDetected()) //
-        // .andThen(intake(subsystems)) //
-        // .until(indexer::isNoteDetected) //
+    return Commands.sequence(
+            intake(subsystems).until(indexer::isNoteDetected), //
+            Commands.waitSeconds(0.2), //
+            outtake(subsystems).until(() -> !indexer.isNoteDetected()), //
+            intake(subsystems).until(indexer::isNoteDetected)) //
         .finallyDo(
             () -> {
               intake.disable();
