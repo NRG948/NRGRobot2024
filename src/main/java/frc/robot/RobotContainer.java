@@ -16,6 +16,7 @@ import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
 import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
 import frc.robot.Constants.RobotConstants.OperatorConstants;
@@ -92,8 +93,15 @@ public class RobotContainer {
     operatorController.povRight().onTrue(ArmCommands.seekToAmp(subsystems));
     operatorController.povDown().onTrue(ArmCommands.stow(subsystems));
     operatorController.povLeft().onTrue(ArmCommands.disableSeek(subsystems));
+    operatorController.leftBumper().whileTrue(NoteCommands.autoCenterNote(subsystems));
     operatorController.rightBumper().whileTrue(NoteCommands.intakeUntilNoteDetected(subsystems));
     operatorController.leftTrigger().whileTrue(NoteCommands.outtake(subsystems));
+    operatorController
+        .rightTrigger()
+        .whileTrue(
+            Commands.sequence(
+                NoteCommands.intakeUntilNoteDetected(subsystems, false),
+                NoteCommands.autoCenterNote(subsystems)));
 
     Trigger noteDetected = new Trigger(subsystems.indexer::isNoteDetected);
     noteDetected.onTrue(LEDs.fillColor(subsystems.addressableLED, ORANGE));
