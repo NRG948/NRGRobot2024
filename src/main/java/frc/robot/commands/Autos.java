@@ -34,68 +34,70 @@ import org.javatuples.LabelValue;
     column = 6,
     row = 0,
     width = 3,
-    height = 3,
-    type = "Grid Layout")
+    height = 4,
+    type = "Grid Layout",
+    gridColumns = 2,
+    gridRows = 6)
 public final class Autos {
-  @RobotPreferencesValue
+  @RobotPreferencesValue(column = 0, row = 0)
   public static RobotPreferences.DoubleValue SOURCE_FARSHOT_RPM =
       new RobotPreferences.DoubleValue(
           "Autonomous", "Source Far Shot RPM", 3575); // TODO: RPM needs to be tested.
 
-  @RobotPreferencesValue
-  public static RobotPreferences.DoubleValue AMP_FARSHOT_RPM =
-      new RobotPreferences.DoubleValue(
-          "Autonomous", "Amp Far Shot RPM", 3425); // TODO: RPM needs to be tested
-
-  @RobotPreferencesValue
-  public static RobotPreferences.DoubleValue SPIKE_SHOT_RPM =
-      new RobotPreferences.DoubleValue(
-          "Autonomous", "Spike Shot RPM", 2800); // TODO: RPM needs to be tested.
-
-  @RobotPreferencesValue
-  public static RobotPreferences.DoubleValue MID_SPIKE_SHOT_RPM =
-      new RobotPreferences.DoubleValue(
-          "Autonomous", "Mid Spike Shot RPM", 2800); // TODO: RPM needs to be tested.
-
-  @RobotPreferencesValue
-  public static RobotPreferences.DoubleValue SUBWOOFER_SIDE_SHOT_RPM =
-      new RobotPreferences.DoubleValue(
-          "Autonomous", "Subwoofer Side Shot RPM", 2200); // TODO: RPM needs to be tested.
-
-  @RobotPreferencesValue
-  public static RobotPreferences.DoubleValue SUBWOOFER_SHOT_RPM =
-      new RobotPreferences.DoubleValue(
-          "Autonomous", "Subwoofer Shot RPM", 2200); // TODO: RPM needs to be tested.
-
-  @RobotPreferencesValue
+  @RobotPreferencesValue(column = 1, row = 0)
   public static RobotPreferences.DoubleValue SOURCE_FARSHOT_ANGLE =
       new RobotPreferences.DoubleValue(
           "Autonomous", "Source Far Shot Angle", 22.5); // TODO: Angle needs to be tested.
 
-  @RobotPreferencesValue
-  public static RobotPreferences.DoubleValue SUBWOOFER_SIDE_SHOT_ANGLE =
+  @RobotPreferencesValue(column = 0, row = 1)
+  public static RobotPreferences.DoubleValue AMP_FARSHOT_RPM =
       new RobotPreferences.DoubleValue(
-          "Autonomous", "Subwoofer Side Shot Angle", -11); // TODO: Angle needs to be tested.
+          "Autonomous", "Amp Far Shot RPM", 3425); // TODO: RPM needs to be tested
 
-  @RobotPreferencesValue
-  public static RobotPreferences.DoubleValue SUBWOOFER_SHOT_ANGLE =
-      new RobotPreferences.DoubleValue(
-          "Autonomous", "Subwoofer Shot Angle", -11); // TODO: Angle needs to be tested.
-
-  @RobotPreferencesValue
+  @RobotPreferencesValue(column = 1, row = 1)
   public static RobotPreferences.DoubleValue AMP_FARSHOT_ANGLE =
       new RobotPreferences.DoubleValue(
           "Autonomous", "Amp Far Shot Angle", 20); // TODO: Angle needs to be tested.
 
-  @RobotPreferencesValue
+  @RobotPreferencesValue(column = 0, row = 2)
+  public static RobotPreferences.DoubleValue SPIKE_SHOT_RPM =
+      new RobotPreferences.DoubleValue(
+          "Autonomous", "Spike Shot RPM", 2800); // TODO: RPM needs to be tested.
+
+  @RobotPreferencesValue(column = 1, row = 2)
   public static RobotPreferences.DoubleValue SPIKE_SHOT_ANGLE =
       new RobotPreferences.DoubleValue(
           "Autonomous", "Spike Shot Angle", 12.5); // TODO: Angle needs to be tested.
 
-  @RobotPreferencesValue
+  @RobotPreferencesValue(column = 0, row = 3)
+  public static RobotPreferences.DoubleValue MID_SPIKE_SHOT_RPM =
+      new RobotPreferences.DoubleValue(
+          "Autonomous", "Mid Spike Shot RPM", 2800); // TODO: RPM needs to be tested.
+
+  @RobotPreferencesValue(column = 1, row = 3)
   public static RobotPreferences.DoubleValue MID_SPIKE_SHOT_ANGLE =
       new RobotPreferences.DoubleValue(
           "Autonomous", "Mid Spike Shot Angle", 11); // TODO: Angle needs to be tested.
+
+  @RobotPreferencesValue(column = 0, row = 4)
+  public static RobotPreferences.DoubleValue SUBWOOFER_SIDE_SHOT_RPM =
+      new RobotPreferences.DoubleValue(
+          "Autonomous", "Subwoofer Side Shot RPM", 2200); // TODO: RPM needs to be tested.
+
+  @RobotPreferencesValue(column = 1, row = 4)
+  public static RobotPreferences.DoubleValue SUBWOOFER_SIDE_SHOT_ANGLE =
+      new RobotPreferences.DoubleValue(
+          "Autonomous", "Subwoofer Side Shot Angle", -11); // TODO: Angle needs to be tested.
+
+  @RobotPreferencesValue(column = 0, row = 5)
+  public static RobotPreferences.DoubleValue SUBWOOFER_SHOT_RPM =
+      new RobotPreferences.DoubleValue(
+          "Autonomous", "Subwoofer Shot RPM", 2200); // TODO: RPM needs to be tested.
+
+  @RobotPreferencesValue(column = 1, row = 5)
+  public static RobotPreferences.DoubleValue SUBWOOFER_SHOT_ANGLE =
+      new RobotPreferences.DoubleValue(
+          "Autonomous", "Subwoofer Shot Angle", -11); // TODO: Angle needs to be tested.
 
   /**
    * Returns the collection of PathPlanner auto commands.
