@@ -16,32 +16,16 @@
     },
     {
       "anchor": {
-        "x": 1.81,
-        "y": 6.5331069179550445
+        "x": 1.5995945633646906,
+        "y": 6.125323187775677
       },
       "prevControl": {
-        "x": 2.1157187747352966,
-        "y": 6.709614747817872
+        "x": 1.5929626725014285,
+        "y": 6.490077185255099
       },
       "nextControl": {
-        "x": 1.7795482218062701,
-        "y": 6.515525474718222
-      },
-      "isLocked": false,
-      "linkedName": null
-    },
-    {
-      "anchor": {
-        "x": 1.6333756667513335,
-        "y": 6.032651765303531
-      },
-      "prevControl": {
-        "x": 1.4463334682073452,
-        "y": 6.345868426127108
-      },
-      "nextControl": {
-        "x": 1.710188146552025,
-        "y": 5.9040233134352595
+        "x": 1.6093327560320605,
+        "y": 5.589722591070331
       },
       "isLocked": false,
       "linkedName": null
@@ -49,11 +33,11 @@
     {
       "anchor": {
         "x": 2.62,
-        "y": 5.65
+        "y": 5.2
       },
       "prevControl": {
         "x": 2.4359350578819248,
-        "y": 5.663054703502888
+        "y": 5.213054703502888
       },
       "nextControl": null,
       "isLocked": false,
@@ -65,7 +49,7 @@
   "eventMarkers": [
     {
       "name": "Stow Angle",
-      "waypointRelativePos": 0.25,
+      "waypointRelativePos": 0.15,
       "command": {
         "type": "parallel",
         "data": {
@@ -82,7 +66,7 @@
     },
     {
       "name": "Intake",
-      "waypointRelativePos": 1.7999999999999998,
+      "waypointRelativePos": 0.9,
       "command": {
         "type": "parallel",
         "data": {

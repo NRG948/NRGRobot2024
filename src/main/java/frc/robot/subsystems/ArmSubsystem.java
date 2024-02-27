@@ -41,7 +41,7 @@ public class ArmSubsystem extends SubsystemBase {
 
   @RobotPreferencesValue
   public static final RobotPreferences.DoubleValue KP =
-      new RobotPreferences.DoubleValue("Arm+Shooter", "kP", 3.0);
+      new RobotPreferences.DoubleValue("Arm+Shooter", "kP", 10.0);
 
   @RobotPreferencesValue
   public static RobotPreferences.DoubleValue AMP_ANGLE =
@@ -52,13 +52,13 @@ public class ArmSubsystem extends SubsystemBase {
       new RobotPreferences.DoubleValue("Arm+Shooter", "Trap Angle", 45);
 
   public static final double GEAR_RATIO = (5 * 4 * 3 * 42 / 15.0);
-  public static final double MASS = 10.5;
+  public static final double MASS = 12.5;
   public static final double RADIANS_PER_REVOLUTION = (2 * Math.PI) / GEAR_RATIO;
   public static final MotorParameters MOTOR = MotorParameters.NeoV1_1;
   public static final double EFFICIENCY = 1.0;
   public static final double MAX_ANGULAR_SPEED =
       EFFICIENCY * MOTOR.getFreeSpeedRPM() * RADIANS_PER_REVOLUTION / 60.0;
-  public static final double ARM_LENGTH = 0.55;
+  public static final double ARM_LENGTH = 0.57;
   public static final double MAX_ANGULAR_ACCELERATION =
       EFFICIENCY * ((2 * MOTOR.getStallTorque() * GEAR_RATIO) / (MASS * ARM_LENGTH));
   public static final TrapezoidProfile.Constraints CONSTRAINTS =
@@ -74,7 +74,7 @@ public class ArmSubsystem extends SubsystemBase {
   private static final double ARM_RADIANS_PER_MOTOR_ROTATION = (2 * Math.PI) / GEAR_RATIO;
   private static final double LOWER_ANGLE_LIMIT = STOWED_ANGLE;
   private static final double UPPER_ANGLE_LIMIT = Math.toRadians(70);
-  private static final double ANGLE_TOLERANCE = Math.toRadians(.5);
+  private static final double ANGLE_TOLERANCE = Math.toRadians(3);
 
   private final CANSparkMax leftMotor =
       new CANSparkMax(RobotConstants.CAN.SparkMax.ARM_LEFT_PORT, MotorType.kBrushless);

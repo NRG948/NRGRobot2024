@@ -62,17 +62,17 @@ public final class Autos {
   @RobotPreferencesValue(column = 0, row = 2)
   public static RobotPreferences.DoubleValue SPIKE_SHOT_RPM =
       new RobotPreferences.DoubleValue(
-          "Autonomous", "Spike Shot RPM", 2800); // TODO: RPM needs to be tested.
+          "Autonomous", "Spike Shot RPM", 3000); // TODO: RPM needs to be tested.
 
   @RobotPreferencesValue(column = 1, row = 2)
   public static RobotPreferences.DoubleValue SPIKE_SHOT_ANGLE =
       new RobotPreferences.DoubleValue(
-          "Autonomous", "Spike Shot Angle", 12.5); // TODO: Angle needs to be tested.
+          "Autonomous", "Spike Shot Angle", 14.5); // TODO: Angle needs to be tested.
 
   @RobotPreferencesValue(column = 0, row = 3)
   public static RobotPreferences.DoubleValue MID_SPIKE_SHOT_RPM =
       new RobotPreferences.DoubleValue(
-          "Autonomous", "Mid Spike Shot RPM", 2800); // TODO: RPM needs to be tested.
+          "Autonomous", "Mid Spike Shot RPM", 3000); // TODO: RPM needs to be tested.
 
   @RobotPreferencesValue(column = 1, row = 3)
   public static RobotPreferences.DoubleValue MID_SPIKE_SHOT_ANGLE =
@@ -165,7 +165,7 @@ public final class Autos {
     eventMaps.put("FeedIndexerFullPower", Commands.runOnce(() -> subsystems.indexer.feed()));
     eventMaps.put("StowArm", ArmCommands.stow(subsystems));
     eventMaps.put("Intake", NoteCommands.intake(subsystems));
-    eventMaps.put("IntakeUntilNoteDetected", NoteCommands.intakeUntilNoteDetected(subsystems));
+    eventMaps.put("IntakeUntilNoteDetected", autoIntakeNote(subsystems));
 
     return eventMaps;
   }
@@ -190,6 +190,12 @@ public final class Autos {
     IndexerSubsystem indexer = subsystems.indexer;
     return Commands.defer(
         () -> NoteCommands.shoot(subsystems, rpm.getValue()), Set.of(shooter, indexer));
+  }
+
+  public static Command autoIntakeNote(Subsystems subsystems) {
+    return Commands.sequence(
+        NoteCommands.intakeUntilNoteDetected(subsystems, false),
+        NoteCommands.autoCenterNote(subsystems, NoteCommands.AUTO_CENTER_NOTE_CONTINUATION));
   }
 
   private Autos() {
