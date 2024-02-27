@@ -1,6 +1,6 @@
 {
-  "robotWidth": 0.762,
-  "robotLength": 0.851,
+  "robotWidth": 0.9,
+  "robotLength": 0.94,
   "holonomicMode": true,
   "pathFolders": [
     "Drive Out",
