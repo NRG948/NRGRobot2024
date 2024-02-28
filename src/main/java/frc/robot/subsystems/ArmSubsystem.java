@@ -44,6 +44,14 @@ public class ArmSubsystem extends SubsystemBase {
       new RobotPreferences.DoubleValue("Arm+Shooter", "kP", 10.0);
 
   @RobotPreferencesValue
+  public static final RobotPreferences.DoubleValue KI =
+      new RobotPreferences.DoubleValue("Arm+Shooter", "kI", 0.0);
+
+  @RobotPreferencesValue
+  public static final RobotPreferences.DoubleValue KD =
+      new RobotPreferences.DoubleValue("Arm+Shooter", "kD", 0.0);
+
+  @RobotPreferencesValue
   public static RobotPreferences.DoubleValue AMP_ANGLE =
       new RobotPreferences.DoubleValue("Arm+Shooter", "Amp Angle", 8.0);
 
@@ -94,7 +102,7 @@ public class ArmSubsystem extends SubsystemBase {
 
   private final ArmFeedforward feedForward = new ArmFeedforward(KS, KG, KV, KA);
   private final ProfiledPIDController controller =
-      new ProfiledPIDController(KP.getValue(), 0.0, 0.0, CONSTRAINTS);
+      new ProfiledPIDController(KP.getValue(), KI.getValue(), KD.getValue(), CONSTRAINTS);
   private boolean enablePeriodicControl = false;
 
   /** Creates a new ArmSubsystem. */
@@ -109,6 +117,10 @@ public class ArmSubsystem extends SubsystemBase {
     controller.enableContinuousInput(-Math.PI, Math.PI);
     controller.setTolerance(ANGLE_TOLERANCE);
 
+    // Limit the amount of integral windup
+    controller.setIntegratorRange(-0.1, 0.02);
+    controller.setIZone(Math.toRadians(3));
+
     System.out.println("Arm max velocity: " + Math.toDegrees(MAX_ANGULAR_SPEED));
     System.out.println("Arm max accel: " + Math.toDegrees(MAX_ANGULAR_ACCELERATION));
   }
@@ -121,7 +133,7 @@ public class ArmSubsystem extends SubsystemBase {
   public void setGoalAngle(double goalAngle) {
     setGoalAngleContinous(goalAngle);
     controller.reset(currentAngle);
-    controller.setP(KP.getValue());
+    controller.setPID(KP.getValue(), KI.getValue(), KD.getValue());
   }
 
   public void setGoalAngleContinous(double goalAngle) {
