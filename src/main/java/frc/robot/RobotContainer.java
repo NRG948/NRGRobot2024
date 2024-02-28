@@ -13,7 +13,9 @@ import com.nrg948.preferences.RobotPreferences;
 import com.nrg948.preferences.RobotPreferencesLayout;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.Timer;
+import edu.wpi.first.wpilibj.shuffleboard.BuiltInLayouts;
 import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
+import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardLayout;
 import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
@@ -30,6 +32,7 @@ import frc.robot.commands.Pathfinding;
 import frc.robot.subsystems.ArmSubsystem;
 import frc.robot.subsystems.IndexerSubsystem;
 import frc.robot.subsystems.Subsystems;
+import java.util.Map;
 
 /**
  * This class is where the bulk of the robot should be declared. Since Command-based is a
@@ -156,6 +159,13 @@ public class RobotContainer {
     ShuffleboardTab operatorTab = Shuffleboard.getTab("Operator");
 
     autonomous.addShuffleboardLayout(operatorTab);
+    ShuffleboardLayout statusLayout =
+        operatorTab
+            .getLayout("Status", BuiltInLayouts.kGrid)
+            .withProperties(Map.of("Number of columns", 1, "Number of rows", 1))
+            .withPosition(6, 0)
+            .withSize(2, 2);
+    statusLayout.addBoolean("Note Detected", subsystems.indexer::isNoteDetected);
 
     RobotPreferences.addShuffleBoardTab();
 
