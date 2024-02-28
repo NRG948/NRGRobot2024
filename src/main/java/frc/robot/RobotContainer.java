@@ -171,7 +171,9 @@ public class RobotContainer {
 
     subsystems.drivetrain.addShuffleboardTab();
     subsystems.aprilTag.addShuffleboardTab();
-    subsystems.noteVision.addShuffleboardTab();
+    if (subsystems.noteVision.isPresent()) {
+      subsystems.noteVision.get().addShuffleboardTab();
+    }
 
     if (ArmSubsystem.ENABLE_TAB.getValue()) {
       ShuffleboardTab armShooterTab = Shuffleboard.getTab("Arm+Shooter");
