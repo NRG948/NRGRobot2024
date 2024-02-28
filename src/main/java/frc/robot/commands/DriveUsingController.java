@@ -21,7 +21,7 @@ import java.util.Optional;
 import org.photonvision.targeting.PhotonTrackedTarget;
 
 public class DriveUsingController extends Command {
-  private static final double DEADBAND = 0.05;
+  private static final double DEADBAND = 0.08;
 
   @RobotPreferencesValue
   public static final RobotPreferences.DoubleValue KP_APRIL_TAG =
