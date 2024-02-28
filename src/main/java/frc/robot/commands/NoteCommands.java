@@ -95,7 +95,7 @@ public class NoteCommands {
   public static Command intakeAndAutoCenterNote(Subsystems subsystems) {
     return Commands.sequence(
         NoteCommands.intakeUntilNoteDetected(subsystems, false),
-        NoteCommands.autoCenterNote(subsystems));
+        NoteCommands.autoCenterNote(subsystems, NoteCommands.AUTO_CENTER_NOTE_CONTINUATION));
   }
 
   /**
