@@ -55,20 +55,20 @@ public class ArmSubsystem extends SubsystemBase {
   public static final double MASS = 12.5;
   public static final double RADIANS_PER_REVOLUTION = (2 * Math.PI) / GEAR_RATIO;
   public static final MotorParameters MOTOR = MotorParameters.NeoV1_1;
-  public static final double EFFICIENCY = 1.0;
+  public static final double EFFICIENCY = 1;
   public static final double MAX_ANGULAR_SPEED =
       EFFICIENCY * MOTOR.getFreeSpeedRPM() * RADIANS_PER_REVOLUTION / 60.0;
   public static final double ARM_LENGTH = 0.57;
   public static final double MAX_ANGULAR_ACCELERATION =
       EFFICIENCY * ((2 * MOTOR.getStallTorque() * GEAR_RATIO) / (MASS * ARM_LENGTH));
   public static final TrapezoidProfile.Constraints CONSTRAINTS =
-      new TrapezoidProfile.Constraints(MAX_ANGULAR_SPEED * 0.2, MAX_ANGULAR_ACCELERATION * 0.5);
+      new TrapezoidProfile.Constraints(MAX_ANGULAR_SPEED * 0.3, MAX_ANGULAR_ACCELERATION * 0.5);
   public static final double KS = 0.15;
   public static final double KV = (RobotConstants.MAX_BATTERY_VOLTAGE - KS) / MAX_ANGULAR_SPEED;
   public static final double KA =
       (RobotConstants.MAX_BATTERY_VOLTAGE - KS) / MAX_ANGULAR_ACCELERATION;
   public static final double KG = KA * 9.81;
-  private static final double CG_ANGLE_OFFSET = Math.toRadians(7.0);
+  private static final double CG_ANGLE_OFFSET = Math.toRadians(8);
   public static final double STOWED_ANGLE = Math.toRadians(-11.0);
   private static final double NEARLY_STOWED_ANGLE = STOWED_ANGLE + Math.toRadians(1.5);
   private static final double ARM_RADIANS_PER_MOTOR_ROTATION = (2 * Math.PI) / GEAR_RATIO;
