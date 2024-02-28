@@ -91,7 +91,7 @@ public class DriveUsingController extends Command {
 
     Optional<PhotonTrackedTarget> optionalTagTarget = Optional.empty();
     Optional<PhotonTrackedTarget> optionalNoteTarget = Optional.empty();
-    if (xboxController.getHID().getRightBumper()) {
+    if (xboxController.getHID().getRightStickButton()) {
       optionalTagTarget = aprilTag.getTarget(AprilTagSubsystem.getSpeakerCenterAprilTagID());
     } else if (xboxController.getHID().getXButton()
         && noteVision.hasTargets()) { // Nonpermanent X binding

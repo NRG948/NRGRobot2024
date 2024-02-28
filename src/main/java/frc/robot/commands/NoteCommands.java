@@ -8,6 +8,7 @@ package frc.robot.commands;
 
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
+import frc.robot.subsystems.ArmSubsystem;
 import frc.robot.subsystems.IndexerSubsystem;
 import frc.robot.subsystems.IntakeSubsystem;
 import frc.robot.subsystems.ShooterSubsystem;
@@ -75,6 +76,12 @@ public class NoteCommands {
                 indexer.disable();
               }
             });
+  }
+
+  public static Command intakeAndAutoCenterNote(Subsystems subsystems) {
+    return Commands.sequence(
+        NoteCommands.intakeUntilNoteDetected(subsystems, false),
+        NoteCommands.autoCenterNote(subsystems));
   }
 
   /**
@@ -161,5 +168,35 @@ public class NoteCommands {
                 }), //
         Commands.none(), //
         indexer::isNoteDetected);
+  }
+
+  /***
+   * Returns a command sequence to shoot the note at the current goal RPM.
+   * @param subsystems The subsystems container.
+   * @return
+   */
+  public static Command shootAtCurrentRPM(Subsystems subsystems) {
+    ShooterSubsystem shooter = subsystems.shooter;
+    return shoot(subsystems, shooter.getGoalRPM());
+  }
+
+  /**
+   * Sets the arm angle and the shooter RPM in preparation for the shot.
+   *
+   * @param subsystems The subsystems container.
+   * @param rpm The desired shooter RPM.
+   * @param goalAngle The desired arm angle.
+   * @return
+   */
+  public static Command prepareToShoot(Subsystems subsystems, double rpm, double goalAngle) {
+    ShooterSubsystem shooter = subsystems.shooter;
+    ArmSubsystem arm = subsystems.arm;
+
+    return Commands.sequence(
+        Commands.parallel(
+            ArmCommands.seekToAngle(subsystems, goalAngle),
+            ShooterCommands.setRPM(subsystems, rpm)),
+        Commands.idle(arm, shooter).until(arm::atGoalAngle) // Suppress default commands
+        );
   }
 }

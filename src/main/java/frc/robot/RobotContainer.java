@@ -16,18 +16,17 @@ import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
 import edu.wpi.first.wpilibj2.command.Command;
-import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
 import frc.robot.Constants.RobotConstants.OperatorConstants;
 import frc.robot.commands.ArmCommands;
+import frc.robot.commands.Autos;
 import frc.robot.commands.DriveCommands;
 import frc.robot.commands.DriveUsingController;
 import frc.robot.commands.InterruptAll;
 import frc.robot.commands.LEDs;
 import frc.robot.commands.NoteCommands;
 import frc.robot.commands.Pathfinding;
-import frc.robot.commands.SetShooterContinous;
 import frc.robot.subsystems.ArmSubsystem;
 import frc.robot.subsystems.IndexerSubsystem;
 import frc.robot.subsystems.Subsystems;
@@ -87,21 +86,27 @@ public class RobotContainer {
     driverController.b().whileTrue(Pathfinding.pathFindToAmp());
     driverController.y().whileTrue(Pathfinding.pathFindToAmp2());
 
-    operatorController.back().onTrue(new InterruptAll(subsystems));
-    operatorController.b().whileTrue(new SetShooterContinous(subsystems));
-    operatorController.povUp().onTrue(ArmCommands.seekToTrap(subsystems));
-    operatorController.povRight().onTrue(ArmCommands.seekToAmp(subsystems));
-    operatorController.povDown().onTrue(ArmCommands.stow(subsystems));
-    operatorController.povLeft().onTrue(ArmCommands.disableSeek(subsystems));
-    operatorController.leftBumper().whileTrue(NoteCommands.autoCenterNote(subsystems));
-    operatorController.rightBumper().whileTrue(NoteCommands.intakeUntilNoteDetected(subsystems));
-    operatorController.leftTrigger().whileTrue(NoteCommands.outtake(subsystems));
     operatorController
-        .rightTrigger()
+        .start()
         .whileTrue(
-            Commands.sequence(
-                NoteCommands.intakeUntilNoteDetected(subsystems, false),
-                NoteCommands.autoCenterNote(subsystems)));
+            NoteCommands.prepareToShoot(
+                subsystems,
+                Autos.MID_SPIKE_SHOT_RPM.getValue(),
+                Autos.MID_SPIKE_SHOT_ANGLE.getValue()));
+    operatorController.povUp().whileTrue(NoteCommands.shootAtCurrentRPM(subsystems));
+    operatorController.povDown().whileTrue(NoteCommands.outtake(subsystems));
+    operatorController.back().onTrue(new InterruptAll(subsystems));
+    // operatorController.b().whileTrue(new SetShooterContinous(subsystems));
+    operatorController
+        .b()
+        .whileTrue(
+            NoteCommands.prepareToShoot(
+                subsystems, Autos.SUBWOOFER_SHOT_RPM.getValue(), ArmSubsystem.STOWED_ANGLE));
+    operatorController.x().onTrue(ArmCommands.seekToTrap(subsystems));
+    operatorController.y().onTrue(ArmCommands.seekToAmp(subsystems));
+    operatorController.a().onTrue(ArmCommands.stow(subsystems));
+    operatorController.leftBumper().whileTrue(NoteCommands.intakeUntilNoteDetected(subsystems));
+    operatorController.rightBumper().onTrue(NoteCommands.intakeAndAutoCenterNote(subsystems));
 
     Trigger noteDetected = new Trigger(subsystems.indexer::isNoteDetected);
     noteDetected.onTrue(LEDs.fillColor(subsystems.addressableLED, ORANGE));
