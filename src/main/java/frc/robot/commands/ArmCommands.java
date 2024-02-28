@@ -47,12 +47,18 @@ public class ArmCommands {
     return seekToAngle(subsystems, Math.toRadians(ArmSubsystem.TRAP_ANGLE.getValue()));
   }
 
+  /**
+   * Returns a command to move the arm to the specified angle.
+   *
+   * @param subsystems The subsystems container.
+   * @return A command to move the arm to to trap position.
+   */
   public static Command seekToAngle(Subsystems subsystems, double angle) {
     ArmSubsystem arm = subsystems.arm;
 
     return Commands.sequence(
         Commands.runOnce(() -> arm.setGoalAngle(angle), arm), //
-        Commands.idle(arm));
+        Commands.idle(arm)); // Suppress default command
   }
 
   /**

@@ -170,12 +170,30 @@ public final class Autos {
     return eventMaps;
   }
 
+  /**
+   * Returns a command sequence to set the shooter RPM using the specified preferences value.
+   *
+   * <p>This command is intended to be used in a PathPlanner auto.
+   *
+   * @param subsystems The subsystems container.
+   * @param rpm The {@link RobotPreferences.DoubleValue} containing the RPM value.
+   * @return A command sequence to set the shooter RPM.
+   */
   private static Command setShooterRPM(Subsystems subsystems, RobotPreferences.DoubleValue rpm) {
     ShooterSubsystem shooter = subsystems.shooter;
     return Commands.defer(
         () -> ShooterCommands.setRPM(subsystems, rpm.getValue()), Set.of(shooter));
   }
 
+  /**
+   * Returns a command sequence to set the arm angle using the specified preferences value.
+   *
+   * <p>This command is intended to be used in a PathPlanner auto.
+   *
+   * @param subsystems The subsystems container.
+   * @param angle The {@link RobotPreferences.DoubleValue} containing the angle value.
+   * @return A command sequence to set the arm angle.
+   */
   private static Command setArmAngle(Subsystems subsystems, RobotPreferences.DoubleValue angle) {
     ArmSubsystem arm = subsystems.arm;
     return Commands.defer(
@@ -185,6 +203,16 @@ public final class Autos {
         Set.of(arm));
   }
 
+  /**
+   * Returns a command sequence to shoot a note if one is in the indexer otherwise it will do
+   * nothing.
+   *
+   * <p>This command is intended to be used in a PathPlanner auto.
+   *
+   * @param subsystems The subsystems container.
+   * @param rpm The RPM to shoot the note.
+   * @return The command sequence.
+   */
   public static Command shoot(Subsystems subsystems, RobotPreferences.DoubleValue rpm) {
     ShooterSubsystem shooter = subsystems.shooter;
     IndexerSubsystem indexer = subsystems.indexer;
@@ -192,6 +220,14 @@ public final class Autos {
         () -> NoteCommands.shoot(subsystems, rpm.getValue()), Set.of(shooter, indexer));
   }
 
+  /**
+   * Returns a command sequence to intake a note and then center it.
+   *
+   * <p>This command is intended to be used in a PathPlanner auto.
+   *
+   * @param subsystems The subsystems container.
+   * @return The command sequence.
+   */
   public static Command autoIntakeNote(Subsystems subsystems) {
     return Commands.sequence(
         NoteCommands.intakeUntilNoteDetected(subsystems, false),
