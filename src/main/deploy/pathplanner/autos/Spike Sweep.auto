@@ -14,7 +14,13 @@
         {
           "type": "named",
           "data": {
-            "name": "ShootSubwooferShot"
+            "name": "SetSubwooferRPMAndWait"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "ShootAtCurrentRPM"
           }
         },
         {
