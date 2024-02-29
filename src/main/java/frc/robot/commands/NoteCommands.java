@@ -136,6 +136,22 @@ public class NoteCommands {
             });
   }
 
+  /***
+   * Returns a sequence of commands to outtake a note to the Amp.
+   *
+   * This command should be bound to a button using {@link Trigger#whileTrue}.
+   *
+   * @param subsystems The subsystems container
+   * @return The command sequence.
+   */
+
+  public static Command outakeToAmp(Subsystems subsystems) {
+    IndexerSubsystem indexer = subsystems.indexer;
+    return Commands.sequence(
+            Commands.runOnce(indexer::outtakeToAmp, indexer), Commands.idle(indexer))
+        .finallyDo(indexer::disable);
+  }
+
   /**
    * Returns a sequence of commands to outtake the note.
    *
