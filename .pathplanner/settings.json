@@ -3,9 +3,10 @@
   "robotLength": 0.94,
   "holonomicMode": true,
   "pathFolders": [
+    "Amp Sweep",
     "Drive Out",
     "Miscellaneous",
-    "Amp Sweep",
+    "OLD Spike Sweep",
     "Source Sweep",
     "Spike Sweep"
   ],
