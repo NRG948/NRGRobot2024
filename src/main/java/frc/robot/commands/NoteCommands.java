@@ -10,6 +10,7 @@ import java.util.Set;
 
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
+import edu.wpi.first.wpilibj2.command.button.Trigger;
 import frc.robot.subsystems.ArmSubsystem;
 import frc.robot.subsystems.IndexerSubsystem;
 import frc.robot.subsystems.IntakeSubsystem;
@@ -29,7 +30,7 @@ public class NoteCommands {
    * Returns a sequence of commands to intake the note into the indexer until interrupted by another
    * command.
    *
-   * <p>This command should be bound to a button using whileTrue.
+   * <p>This command should be bound to a button using {@link Trigger#whileTrue}.
    *
    * @param subsystems The subsystems container.
    * @return The command sequence.
@@ -50,7 +51,7 @@ public class NoteCommands {
    * Returns a sequence of commands to intake the note into the indexer until beam break is
    * triggered.
    *
-   * <p>This command should be bound to a button using whileTrue.
+   * <p>This command should be bound to a button using {@link Trigger#whileTrue}.
    *
    * @param subsystems The subsystems container.
    * @return The command sequence.
@@ -62,6 +63,9 @@ public class NoteCommands {
   /**
    * Returns a sequence of commands to intake the note into the indexer until beam break is
    * triggered.
+   *
+   * <p>This method is intended to be used to create a sequence with another command like {@link
+   * NoteCommands#autoCenterNote(Subsystems)} that requires the indexer to be enabled.
    *
    * @param subsystems The subsystems container.
    * @param disableIndexer If true, disables the indexer at the end of the command.
@@ -82,16 +86,27 @@ public class NoteCommands {
             });
   }
 
+  /**
+   * Returns a sequence of commands to intake the note into the indexer until beam break is
+   * triggered and then auto center the note.
+   *
+   * <p>This command should be bound to a button using {@link Trigger#onTrue} to prevent
+   * interrupting the auto-centering sequence.
+   *
+   * @param subsystems The subsystems container.
+   * @return The command sequence.
+   */
   public static Command intakeAndAutoCenterNote(Subsystems subsystems) {
     return Commands.sequence(
         NoteCommands.intakeUntilNoteDetected(subsystems, false),
-        NoteCommands.autoCenterNote(subsystems));
+        NoteCommands.autoCenterNote(subsystems, NoteCommands.AUTO_CENTER_NOTE_CONTINUATION));
   }
 
   /**
    * Returns a sequence of commands to automatically center the note.
    *
-   * <p>This command is intended to be used standalone.
+   * <p>This command is intended to be used standalone (i.e. not in sequence with an intake
+   * command).
    *
    * @param subsystems The subsystems container.
    * @return The command sequence.
@@ -102,6 +117,9 @@ public class NoteCommands {
 
   /**
    * Returns a sequence of commands to automatically center the note.
+   *
+   * <p>This method is intended to be used to create a sequence with another command like {@link
+   * NoteCommands#intakeUntilNoteDetected(Subsystems)}.
    *
    * @param subsystems The subsystems container.
    * @param initialIntakeSeconds The initial intake time in seconds.
@@ -122,10 +140,26 @@ public class NoteCommands {
             });
   }
 
+  /***
+   * Returns a sequence of commands to outtake a note to the Amp.
+   *
+   * This command should be bound to a button using {@link Trigger#whileTrue}.
+   *
+   * @param subsystems The subsystems container
+   * @return The command sequence.
+   */
+
+  public static Command outakeToAmp(Subsystems subsystems) {
+    IndexerSubsystem indexer = subsystems.indexer;
+    return Commands.sequence(
+            Commands.runOnce(indexer::outtakeToAmp, indexer), Commands.idle(indexer))
+        .finallyDo(indexer::disable);
+  }
+
   /**
    * Returns a sequence of commands to outtake the note.
    *
-   * <p>Assumes this command will be bound to a button using whileTrue.
+   * <p>Assumes this command will be bound to a button using {@link Trigger#whileTrue}.
    *
    * @param subsystems The subsystems container.
    * @return The command sequence.
@@ -178,7 +212,7 @@ public class NoteCommands {
   /***
    * Returns a command sequence to shoot the note at the current goal RPM.
    * @param subsystems The subsystems container.
-   * @return
+   * @return The command sequence.
    */
   public static Command shootAtCurrentRPM(Subsystems subsystems) {
     IndexerSubsystem indexer = subsystems.indexer;
@@ -200,7 +234,7 @@ public class NoteCommands {
    * @param subsystems The subsystems container.
    * @param rpm The desired shooter RPM.
    * @param goalAngle The desired arm angle.
-   * @return
+   * @return The command sequence.
    */
   public static Command prepareToShoot(Subsystems subsystems, double rpm, double goalAngle) {
     ShooterSubsystem shooter = subsystems.shooter;

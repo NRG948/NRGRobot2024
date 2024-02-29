@@ -21,9 +21,12 @@ import frc.robot.Constants.RobotConstants;
 
 @RobotPreferencesLayout(groupName = "NoteVision", column = 4, row = 0, width = 1, height = 3)
 public class NoteVisionSubsystem extends PhotonVisionSubsystemBase {
+  @RobotPreferencesValue
+  public static final RobotPreferences.BooleanValue ENABLED =
+      new RobotPreferences.BooleanValue("NoteVision", "Enabled", false);
 
   @RobotPreferencesValue
-  public static final RobotPreferences.BooleanValue enableTab =
+  public static final RobotPreferences.BooleanValue ENABLE_TAB =
       new RobotPreferences.BooleanValue("NoteVision", "Enable Tab", false);
 
   /** Creates a new NoteSubsystem. */
@@ -33,7 +36,7 @@ public class NoteVisionSubsystem extends PhotonVisionSubsystemBase {
 
   /** Adds a tab for Note Vision in Shuffleboard. */
   public void addShuffleboardTab() {
-    if (!enableTab.getValue()) {
+    if (!ENABLE_TAB.getValue()) {
       return;
     }
 

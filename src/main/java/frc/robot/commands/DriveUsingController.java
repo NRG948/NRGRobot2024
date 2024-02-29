@@ -49,7 +49,7 @@ public class DriveUsingController extends Command {
 
   private final SwerveSubsystem drivetrain;
   private final AprilTagSubsystem aprilTag;
-  private final NoteVisionSubsystem noteVision;
+  private final Optional<NoteVisionSubsystem> noteVision;
   private final CommandXboxController xboxController;
   private ProfiledPIDController profiledPIDController;
 
@@ -94,8 +94,9 @@ public class DriveUsingController extends Command {
     if (xboxController.getHID().getRightStickButton()) {
       optionalTagTarget = aprilTag.getTarget(AprilTagSubsystem.getSpeakerCenterAprilTagID());
     } else if (xboxController.getHID().getXButton()
-        && noteVision.hasTargets()) { // Nonpermanent X binding
-      optionalNoteTarget = Optional.of(noteVision.getBestTarget());
+        && noteVision.isPresent()
+        && noteVision.get().hasTargets()) { // Nonpermanent X binding
+      optionalNoteTarget = Optional.of(noteVision.get().getBestTarget());
     }
 
     // Don't want to do both tag and note alignment so to choose one, tag takes
@@ -111,7 +112,7 @@ public class DriveUsingController extends Command {
               * profiledPIDController.calculate(
                   currentOrientation.getRadians(), targetOrientation.getRadians());
     } else if (optionalNoteTarget.isPresent()) {
-      Rotation2d angleToTarget = Rotation2d.fromDegrees(noteVision.getAngleToBestTarget());
+      Rotation2d angleToTarget = Rotation2d.fromDegrees(noteVision.get().getAngleToBestTarget());
       targetOrientation = targetOrientation.plus(angleToTarget);
       profiledPIDController.setP(KP_NOTE.getValue());
       profiledPIDController.setI(KI_NOTE.getValue());

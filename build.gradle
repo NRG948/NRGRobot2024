@@ -94,7 +94,7 @@ dependencies {
     nativeRelease wpi.java.vendor.jniRelease(wpi.platforms.desktop)
     simulationRelease wpi.sim.enableRelease()
 
-    implementation 'com.nrg948:nrgcommon:2024.1.2-SNAPSHOT'
+    implementation 'com.nrg948:nrgcommon:2024.3.1'
 }
 
 test {
