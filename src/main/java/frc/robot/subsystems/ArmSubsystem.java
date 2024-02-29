@@ -53,7 +53,7 @@ public class ArmSubsystem extends SubsystemBase {
 
   @RobotPreferencesValue
   public static RobotPreferences.DoubleValue AMP_ANGLE =
-      new RobotPreferences.DoubleValue("Arm+Shooter", "Amp Angle", 8.0);
+      new RobotPreferences.DoubleValue("Arm+Shooter", "Amp Angle", 40.0);
 
   @RobotPreferencesValue
   public static RobotPreferences.DoubleValue TRAP_ANGLE =
