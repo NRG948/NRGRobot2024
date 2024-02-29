@@ -101,6 +101,7 @@ public class RobotContainer {
         .whileTrue(
             NoteCommands.shootAtCurrentRPM(subsystems).finallyDo(subsystems.shooter::disable));
     operatorController.povDown().whileTrue(NoteCommands.outtake(subsystems));
+    operatorController.povRight().whileTrue(NoteCommands.outakeToAmp(subsystems));
     operatorController.back().onTrue(new InterruptAll(subsystems));
     // operatorController.b().whileTrue(new SetShooterContinous(subsystems));
     operatorController
