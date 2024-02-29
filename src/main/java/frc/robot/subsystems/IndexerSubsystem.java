@@ -67,6 +67,10 @@ public class IndexerSubsystem extends SubsystemBase {
   private final DoubleLogEntry goalVelocityLogger =
       new DoubleLogEntry(DataLogManager.getLog(), "Indexer/Goal Velocity");
 
+  @RobotPreferencesValue
+  public static final RobotPreferences.DoubleValue AMP_OUTAKE_VELOCITY =
+      new RobotPreferences.DoubleValue("Indexer+Intake", "Amp Outake Velocity", 2.0);
+
   /** Creates a new IndexerSubsystem. */
   public IndexerSubsystem() {
     motor.setIdleMode(IdleMode.kBrake);
@@ -93,6 +97,11 @@ public class IndexerSubsystem extends SubsystemBase {
   public void outtake() {
     isEnabled = true;
     goalVelocity = -IntakeSubsystem.INTAKE_VELOCITY.getValue();
+  }
+
+  public void outtakeToAmp() {
+    isEnabled = true;
+    goalVelocity = -IndexerSubsystem.AMP_OUTAKE_VELOCITY.getValue();
   }
 
   public void disable() {
