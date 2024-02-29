@@ -2,8 +2,8 @@
   "version": 1.0,
   "startingPose": {
     "position": {
-      "x": 1.31,
-      "y": 5.66
+      "x": 1.35,
+      "y": 5.6
     },
     "rotation": 0
   },
@@ -12,15 +12,65 @@
     "data": {
       "commands": [
         {
+          "type": "sequential",
+          "data": {
+            "commands": [
+              {
+                "type": "named",
+                "data": {
+                  "name": "SetSubwooferRPMAndWait"
+                }
+              },
+              {
+                "type": "named",
+                "data": {
+                  "name": "ShootAtCurrentRPM"
+                }
+              },
+              {
+                "type": "path",
+                "data": {
+                  "pathName": "Spike Start to Amp Spike"
+                }
+              }
+            ]
+          }
+        },
+        {
+          "type": "race",
+          "data": {
+            "commands": [
+              {
+                "type": "wait",
+                "data": {
+                  "waitTime": 2.0
+                }
+              },
+              {
+                "type": "named",
+                "data": {
+                  "name": "IntakeUntilNoteDetected"
+                }
+              }
+            ]
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "Amp Spike to Subwoofer"
+          }
+        },
+        {
           "type": "named",
           "data": {
-            "name": "ShootSubwooferShot"
+            "name": "ShootAtCurrentRPM"
           }
         },
         {
           "type": "path",
           "data": {
-            "pathName": "Spike Start to Amp Spike"
+            "pathName": " Subwoofer to Source Spike"
           }
         },
         {
@@ -30,32 +80,13 @@
               {
                 "type": "wait",
                 "data": {
-                  "waitTime": 5.0
+                  "waitTime": 2.0
                 }
               },
               {
-                "type": "sequential",
+                "type": "named",
                 "data": {
-                  "commands": [
-                    {
-                      "type": "named",
-                      "data": {
-                        "name": "IntakeUntilNoteDetected"
-                      }
-                    },
-                    {
-                      "type": "named",
-                      "data": {
-                        "name": "SetArmAngleSpikeShot"
-                      }
-                    },
-                    {
-                      "type": "named",
-                      "data": {
-                        "name": "ShootSpikeShot"
-                      }
-                    }
-                  ]
+                  "name": "IntakeUntilNoteDetected"
                 }
               }
             ]
@@ -64,7 +95,26 @@
         {
           "type": "path",
           "data": {
-            "pathName": "Amp Spike to Mid Spike"
+            "pathName": "Source Spike to Subwoofer"
+          }
+        },
+        {
+          "type": "sequential",
+          "data": {
+            "commands": [
+              {
+                "type": "named",
+                "data": {
+                  "name": "ShootAtCurrentRPM"
+                }
+              }
+            ]
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "Subwoofer to Mid Spike"
           }
         },
         {
@@ -74,79 +124,53 @@
               {
                 "type": "wait",
                 "data": {
-                  "waitTime": 5.0
+                  "waitTime": 2.0
                 }
               },
               {
-                "type": "sequential",
+                "type": "named",
                 "data": {
-                  "commands": [
-                    {
-                      "type": "named",
-                      "data": {
-                        "name": "IntakeUntilNoteDetected"
-                      }
-                    },
-                    {
-                      "type": "named",
-                      "data": {
-                        "name": "SetArmAngleSpikeShot"
-                      }
-                    },
-                    {
-                      "type": "named",
-                      "data": {
-                        "name": "ShootSpikeShot"
-                      }
-                    }
-                  ]
+                  "name": "IntakeUntilNoteDetected"
                 }
               }
             ]
+          }
+        },
+        {
+          "type": "parallel",
+          "data": {
+            "commands": [
+              {
+                "type": "named",
+                "data": {
+                  "name": "AutoCenterNote"
+                }
+              },
+              {
+                "type": "named",
+                "data": {
+                  "name": "SetShooterRPMMidSpikeShot"
+                }
+              }
+            ]
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "SetArmAngleMidSpikeShot"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "ShootMidSPikeShot"
           }
         },
         {
           "type": "path",
           "data": {
-            "pathName": "Mid Spike to Podium Spike"
-          }
-        },
-        {
-          "type": "race",
-          "data": {
-            "commands": [
-              {
-                "type": "wait",
-                "data": {
-                  "waitTime": 5.0
-                }
-              },
-              {
-                "type": "sequential",
-                "data": {
-                  "commands": [
-                    {
-                      "type": "named",
-                      "data": {
-                        "name": "IntakeUntilNoteDetected"
-                      }
-                    },
-                    {
-                      "type": "named",
-                      "data": {
-                        "name": "SetArmAngleSpikeShot"
-                      }
-                    },
-                    {
-                      "type": "named",
-                      "data": {
-                        "name": "ShootSpikeShot"
-                      }
-                    }
-                  ]
-                }
-              }
-            ]
+            "pathName": "Spike Sweep Drive Out"
           }
         }
       ]

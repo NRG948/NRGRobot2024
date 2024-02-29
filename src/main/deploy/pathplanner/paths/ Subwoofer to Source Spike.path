@@ -3,41 +3,25 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 2.62,
-        "y": 6.9
+        "x": 1.37,
+        "y": 5.54
       },
       "prevControl": null,
       "nextControl": {
-        "x": 2.205980582067926,
-        "y": 6.790923784481022
+        "x": 1.6126028806482047,
+        "y": 5.004856243071922
       },
       "isLocked": false,
       "linkedName": null
     },
     {
       "anchor": {
-        "x": 1.5995945633646906,
-        "y": 6.125323187775677
+        "x": 2.38,
+        "y": 4.1
       },
       "prevControl": {
-        "x": 1.5929626725014285,
-        "y": 6.490077185255099
-      },
-      "nextControl": {
-        "x": 1.6093327560320605,
-        "y": 5.589722591070331
-      },
-      "isLocked": false,
-      "linkedName": null
-    },
-    {
-      "anchor": {
-        "x": 2.62,
-        "y": 5.2
-      },
-      "prevControl": {
-        "x": 2.4359350578819248,
-        "y": 5.213054703502888
+        "x": 1.7906551721325832,
+        "y": 4.592200076021138
       },
       "nextControl": null,
       "isLocked": false,
@@ -48,25 +32,8 @@
   "constraintZones": [],
   "eventMarkers": [
     {
-      "name": "Stow Angle",
-      "waypointRelativePos": 0.15,
-      "command": {
-        "type": "parallel",
-        "data": {
-          "commands": [
-            {
-              "type": "named",
-              "data": {
-                "name": "StowArm"
-              }
-            }
-          ]
-        }
-      }
-    },
-    {
       "name": "Intake",
-      "waypointRelativePos": 0.9,
+      "waypointRelativePos": 0.35,
       "command": {
         "type": "parallel",
         "data": {
@@ -96,7 +63,7 @@
   "reversed": false,
   "folder": "Spike Sweep",
   "previewStartingState": {
-    "rotation": 17.659586777636193,
+    "rotation": 0,
     "velocity": 0
   },
   "useDefaultConstraints": true

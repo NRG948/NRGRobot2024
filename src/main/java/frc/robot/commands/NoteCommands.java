@@ -6,6 +6,8 @@
  */
 package frc.robot.commands;
 
+import java.util.Set;
+
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
@@ -16,6 +18,8 @@ import frc.robot.subsystems.ShooterSubsystem;
 import frc.robot.subsystems.Subsystems;
 
 public class NoteCommands {
+  private static final double EXTRA_SHOT_DELAY = 0.2;
+
   /** The initial intake time when autoCenterNote is in sequence with intakeUntilNoteDetected. */
   public static double AUTO_CENTER_NOTE_CONTINUATION = 0.2;
 
@@ -187,6 +191,7 @@ public class NoteCommands {
   public static Command shoot(Subsystems subsystems, double rpm) {
     IndexerSubsystem indexer = subsystems.indexer;
     ShooterSubsystem shooter = subsystems.shooter;
+
     return Commands.either( //
         Commands.sequence( //
                 ShooterCommands.setAndWaitForRPM(subsystems, rpm), //
@@ -194,7 +199,7 @@ public class NoteCommands {
                 Commands.idle(shooter, indexer) // Suppress default commands
                     .until(() -> !indexer.isNoteDetected()),
                 Commands.idle(shooter, indexer) // Suppress default commands
-                    .withTimeout(0.5))
+                    .withTimeout(EXTRA_SHOT_DELAY))
             .finallyDo(
                 () -> {
                   shooter.disable();
@@ -210,8 +215,17 @@ public class NoteCommands {
    * @return The command sequence.
    */
   public static Command shootAtCurrentRPM(Subsystems subsystems) {
-    ShooterSubsystem shooter = subsystems.shooter;
-    return shoot(subsystems, shooter.getGoalRPM());
+    IndexerSubsystem indexer = subsystems.indexer;
+    return Commands.either( //
+        Commands.sequence( //
+                Commands.runOnce(indexer::feed, indexer), //
+                Commands.idle(indexer) // Suppress default commands
+                    .until(() -> !indexer.isNoteDetected()),
+                Commands.idle(indexer) // Suppress default commands
+                    .withTimeout(EXTRA_SHOT_DELAY))
+            .finallyDo(() -> indexer.disable()), //
+        Commands.none(), //
+        indexer::isNoteDetected);
   }
 
   /**

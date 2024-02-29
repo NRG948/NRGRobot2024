@@ -2,10 +2,10 @@
   "version": 1.0,
   "startingPose": {
     "position": {
-      "x": 0.77,
-      "y": 6.66
+      "x": 1.31,
+      "y": 5.66
     },
-    "rotation": 60.0
+    "rotation": 0
   },
   "command": {
     "type": "sequential",
@@ -26,7 +26,7 @@
         {
           "type": "path",
           "data": {
-            "pathName": "Amp Start to Amp Spike"
+            "pathName": "OLD Spike Start to Amp Spike"
           }
         },
         {
@@ -70,7 +70,7 @@
         {
           "type": "path",
           "data": {
-            "pathName": "Amp Spike to Amp Note"
+            "pathName": "OLD Amp Spike to Mid Spike"
           }
         },
         {
@@ -80,13 +80,32 @@
               {
                 "type": "wait",
                 "data": {
-                  "waitTime": 2.0
+                  "waitTime": 5.0
                 }
               },
               {
-                "type": "named",
+                "type": "sequential",
                 "data": {
-                  "name": "IntakeUntilNoteDetected"
+                  "commands": [
+                    {
+                      "type": "named",
+                      "data": {
+                        "name": "IntakeUntilNoteDetected"
+                      }
+                    },
+                    {
+                      "type": "named",
+                      "data": {
+                        "name": "SetArmAngleSpikeShot"
+                      }
+                    },
+                    {
+                      "type": "named",
+                      "data": {
+                        "name": "ShootSpikeShot"
+                      }
+                    }
+                  ]
                 }
               }
             ]
@@ -95,7 +114,7 @@
         {
           "type": "path",
           "data": {
-            "pathName": "Amp Note to Amp Farshot"
+            "pathName": "OLD Mid Spike to Podium Spike"
           }
         },
         {
@@ -105,53 +124,35 @@
               {
                 "type": "wait",
                 "data": {
-                  "waitTime": 2.0
+                  "waitTime": 5.0
                 }
               },
               {
-                "type": "named",
+                "type": "sequential",
                 "data": {
-                  "name": "ShootAmpFarShot"
+                  "commands": [
+                    {
+                      "type": "named",
+                      "data": {
+                        "name": "IntakeUntilNoteDetected"
+                      }
+                    },
+                    {
+                      "type": "named",
+                      "data": {
+                        "name": "SetArmAngleSpikeShot"
+                      }
+                    },
+                    {
+                      "type": "named",
+                      "data": {
+                        "name": "ShootSpikeShot"
+                      }
+                    }
+                  ]
                 }
               }
             ]
-          }
-        },
-        {
-          "type": "path",
-          "data": {
-            "pathName": "Amp Farshot to Mid Amp Note"
-          }
-        },
-        {
-          "type": "race",
-          "data": {
-            "commands": [
-              {
-                "type": "wait",
-                "data": {
-                  "waitTime": 3.0
-                }
-              },
-              {
-                "type": "named",
-                "data": {
-                  "name": "IntakeUntilNoteDetected"
-                }
-              }
-            ]
-          }
-        },
-        {
-          "type": "path",
-          "data": {
-            "pathName": "Mid Amp Note To Amp Farshot"
-          }
-        },
-        {
-          "type": "named",
-          "data": {
-            "name": "ShootAmpFarShot"
           }
         }
       ]
