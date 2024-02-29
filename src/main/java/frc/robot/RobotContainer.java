@@ -96,13 +96,16 @@ public class RobotContainer {
                 subsystems,
                 Autos.MID_SPIKE_SHOT_RPM.getValue(),
                 Autos.MID_SPIKE_SHOT_ANGLE.getValue()));
-    operatorController.povUp().whileTrue(NoteCommands.shootAtCurrentRPM(subsystems));
+    operatorController
+        .povUp()
+        .whileTrue(
+            NoteCommands.shootAtCurrentRPM(subsystems).finallyDo(subsystems.shooter::disable));
     operatorController.povDown().whileTrue(NoteCommands.outtake(subsystems));
     operatorController.back().onTrue(new InterruptAll(subsystems));
     // operatorController.b().whileTrue(new SetShooterContinous(subsystems));
     operatorController
         .b()
-        .whileTrue(
+        .onTrue(
             NoteCommands.prepareToShoot(
                 subsystems, Autos.SUBWOOFER_SHOT_RPM.getValue(), ArmSubsystem.STOWED_ANGLE));
     operatorController.x().onTrue(ArmCommands.seekToTrap(subsystems));
