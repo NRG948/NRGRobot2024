@@ -69,7 +69,7 @@ public class IndexerSubsystem extends SubsystemBase {
 
   @RobotPreferencesValue
   public static final RobotPreferences.DoubleValue AMP_OUTAKE_VELOCITY =
-      new RobotPreferences.DoubleValue("Indexer+Intake", "Amp Outake Velocity", 2.0);
+      new RobotPreferences.DoubleValue("Indexer+Intake", "Amp Outake Velocity", 3.0);
 
   /** Creates a new IndexerSubsystem. */
   public IndexerSubsystem() {
