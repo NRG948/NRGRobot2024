@@ -24,7 +24,7 @@ public class Subsystems {
   public final AprilTagSubsystem aprilTag = new AprilTagSubsystem();
   public final Optional<NoteVisionSubsystem> noteVision;
   public final IndexerSubsystem indexer = new IndexerSubsystem();
-  public final AddressableLEDSubsystem addressableLED = new AddressableLEDSubsystem();
+  public final StatusLEDSubsystem statusLED = new StatusLEDSubsystem();
   public final ArmSubsystem arm = new ArmSubsystem();
   public final IntakeSubsystem intake = new IntakeSubsystem();
   public final ShooterSubsystem shooter = new ShooterSubsystem();
@@ -34,7 +34,7 @@ public class Subsystems {
   public Subsystems() {
     ArrayList<Subsystem> all =
         new ArrayList<Subsystem>(
-            Arrays.asList(drivetrain, aprilTag, indexer, intake, addressableLED, arm, shooter));
+            Arrays.asList(drivetrain, aprilTag, indexer, intake, statusLED, arm, shooter));
     if (NoteVisionSubsystem.ENABLED.getValue()) {
       noteVision = Optional.of(new NoteVisionSubsystem());
       all.add(noteVision.get());

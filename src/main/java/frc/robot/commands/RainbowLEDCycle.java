@@ -8,14 +8,14 @@ package frc.robot.commands;
 
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.Constants;
-import frc.robot.subsystems.AddressableLEDSubsystem;
+import frc.robot.subsystems.LEDSubsystem;
 
 public class RainbowLEDCycle extends Command {
   public static int colorIndex = 0;
-  private final AddressableLEDSubsystem led;
+  private final LEDSubsystem led;
 
   /** Creates a new RainbowLEDCycle. */
-  public RainbowLEDCycle(AddressableLEDSubsystem led) {
+  public RainbowLEDCycle(LEDSubsystem led) {
     // Use addRequirements() here to declare subsystem dependencies.
     this.led = led;
     addRequirements(led);

@@ -9,11 +9,11 @@ package frc.robot.commands;
 import edu.wpi.first.wpilibj.util.Color8Bit;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
-import frc.robot.subsystems.AddressableLEDSubsystem;
+import frc.robot.subsystems.LEDSubsystem;
 
 /** Add your docs here. */
 public class LEDs {
-  public static Command fillColor(AddressableLEDSubsystem ledSubsystem, Color8Bit color) {
+  public static Command fillColor(LEDSubsystem ledSubsystem, Color8Bit color) {
     return Commands.runOnce(() -> ledSubsystem.fillAndCommitColor(color), ledSubsystem);
   }
 }

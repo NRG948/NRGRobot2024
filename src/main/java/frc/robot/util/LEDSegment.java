@@ -11,8 +11,8 @@ import edu.wpi.first.wpilibj.AddressableLEDBuffer;
 import edu.wpi.first.wpilibj.util.Color8Bit;
 import frc.robot.Constants.RobotConstants;
 
-/** Add your docs here. */
-public class AddressableLEDs {
+/** A class to manage a segment of the total LED string. */
+public class LEDSegment {
   public static final int GAMMA_TABLE[] = {
     0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
     0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x01, 0x01, 0x01, 0x01,
@@ -35,6 +35,7 @@ public class AddressableLEDs {
   private static final AddressableLEDBuffer ledBuffer =
       new AddressableLEDBuffer(RobotConstants.LED_COUNT);
   private static final AddressableLED leds = createAddressableLED(ledBuffer);
+
   private final int firstLED;
   private final int numberOfLEDs;
 
@@ -54,10 +55,10 @@ public class AddressableLEDs {
   /**
    * Constructs an instance of this class.
    *
-   * @param firstLED The index of the first LED.
-   * @param numberOfLEDs The number of LEDs.
+   * @param firstLED The index of the first LED in the segment.
+   * @param numberOfLEDs The number of LEDs in the segment.
    */
-  public AddressableLEDs(int firstLED, int numberOfLEDs) {
+  public LEDSegment(int firstLED, int numberOfLEDs) {
     this.firstLED = firstLED;
     this.numberOfLEDs = numberOfLEDs;
   }
@@ -74,10 +75,10 @@ public class AddressableLEDs {
   }
 
   /**
-   * Sets the color at the given LED index.
+   * Sets the color of the LED at the specified index.
    *
-   * @param color The color it fills the LEDs.
-   * @param index Where the LED is set.
+   * @param color The color to set.
+   * @param index The index of the LED to set.
    */
   public void setColor(Color8Bit color, int index) {
     ledBuffer.setRGB(
