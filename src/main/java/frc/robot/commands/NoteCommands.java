@@ -6,8 +6,6 @@
  */
 package frc.robot.commands;
 
-import java.util.Set;
-
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
@@ -231,6 +229,8 @@ public class NoteCommands {
   /**
    * Sets the arm angle and the shooter RPM in preparation for the shot.
    *
+   * <p>This command should be bound to a button using {@link Trigger#whileTrue(Command)}.
+   *
    * @param subsystems The subsystems container.
    * @param rpm The desired shooter RPM.
    * @param goalAngle The desired arm angle.
@@ -242,9 +242,9 @@ public class NoteCommands {
 
     return Commands.sequence(
         Commands.parallel(
-            ArmCommands.seekToAngle(subsystems, goalAngle),
+            ArmCommands.seekToAngle(subsystems, goalAngle).until(arm::atGoalAngle),
             ShooterCommands.setRPM(subsystems, rpm)),
-        Commands.idle(arm, shooter).until(arm::atGoalAngle) // Suppress default commands
+        Commands.idle(arm, shooter) // Suppress default commands
         );
   }
 }
