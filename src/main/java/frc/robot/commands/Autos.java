@@ -77,7 +77,7 @@ public final class Autos {
   @RobotPreferencesValue(column = 1, row = 3)
   public static RobotPreferences.DoubleValue MID_SPIKE_SHOT_ANGLE =
       new RobotPreferences.DoubleValue(
-          "Autonomous", "Mid Spike Shot Angle", 11); // TODO: Angle needs to be tested.
+          "Autonomous", "Mid Spike Shot Angle", 10.5); // TODO: Angle needs to be tested.
 
   @RobotPreferencesValue(column = 0, row = 4)
   public static RobotPreferences.DoubleValue SUBWOOFER_SIDE_SHOT_RPM =
@@ -147,7 +147,7 @@ public final class Autos {
         "SetShooterRPMSubwooferSideShot", setShooterRPM(subsystems, SUBWOOFER_SIDE_SHOT_RPM));
     eventMaps.put("SetShooterRPMSubwooferShot", setShooterRPM(subsystems, SUBWOOFER_SHOT_RPM));
     eventMaps.put("SetSubwooferRPMAndWait", setShooterRPMAndWait(subsystems, SUBWOOFER_SHOT_RPM));
-    
+
     eventMaps.put("SetArmAngleSpikeShot", setArmAngle(subsystems, SPIKE_SHOT_ANGLE));
     eventMaps.put("SetArmAngleAmpFarShot", setArmAngle(subsystems, AMP_FARSHOT_ANGLE));
     eventMaps.put("SetArmAngleSourceFarShot", setArmAngle(subsystems, SOURCE_FARSHOT_ANGLE));
@@ -168,7 +168,9 @@ public final class Autos {
     eventMaps.put("StowArm", ArmCommands.stow(subsystems));
     eventMaps.put("Intake", NoteCommands.intake(subsystems));
     eventMaps.put("IntakeUntilNoteDetected", autoIntakeNote(subsystems));
-    eventMaps.put("AutoCenterNote", NoteCommands.autoCenterNote(subsystems, NoteCommands.AUTO_CENTER_NOTE_CONTINUATION));
+    eventMaps.put(
+        "AutoCenterNote",
+        NoteCommands.autoCenterNote(subsystems, NoteCommands.AUTO_CENTER_NOTE_CONTINUATION));
 
     return eventMaps;
   }
@@ -188,7 +190,8 @@ public final class Autos {
         () -> ShooterCommands.setRPM(subsystems, rpm.getValue()), Set.of(shooter));
   }
 
-  public static Command setShooterRPMAndWait(Subsystems subsystems, RobotPreferences.DoubleValue rpm) {
+  public static Command setShooterRPMAndWait(
+      Subsystems subsystems, RobotPreferences.DoubleValue rpm) {
     ShooterSubsystem shooter = subsystems.shooter;
     return Commands.defer(
         () -> ShooterCommands.setAndWaitForRPM(subsystems, rpm.getValue()), Set.of(shooter));
