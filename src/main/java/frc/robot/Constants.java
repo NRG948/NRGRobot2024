@@ -35,12 +35,16 @@ public final class Constants {
 
     /** PMW Ports. */
     public static class PWMPort {
-      public static final int LED = 2;
+      public static final int LED = 0;
     }
 
+    /** The total number of LEDs on the addressable LED string. */
+    public static final int LED_COUNT = 12;
+
+    /** Defines sub-segments on the addressable LED string. */
     public static class LEDSegment {
       public static final int STATUS_FIRST_LED = 0;
-      public static final int STATUS_LED_COUNT = 9;
+      public static final int STATUS_LED_COUNT = 12;
     }
 
     /** Field of View of Camera in degrees. */
@@ -98,9 +102,6 @@ public final class Constants {
         public static final int MANIPULATOR = 1;
       }
     }
-
-    /** The number of LEDs on the addressable LED string. */
-    public static final int LED_COUNT = 63;
   }
 
   public static class ColorConstants {
