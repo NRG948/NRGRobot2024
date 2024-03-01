@@ -18,13 +18,7 @@
               {
                 "type": "named",
                 "data": {
-                  "name": "SetSubwooferRPMAndWait"
-                }
-              },
-              {
-                "type": "named",
-                "data": {
-                  "name": "ShootAtCurrentRPM"
+                  "name": "ShootSubwooferShot"
                 }
               },
               {
@@ -64,7 +58,7 @@
         {
           "type": "named",
           "data": {
-            "name": "ShootAtCurrentRPM"
+            "name": "ShootSubwooferShot"
           }
         },
         {
@@ -105,7 +99,7 @@
               {
                 "type": "named",
                 "data": {
-                  "name": "ShootAtCurrentRPM"
+                  "name": "ShootSubwooferShot"
                 }
               }
             ]
@@ -114,7 +108,7 @@
         {
           "type": "path",
           "data": {
-            "pathName": "Subwoofer to Mid Spike"
+            "pathName": "Subwoofer to mid Spike"
           }
         },
         {
@@ -137,13 +131,19 @@
           }
         },
         {
+          "type": "named",
+          "data": {
+            "name": "AutoCenterNote"
+          }
+        },
+        {
           "type": "parallel",
           "data": {
             "commands": [
               {
                 "type": "named",
                 "data": {
-                  "name": "AutoCenterNote"
+                  "name": "SetArmAngleMidSpikeShot"
                 }
               },
               {
@@ -153,12 +153,6 @@
                 }
               }
             ]
-          }
-        },
-        {
-          "type": "named",
-          "data": {
-            "name": "SetArmAngleMidSpikeShot"
           }
         },
         {

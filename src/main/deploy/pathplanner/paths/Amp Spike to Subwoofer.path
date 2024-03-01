@@ -35,13 +35,19 @@
       "name": "Auto-Centering",
       "waypointRelativePos": 0.0,
       "command": {
-        "type": "parallel",
+        "type": "sequential",
         "data": {
           "commands": [
             {
               "type": "named",
               "data": {
                 "name": "AutoCenterNote"
+              }
+            },
+            {
+              "type": "named",
+              "data": {
+                "name": "SetSubwooferRPMAndWait"
               }
             }
           ]
