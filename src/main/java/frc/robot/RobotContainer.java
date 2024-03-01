@@ -109,8 +109,8 @@ public class RobotContainer {
         .onTrue(
             NoteCommands.prepareToShoot(
                 subsystems, Autos.SUBWOOFER_SHOT_RPM.getValue(), ArmSubsystem.STOWED_ANGLE));
-    operatorController.x().onTrue(ArmCommands.seekToTrap(subsystems));
-    operatorController.y().onTrue(ArmCommands.seekToAmp(subsystems));
+    operatorController.x().onTrue(ArmCommands.seekToAmp(subsystems));
+    operatorController.y().onTrue(ArmCommands.seekToTrap(subsystems));
     operatorController.a().onTrue(ArmCommands.stow(subsystems));
     operatorController.leftBumper().whileTrue(NoteCommands.intakeUntilNoteDetected(subsystems));
     operatorController.rightBumper().onTrue(NoteCommands.intakeAndAutoCenterNote(subsystems));
