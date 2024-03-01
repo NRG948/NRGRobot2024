@@ -3,12 +3,12 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 2.38,
+        "x": 2.58,
         "y": 4.1
       },
       "prevControl": null,
       "nextControl": {
-        "x": 1.865179235448526,
+        "x": 2.065179235448526,
         "y": 4.933616758384652
       },
       "isLocked": false,
@@ -17,11 +17,11 @@
     {
       "anchor": {
         "x": 1.3859317930068906,
-        "y": 5.503532635882813
+        "y": 5.3
       },
       "prevControl": {
         "x": 1.9169897697665406,
-        "y": 4.978950975912915
+        "y": 4.775418340030102
       },
       "nextControl": null,
       "isLocked": false,
@@ -35,13 +35,19 @@
       "name": "Auto-Centering",
       "waypointRelativePos": 0,
       "command": {
-        "type": "parallel",
+        "type": "sequential",
         "data": {
           "commands": [
             {
               "type": "named",
               "data": {
                 "name": "AutoCenterNote"
+              }
+            },
+            {
+              "type": "named",
+              "data": {
+                "name": "SetSubwooferRPMAndWait"
               }
             }
           ]
