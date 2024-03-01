@@ -116,8 +116,8 @@ public class RobotContainer {
     operatorController.rightBumper().onTrue(NoteCommands.intakeAndAutoCenterNote(subsystems));
 
     Trigger noteDetected = new Trigger(subsystems.indexer::isNoteDetected);
-    noteDetected.onTrue(LEDs.fillColor(subsystems.addressableLED, ORANGE));
-    noteDetected.onFalse(LEDs.fillColor(subsystems.addressableLED, RED));
+    noteDetected.onTrue(LEDs.fillColor(subsystems.statusLED, ORANGE));
+    noteDetected.onFalse(LEDs.fillColor(subsystems.statusLED, RED));
   }
 
   /**

@@ -9,20 +9,19 @@ package frc.robot.commands;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.util.Color8Bit;
 import edu.wpi.first.wpilibj2.command.Command;
-import frc.robot.subsystems.AddressableLEDSubsystem;
+import frc.robot.subsystems.LEDSubsystem;
 
 public class FlashingLEDs extends Command {
   private final Color8Bit color1;
   private final Color8Bit color2;
-  private final AddressableLEDSubsystem led;
+  private final LEDSubsystem led;
   private final Timer timer = new Timer();
   private final double blinkingSpeed;
 
   private Color8Bit color;
 
   /** Creates a new FlashingLEDs. */
-  public FlashingLEDs(
-      Color8Bit color1, Color8Bit color2, AddressableLEDSubsystem led, double blinkingSpeed) {
+  public FlashingLEDs(Color8Bit color1, Color8Bit color2, LEDSubsystem led, double blinkingSpeed) {
     // Use addRequirements() here to declare subsystem dependencies.
     this.color1 = color1;
     this.color2 = color2;
