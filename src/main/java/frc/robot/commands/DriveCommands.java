@@ -32,8 +32,12 @@ public final class DriveCommands {
   /** Returns a Command that drives to amp delivery position. */
   public static Command driveToAmp(Subsystems subsystems) {
 
+    if (subsystems.aprilTag.isEmpty()) {
+      return Commands.none(); // TODO blink LEDS red to tell driver we can't see the target
+    }
+
     var drivetrain = subsystems.drivetrain;
-    var aprilTag = subsystems.aprilTag;
+    var aprilTag = subsystems.aprilTag.get();
 
     var targetID = AprilTagSubsystem.getAmpAprilTagID();
     var targetOptional = aprilTag.getTarget(targetID);

@@ -48,6 +48,10 @@ public class AprilTagSubsystem extends PhotonVisionSubsystemBase {
       new EstimatedRobotPose(NO_APRILTAG, 0, List.of(), PoseStrategy.LOWEST_AMBIGUITY);
 
   @RobotPreferencesValue
+  public static final RobotPreferences.BooleanValue ENABLED =
+      new RobotPreferences.BooleanValue("AprilTag", "Enabled", false);
+
+  @RobotPreferencesValue
   public static final RobotPreferences.BooleanValue enableTab =
       new RobotPreferences.BooleanValue("AprilTag", "Enable Tab", false);
 

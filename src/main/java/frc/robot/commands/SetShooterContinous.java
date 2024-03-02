@@ -11,6 +11,7 @@ import frc.robot.subsystems.AprilTagSubsystem;
 import frc.robot.subsystems.ArmSubsystem;
 import frc.robot.subsystems.ShooterSubsystem;
 import frc.robot.subsystems.Subsystems;
+import java.util.Optional;
 
 /**
  * A command that continously sets arm angle and shooter rpms based on speaker april tag.
@@ -20,7 +21,7 @@ import frc.robot.subsystems.Subsystems;
 public class SetShooterContinous extends Command {
   private final ArmSubsystem arm;
   private final ShooterSubsystem shooter;
-  private final AprilTagSubsystem aprilTag;
+  private final Optional<AprilTagSubsystem> aprilTag;
 
   private record ShooterParams(double distance, double armAngleDegrees, int rpm) {}
 
@@ -48,15 +49,23 @@ public class SetShooterContinous extends Command {
 
   @Override
   public void execute() {
+    if (aprilTag.isEmpty()) {
+      return;
+    }
+
     int tagId = AprilTagSubsystem.getSpeakerCenterAprilTagID();
-    double distance = aprilTag.getDistanceToTarget(tagId);
+    double distance = aprilTag.get().getDistanceToTarget(tagId);
+
     if (distance == 0) { // if target is not detected
       return;
     }
+
     if (distance > shooterParams[shooterParams.length - 1].distance) {
       return; // if target is greater than farthest point (last index)
     }
+
     ShooterParams computedShooterParams = computeShooterParams(distance);
+
     arm.setGoalAngleContinous(Math.toRadians(computedShooterParams.armAngleDegrees));
     shooter.setGoalRPM(computedShooterParams.rpm);
   }
