@@ -10,7 +10,6 @@ import com.nrg948.preferences.RobotPreferences;
 import com.nrg948.preferences.RobotPreferencesValue;
 import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.controller.ProfiledPIDController;
-import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import frc.robot.subsystems.AprilTagSubsystem;
@@ -68,7 +67,10 @@ public class DriveUsingController extends Command {
   public void initialize() {
     profiledPIDController =
         new ProfiledPIDController(
-            KP_APRIL_TAG.getValue(), 0, 0, SwerveSubsystem.getRotationalConstraints());
+            KP_APRIL_TAG.getValue(),
+            KI_APRIL_TAG.getValue(),
+            KD_APRIL_TAG.getValue(),
+            SwerveSubsystem.getRotationalConstraints());
     profiledPIDController.enableContinuousInput(-Math.PI, Math.PI);
     profiledPIDController.reset(drivetrain.getOrientation().getRadians());
   }
@@ -81,8 +83,8 @@ public class DriveUsingController extends Command {
     double ySpeed = -xboxController.getLeftX();
     double inputScalar = Math.max(1.0 - xboxController.getRightTriggerAxis(), 0.15);
 
-    Rotation2d currentOrientation = drivetrain.getOrientation();
-    Rotation2d targetOrientation = currentOrientation;
+    double currentOrientation = drivetrain.getOrientation().getRadians();
+    double targetOrientation = currentOrientation;
 
     // Applies deadbands to x and y joystick values and multiples all
     // values with inputScalar whihc allows finer driving control.
@@ -103,24 +105,17 @@ public class DriveUsingController extends Command {
     // Don't want to do both tag and note alignment so to choose one, tag takes
     // priority
     if (optionalTagTarget.isPresent()) {
-      Rotation2d angleToTarget = Rotation2d.fromDegrees(-optionalTagTarget.get().getYaw());
-      targetOrientation = targetOrientation.plus(angleToTarget);
-      profiledPIDController.setP(KP_APRIL_TAG.getValue());
-      profiledPIDController.setI(KI_APRIL_TAG.getValue());
-      profiledPIDController.setD(KD_APRIL_TAG.getValue());
+      double angleToTarget = Math.toRadians(-optionalTagTarget.get().getYaw());
+      targetOrientation = MathUtil.angleModulus(targetOrientation + angleToTarget);
+      profiledPIDController.setPID(
+          KP_APRIL_TAG.getValue(), KI_APRIL_TAG.getValue(), KD_APRIL_TAG.getValue());
       rSpeed =
-          Math.abs(ySpeed)
-              * profiledPIDController.calculate(
-                  currentOrientation.getRadians(), targetOrientation.getRadians());
+          Math.abs(ySpeed) * profiledPIDController.calculate(currentOrientation, targetOrientation);
     } else if (optionalNoteTarget.isPresent()) {
-      Rotation2d angleToTarget = Rotation2d.fromDegrees(noteVision.get().getAngleToBestTarget());
-      targetOrientation = targetOrientation.plus(angleToTarget);
-      profiledPIDController.setP(KP_NOTE.getValue());
-      profiledPIDController.setI(KI_NOTE.getValue());
-      profiledPIDController.setD(KD_NOTE.getValue());
-      rSpeed =
-          profiledPIDController.calculate(
-              currentOrientation.getRadians(), targetOrientation.getRadians());
+      double angleToTarget = Math.toRadians(noteVision.get().getAngleToBestTarget());
+      targetOrientation = MathUtil.angleModulus(targetOrientation + angleToTarget);
+      profiledPIDController.setPID(KP_NOTE.getValue(), KI_NOTE.getValue(), KD_NOTE.getValue());
+      rSpeed = profiledPIDController.calculate(currentOrientation, targetOrientation);
     } else {
       rSpeed = -xboxController.getRightX();
       rSpeed = MathUtil.applyDeadband(rSpeed, DEADBAND) * inputScalar;
