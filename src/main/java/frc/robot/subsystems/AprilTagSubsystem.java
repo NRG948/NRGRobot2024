@@ -52,7 +52,7 @@ public class AprilTagSubsystem extends PhotonVisionSubsystemBase {
       new RobotPreferences.BooleanValue("AprilTag", "Enabled", false);
 
   @RobotPreferencesValue
-  public static final RobotPreferences.BooleanValue enableTab =
+  public static final RobotPreferences.BooleanValue ENABLE_TAB =
       new RobotPreferences.BooleanValue("AprilTag", "Enable Tab", false);
 
   private final PhotonPoseEstimator estimator;
@@ -198,15 +198,18 @@ public class AprilTagSubsystem extends PhotonVisionSubsystemBase {
   @Override
   public void periodic() {
     super.periodic();
+
     estimator.update(getLatestResult());
 
-    selectedAprilTag = aprilTagIdChooser.getSelected().intValue();
-    selectedAprilTagPose = getAprilTagPose(selectedAprilTag);
+    if (ENABLE_TAB.getValue()) {
+      selectedAprilTag = aprilTagIdChooser.getSelected().intValue();
+      selectedAprilTagPose = getAprilTagPose(selectedAprilTag);
+    }
   }
 
   /** Adds a tab for April Tag in Shuffleboard. */
   public void addShuffleboardTab() {
-    if (!enableTab.getValue()) {
+    if (!ENABLE_TAB.getValue()) {
       return;
     }
 
