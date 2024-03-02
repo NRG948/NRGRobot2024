@@ -21,7 +21,7 @@ public class Subsystems {
       new RobotPreferences.BooleanValue("AprilTag", "Enable Pose Estimation", true);
 
   public final SwerveSubsystem drivetrain = new SwerveSubsystem();
-  public final AprilTagSubsystem aprilTag = new AprilTagSubsystem();
+  public final Optional<AprilTagSubsystem> aprilTag;
   public final Optional<NoteVisionSubsystem> noteVision;
   public final IndexerSubsystem indexer = new IndexerSubsystem();
   public final StatusLEDSubsystem statusLED = new StatusLEDSubsystem();
@@ -34,19 +34,30 @@ public class Subsystems {
   public Subsystems() {
     ArrayList<Subsystem> all =
         new ArrayList<Subsystem>(
-            Arrays.asList(drivetrain, aprilTag, indexer, intake, statusLED, arm, shooter));
+            Arrays.asList(drivetrain, indexer, intake, statusLED, arm, shooter));
+
+    if (AprilTagSubsystem.ENABLED.getValue()) {
+      aprilTag = Optional.of(new AprilTagSubsystem());
+      all.add(aprilTag.get());
+    } else {
+      aprilTag = Optional.empty();
+    }
+
     if (NoteVisionSubsystem.ENABLED.getValue()) {
       noteVision = Optional.of(new NoteVisionSubsystem());
       all.add(noteVision.get());
     } else {
       noteVision = Optional.empty();
     }
+
     this.all = all.toArray(Subsystem[]::new);
   }
 
   public void periodic() {
-    if (ENABLE_POSE_ESTIMATION.getValue()) {
+    if (aprilTag.isPresent() && ENABLE_POSE_ESTIMATION.getValue()) {
+      AprilTagSubsystem aprilTag = this.aprilTag.get();
       var visionEst = aprilTag.getEstimateGlobalPose();
+
       visionEst.ifPresent(
           (est) -> {
             var estPose = est.estimatedPose.toPose2d();

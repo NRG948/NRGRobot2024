@@ -48,7 +48,7 @@ public class DriveUsingController extends Command {
       new RobotPreferences.DoubleValue("NoteVision", "kD", 0.0);
 
   private final SwerveSubsystem drivetrain;
-  private final AprilTagSubsystem aprilTag;
+  private final Optional<AprilTagSubsystem> aprilTag;
   private final Optional<NoteVisionSubsystem> noteVision;
   private final CommandXboxController xboxController;
   private ProfiledPIDController profiledPIDController;
@@ -91,8 +91,9 @@ public class DriveUsingController extends Command {
 
     Optional<PhotonTrackedTarget> optionalTagTarget = Optional.empty();
     Optional<PhotonTrackedTarget> optionalNoteTarget = Optional.empty();
-    if (xboxController.getHID().getRightStickButton()) {
-      optionalTagTarget = aprilTag.getTarget(AprilTagSubsystem.getSpeakerCenterAprilTagID());
+
+    if (xboxController.getHID().getRightStickButton() && aprilTag.isPresent()) {
+      optionalTagTarget = aprilTag.get().getTarget(AprilTagSubsystem.getSpeakerCenterAprilTagID());
     } else if (xboxController.getHID().getXButton()
         && noteVision.isPresent()
         && noteVision.get().hasTargets()) { // Nonpermanent X binding

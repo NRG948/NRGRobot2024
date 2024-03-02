@@ -174,7 +174,11 @@ public class RobotContainer {
     RobotPreferences.addShuffleBoardTab();
 
     subsystems.drivetrain.addShuffleboardTab();
-    subsystems.aprilTag.addShuffleboardTab();
+
+    if (subsystems.aprilTag.isPresent()) {
+      subsystems.aprilTag.get().addShuffleboardTab();
+    }
+
     if (subsystems.noteVision.isPresent()) {
       subsystems.noteVision.get().addShuffleboardTab();
     }
