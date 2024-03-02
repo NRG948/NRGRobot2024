@@ -9,10 +9,15 @@ package frc.robot.util;
 /** Represents swerve module velocities. */
 public class SwerveModuleVelocities {
   /** The translational velocity of the wheel in m/s. */
-  public final double driveVelocity;
+  public double driveVelocity;
 
   /** The rotational velocity of the wheel in rad/s */
-  public final double steeringVelocity;
+  public double steeringVelocity;
+
+  /** Creates a new SwerveModuleVelocities. */
+  public SwerveModuleVelocities() {
+    this(0, 0);
+  }
 
   /**
    * Creates a new SwerveModuleVelocities.

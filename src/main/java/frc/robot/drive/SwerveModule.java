@@ -66,9 +66,9 @@ public class SwerveModule {
   private double steeringVoltage;
 
   // The current supplied state updated by the periodic method.
-  private SwerveModuleState state;
-  private SwerveModulePosition position;
-  private SwerveModuleVelocities velocities;
+  private final SwerveModuleState state = new SwerveModuleState();
+  private final SwerveModulePosition position = new SwerveModulePosition();
+  private final SwerveModuleVelocities velocities = new SwerveModuleVelocities();
 
   private final DoubleLogEntry driveSpeedLog;
   private final DoubleLogEntry positionLog;
@@ -191,9 +191,14 @@ public class SwerveModule {
     double wheelAngleVelocity = wheelAngleVelocitySupplier.getAsDouble();
     double position = positionSupplier.getAsDouble();
 
-    this.position = new SwerveModulePosition(position, wheelAngle);
-    this.state = new SwerveModuleState(velocity, wheelAngle);
-    this.velocities = new SwerveModuleVelocities(velocity, wheelAngleVelocity);
+    this.position.distanceMeters = position;
+    this.position.angle = wheelAngle;
+
+    this.state.speedMetersPerSecond = velocity;
+    this.state.angle = wheelAngle;
+
+    this.velocities.driveVelocity = velocity;
+    this.velocities.steeringVelocity = wheelAngleVelocity;
 
     driveSpeedLog.append(velocity);
     positionLog.append(position);
