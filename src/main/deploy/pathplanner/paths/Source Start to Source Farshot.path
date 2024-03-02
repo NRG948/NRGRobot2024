@@ -47,6 +47,23 @@
           ]
         }
       }
+    },
+    {
+      "name": "Set RPM",
+      "waypointRelativePos": 0.2,
+      "command": {
+        "type": "parallel",
+        "data": {
+          "commands": [
+            {
+              "type": "named",
+              "data": {
+                "name": "SetShooterRPMSourceFarShot"
+              }
+            }
+          ]
+        }
+      }
     }
   ],
   "globalConstraints": {
