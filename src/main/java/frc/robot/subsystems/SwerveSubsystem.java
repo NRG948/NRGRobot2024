@@ -20,6 +20,7 @@ import com.nrg948.preferences.RobotPreferencesValue;
 import com.revrobotics.CANSparkBase.IdleMode;
 import com.revrobotics.CANSparkLowLevel.MotorType;
 import com.revrobotics.CANSparkMax;
+import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.Matrix;
 import edu.wpi.first.math.controller.HolonomicDriveController;
 import edu.wpi.first.math.controller.PIDController;
@@ -148,8 +149,8 @@ public class SwerveSubsystem extends SubsystemBase {
   private final SwerveDrivePoseEstimator odometry;
 
   // The current sensor state updated by the periodic method.
-  private Rotation2d rawOrientation;
-  private Rotation2d rawOrientationOffset = new Rotation2d();
+  private double rawOrientation; // The raw gyro orientation in radians.
+  private double rawOrientationOffset; // The offset to the corrected orientation in radians.
   private Rotation2d orientation = new Rotation2d();
   private Pose2d lastVisionMeasurement = new Pose2d();
 
@@ -235,9 +236,10 @@ public class SwerveSubsystem extends SubsystemBase {
    * is up to date.
    */
   private void updateSensorState() {
-    rawOrientation = Rotation2d.fromDegrees(-ahrs.getAngle());
-    rawOrientationLog.append(rawOrientation.getDegrees());
-    orientation = rawOrientation.plus(rawOrientationOffset);
+    double rawGyroDegrees = -ahrs.getAngle();
+    rawOrientation = Math.toRadians(rawGyroDegrees);
+    rawOrientationLog.append(rawGyroDegrees);
+    orientation = new Rotation2d(MathUtil.angleModulus(rawOrientation + rawOrientationOffset));
   }
 
   /** See {@link SwerveDrivePoseEstimator#addVisionMeasurement(Pose2d, double)} */
@@ -423,8 +425,8 @@ public class SwerveSubsystem extends SubsystemBase {
    */
   public void resetPosition(Pose2d desiredPosition) {
     orientation = desiredPosition.getRotation();
-    rawOrientationOffset = orientation.minus(rawOrientation);
-    rawOrientationOffsetLog.append(rawOrientationOffset.getDegrees());
+    rawOrientationOffset = MathUtil.angleModulus(orientation.getRadians() - rawOrientation);
+    rawOrientationOffsetLog.append(Math.toDegrees(rawOrientationOffset));
 
     odometry.resetPosition(getOrientation(), drivetrain.getModulesPositions(), desiredPosition);
   }
