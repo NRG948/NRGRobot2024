@@ -7,6 +7,7 @@
 package frc.robot;
 
 import static frc.robot.Constants.ColorConstants.GREEN;
+import static frc.robot.Constants.ColorConstants.PINK;
 import static frc.robot.Constants.ColorConstants.RED;
 
 import com.nrg948.preferences.RobotPreferences;
@@ -118,6 +119,10 @@ public class RobotContainer {
     Trigger noteDetected = new Trigger(subsystems.indexer::isNoteDetected);
     noteDetected.onTrue(LEDs.fillColor(subsystems.statusLED, GREEN));
     noteDetected.onFalse(LEDs.fillColor(subsystems.statusLED, RED));
+
+    Trigger shooterSpinning =
+        new Trigger(() -> subsystems.shooter.atGoalRPM() && subsystems.indexer.isNoteDetected());
+    shooterSpinning.onTrue(LEDs.fillColor(subsystems.statusLED, PINK));
   }
 
   /**
