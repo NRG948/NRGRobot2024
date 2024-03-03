@@ -35,11 +35,11 @@ public final class Constants {
 
     /** PMW Ports. */
     public static class PWMPort {
-      public static final int LED = 0;
+      public static final int LED = 1;
     }
 
     /** The total number of LEDs on the addressable LED string. */
-    public static final int LED_COUNT = 12;
+    public static final int LED_COUNT = 11;
 
     /** Defines sub-segments on the addressable LED string. */
     public static class LEDSegment {
