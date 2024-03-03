@@ -32,7 +32,24 @@
   "constraintZones": [],
   "eventMarkers": [
     {
-      "name": "Prepare to Shoot",
+      "name": "Auto Center",
+      "waypointRelativePos": 0,
+      "command": {
+        "type": "sequential",
+        "data": {
+          "commands": [
+            {
+              "type": "named",
+              "data": {
+                "name": "AutoCenterNote"
+              }
+            }
+          ]
+        }
+      }
+    },
+    {
+      "name": "Prepare To Shoot",
       "waypointRelativePos": 0.3,
       "command": {
         "type": "parallel",
@@ -41,13 +58,13 @@
             {
               "type": "named",
               "data": {
-                "name": "SetShooterRPMSourceFarShot"
+                "name": "SetArmAngleSourceFarShot"
               }
             },
             {
               "type": "named",
               "data": {
-                "name": "SetArmAngleSourceFarShot"
+                "name": "SetShooterRPMSourceFarShot"
               }
             }
           ]
@@ -63,7 +80,7 @@
   },
   "goalEndState": {
     "velocity": 0,
-    "rotation": -37.639387204640194,
+    "rotation": -43.0,
     "rotateFast": false
   },
   "reversed": false,
