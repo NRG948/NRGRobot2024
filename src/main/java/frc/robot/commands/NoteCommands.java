@@ -19,10 +19,10 @@ public class NoteCommands {
   private static final double EXTRA_SHOT_DELAY = 0.2;
 
   /** The initial intake time when autoCenterNote is in sequence with intakeUntilNoteDetected. */
-  public static double AUTO_CENTER_NOTE_CONTINUATION = 0.2;
+  public static double AUTO_CENTER_NOTE_CONTINUATION = 0.15;
 
   /** The inital intake time when autoCenterNote is used standalone. */
-  public static double AUTO_CENTER_NOTE_STANDALONE = 0.25;
+  public static double AUTO_CENTER_NOTE_STANDALONE = 0.2;
 
   /**
    * Returns a sequence of commands to intake the note into the indexer until interrupted by another
