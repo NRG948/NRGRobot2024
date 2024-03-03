@@ -214,12 +214,13 @@ public class NoteCommands {
    */
   public static Command shootAtCurrentRPM(Subsystems subsystems) {
     IndexerSubsystem indexer = subsystems.indexer;
+    ShooterSubsystem shooter = subsystems.shooter;
     return Commands.either( //
         Commands.sequence( //
                 Commands.runOnce(indexer::feed, indexer), //
-                Commands.idle(indexer) // Suppress default commands
+                Commands.idle(indexer, shooter) // Suppress default commands
                     .until(() -> !indexer.isNoteDetected()),
-                Commands.idle(indexer) // Suppress default commands
+                Commands.idle(indexer, shooter) // Suppress default commands
                     .withTimeout(EXTRA_SHOT_DELAY))
             .finallyDo(() -> indexer.disable()), //
         Commands.none(), //
