@@ -6,7 +6,7 @@
  */
 package frc.robot;
 
-import static frc.robot.Constants.ColorConstants.ORANGE;
+import static frc.robot.Constants.ColorConstants.GREEN;
 import static frc.robot.Constants.ColorConstants.RED;
 
 import com.nrg948.preferences.RobotPreferences;
@@ -116,7 +116,7 @@ public class RobotContainer {
     operatorController.rightBumper().onTrue(NoteCommands.intakeAndAutoCenterNote(subsystems));
 
     Trigger noteDetected = new Trigger(subsystems.indexer::isNoteDetected);
-    noteDetected.onTrue(LEDs.fillColor(subsystems.statusLED, ORANGE));
+    noteDetected.onTrue(LEDs.fillColor(subsystems.statusLED, GREEN));
     noteDetected.onFalse(LEDs.fillColor(subsystems.statusLED, RED));
   }
 

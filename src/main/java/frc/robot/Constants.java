@@ -44,7 +44,7 @@ public final class Constants {
     /** Defines sub-segments on the addressable LED string. */
     public static class LEDSegment {
       public static final int STATUS_FIRST_LED = 0;
-      public static final int STATUS_LED_COUNT = 12;
+      public static final int STATUS_LED_COUNT = 11;
     }
 
     /** Field of View of Camera in degrees. */
