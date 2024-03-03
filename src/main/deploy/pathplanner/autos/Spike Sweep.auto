@@ -43,7 +43,7 @@
               {
                 "type": "named",
                 "data": {
-                  "name": "IntakeUntilNoteDetected"
+                  "name": "IntakeUntilNoteDetectedNoAutoCentering"
                 }
               }
             ]
@@ -80,7 +80,7 @@
               {
                 "type": "named",
                 "data": {
-                  "name": "IntakeUntilNoteDetected"
+                  "name": "IntakeUntilNoteDetectedNoAutoCentering"
                 }
               }
             ]
@@ -118,7 +118,7 @@
               {
                 "type": "wait",
                 "data": {
-                  "waitTime": 2.0
+                  "waitTime": 3.0
                 }
               },
               {
@@ -128,12 +128,6 @@
                 }
               }
             ]
-          }
-        },
-        {
-          "type": "named",
-          "data": {
-            "name": "AutoCenterNote"
           }
         },
         {
