@@ -91,11 +91,11 @@ public class RobotContainer {
 
     operatorController
         .start()
-        .whileTrue(
+        .onTrue(
             NoteCommands.prepareToShoot(
                 subsystems,
-                Autos.MID_SPIKE_SHOT_RPM.getValue(),
-                Autos.MID_SPIKE_SHOT_ANGLE.getValue()));
+                Autos.SPIKE_SHOT_RPM.getValue(),
+                Math.toRadians(Autos.SPIKE_SHOT_ANGLE.getValue())));
     operatorController
         .povUp()
         .whileTrue(
