@@ -9,8 +9,8 @@ package frc.robot.subsystems;
 import com.nrg948.preferences.RobotPreferences;
 import com.nrg948.preferences.RobotPreferencesValue;
 import com.revrobotics.CANSparkBase.IdleMode;
-import com.revrobotics.CANSparkFlex;
 import com.revrobotics.CANSparkLowLevel.MotorType;
+import com.revrobotics.CANSparkMax;
 import com.revrobotics.RelativeEncoder;
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.controller.SimpleMotorFeedforward;
@@ -46,10 +46,10 @@ public class ShooterSubsystem extends SubsystemBase {
 
   private static final double RPM_TOLERANCE = 50.0;
 
-  private final CANSparkFlex leftMotor =
-      new CANSparkFlex(RobotConstants.CAN.SparkMax.SHOOTER_LEFT_PORT, MotorType.kBrushless);
-  private final CANSparkFlex rightMotor =
-      new CANSparkFlex(RobotConstants.CAN.SparkMax.SHOOTER_RIGHT_PORT, MotorType.kBrushless);
+  private final CANSparkMax leftMotor =
+      new CANSparkMax(RobotConstants.CAN.SparkMax.SHOOTER_LEFT_PORT, MotorType.kBrushless);
+  private final CANSparkMax rightMotor =
+      new CANSparkMax(RobotConstants.CAN.SparkMax.SHOOTER_RIGHT_PORT, MotorType.kBrushless);
 
   private double currentLeftRPM;
   private double currentRightRPM;

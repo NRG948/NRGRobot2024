@@ -9,8 +9,8 @@ package frc.robot.subsystems;
 import com.nrg948.preferences.RobotPreferences;
 import com.nrg948.preferences.RobotPreferencesValue;
 import com.revrobotics.CANSparkBase.IdleMode;
-import com.revrobotics.CANSparkFlex;
 import com.revrobotics.CANSparkLowLevel.MotorType;
+import com.revrobotics.CANSparkMax;
 import com.revrobotics.RelativeEncoder;
 import edu.wpi.first.math.controller.SimpleMotorFeedforward;
 import edu.wpi.first.wpilibj.shuffleboard.BuiltInLayouts;
@@ -23,8 +23,7 @@ import frc.robot.parameters.MotorParameters;
 
 /** The intake subsystem is responsible for acquiring game elements from the floor. */
 public class IntakeSubsystem extends SubsystemBase {
-  private final CANSparkFlex motor =
-      new CANSparkFlex(CAN.SparkMax.INTAKE_PORT, MotorType.kBrushless);
+  private final CANSparkMax motor = new CANSparkMax(CAN.SparkMax.INTAKE_PORT, MotorType.kBrushless);
   private final RelativeEncoder encoder = motor.getEncoder();
   private boolean isEnabled = false;
   private double goalVelocity;
