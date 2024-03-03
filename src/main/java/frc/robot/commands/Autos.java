@@ -171,6 +171,8 @@ public final class Autos {
     eventMaps.put(
         "AutoCenterNote",
         NoteCommands.autoCenterNote(subsystems, NoteCommands.AUTO_CENTER_NOTE_CONTINUATION));
+    eventMaps.put(
+        "IntakeUntilNoteDetectedNoAutoCentering", NoteCommands.intakeUntilNoteDetected(subsystems));
 
     return eventMaps;
   }
