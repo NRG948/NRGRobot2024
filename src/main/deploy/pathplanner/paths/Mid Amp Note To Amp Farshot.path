@@ -32,22 +32,35 @@
   "constraintZones": [],
   "eventMarkers": [
     {
-      "name": "Prepare to Shoot",
-      "waypointRelativePos": 0.55,
+      "name": "New Event Marker",
+      "waypointRelativePos": 0,
       "command": {
-        "type": "parallel",
+        "type": "sequential",
         "data": {
           "commands": [
             {
               "type": "named",
               "data": {
-                "name": "SetArmAngleAmpFarShot"
+                "name": "AutoCenterNote"
               }
             },
             {
-              "type": "named",
+              "type": "parallel",
               "data": {
-                "name": "SetShooterRPMAmpFarShot"
+                "commands": [
+                  {
+                    "type": "named",
+                    "data": {
+                      "name": "SetArmAngleAmpFarShot"
+                    }
+                  },
+                  {
+                    "type": "named",
+                    "data": {
+                      "name": "SetShooterRPMAmpFarShot"
+                    }
+                  }
+                ]
               }
             }
           ]

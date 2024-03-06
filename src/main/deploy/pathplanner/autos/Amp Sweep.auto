@@ -14,13 +14,7 @@
         {
           "type": "named",
           "data": {
-            "name": "SetSubwooferRPMAndWait"
-          }
-        },
-        {
-          "type": "named",
-          "data": {
-            "name": "ShootAtCurrentRPM"
+            "name": "ShootSubwooferShot"
           }
         },
         {
@@ -36,7 +30,7 @@
               {
                 "type": "wait",
                 "data": {
-                  "waitTime": 5.0
+                  "waitTime": 2.0
                 }
               },
               {
@@ -86,7 +80,7 @@
               {
                 "type": "named",
                 "data": {
-                  "name": "IntakeUntilNoteDetected"
+                  "name": "IntakeUntilNoteDetectedNoAutoCentering"
                 }
               }
             ]
@@ -136,7 +130,7 @@
               {
                 "type": "named",
                 "data": {
-                  "name": "IntakeUntilNoteDetected"
+                  "name": "IntakeUntilNoteDetectedNoAutoCentering"
                 }
               }
             ]
