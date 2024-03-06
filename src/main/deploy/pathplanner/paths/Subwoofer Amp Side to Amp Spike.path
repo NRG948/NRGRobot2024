@@ -1,0 +1,52 @@
+{
+  "version": 1.0,
+  "waypoints": [
+    {
+      "anchor": {
+        "x": 0.7913245719729881,
+        "y": 6.621971013811542
+      },
+      "prevControl": null,
+      "nextControl": {
+        "x": 1.5119508293583617,
+        "y": 6.904378601165269
+      },
+      "isLocked": false,
+      "linkedName": null
+    },
+    {
+      "anchor": {
+        "x": 2.544199252099572,
+        "y": 7.001760527838968
+      },
+      "prevControl": {
+        "x": 1.9501694993900078,
+        "y": 6.982284142504229
+      },
+      "nextControl": null,
+      "isLocked": false,
+      "linkedName": null
+    }
+  ],
+  "rotationTargets": [],
+  "constraintZones": [],
+  "eventMarkers": [],
+  "globalConstraints": {
+    "maxVelocity": 3.0,
+    "maxAcceleration": 3.0,
+    "maxAngularVelocity": 540.0,
+    "maxAngularAcceleration": 720.0
+  },
+  "goalEndState": {
+    "velocity": 0,
+    "rotation": 0,
+    "rotateFast": false
+  },
+  "reversed": false,
+  "folder": "Drive Out",
+  "previewStartingState": {
+    "rotation": 58.78159723565356,
+    "velocity": 0
+  },
+  "useDefaultConstraints": true
+}
