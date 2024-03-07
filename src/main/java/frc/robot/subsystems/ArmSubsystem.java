@@ -32,30 +32,38 @@ import frc.robot.parameters.MotorParameters;
 import java.util.Map;
 import java.util.Set;
 
-@RobotPreferencesLayout(groupName = "Arm+Shooter", column = 5, row = 0, width = 1, height = 3)
+@RobotPreferencesLayout(
+    groupName = "Arm+Shooter",
+    column = 4,
+    row = 0,
+    width = 2,
+    height = 4,
+    type = "Grid Layout",
+    gridColumns = 2,
+    gridRows = 5)
 public class ArmSubsystem extends SubsystemBase {
 
-  @RobotPreferencesValue
+  @RobotPreferencesValue(column = 0, row = 0)
   public static final RobotPreferences.BooleanValue ENABLE_TAB =
       new RobotPreferences.BooleanValue("Arm+Shooter", "Enable Tab", false);
 
-  @RobotPreferencesValue
+  @RobotPreferencesValue(column = 0, row = 1)
   public static final RobotPreferences.DoubleValue KP =
       new RobotPreferences.DoubleValue("Arm+Shooter", "kP", 10.0);
 
-  @RobotPreferencesValue
+  @RobotPreferencesValue(column = 0, row = 2)
   public static final RobotPreferences.DoubleValue KI =
       new RobotPreferences.DoubleValue("Arm+Shooter", "kI", 0.0);
 
-  @RobotPreferencesValue
+  @RobotPreferencesValue(column = 0, row = 3)
   public static final RobotPreferences.DoubleValue KD =
       new RobotPreferences.DoubleValue("Arm+Shooter", "kD", 0.0);
 
-  @RobotPreferencesValue
+  @RobotPreferencesValue(column = 0, row = 4)
   public static RobotPreferences.DoubleValue AMP_ANGLE =
       new RobotPreferences.DoubleValue("Arm+Shooter", "Amp Angle", 40.0);
 
-  @RobotPreferencesValue
+  @RobotPreferencesValue(column = 1, row = 4)
   public static RobotPreferences.DoubleValue TRAP_ANGLE =
       new RobotPreferences.DoubleValue("Arm+Shooter", "Trap Angle", 45);
 
