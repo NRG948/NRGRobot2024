@@ -8,10 +8,6 @@ package frc.robot.subsystems;
 
 import com.nrg948.preferences.RobotPreferences;
 import com.nrg948.preferences.RobotPreferencesValue;
-import com.revrobotics.CANSparkBase.IdleMode;
-import com.revrobotics.CANSparkLowLevel.MotorType;
-import com.revrobotics.CANSparkMax;
-import com.revrobotics.RelativeEncoder;
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.controller.SimpleMotorFeedforward;
 import edu.wpi.first.networktables.GenericEntry;
@@ -23,22 +19,27 @@ import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardLayout;
 import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
 import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
-import frc.robot.Constants.RobotConstants;
 import frc.robot.commands.NoteCommands;
-import frc.robot.parameters.MotorParameters;
+import frc.robot.motors.MotorAdapter;
+import frc.robot.motors.RelativeEncoderAdapter;
+import frc.robot.parameters.ShooterParameters;
 import java.util.Map;
 import java.util.Set;
 
 public class ShooterSubsystem extends SubsystemBase {
-  /** Creates a new ShooterSubsystem. */
-  private static final MotorParameters MOTOR = MotorParameters.NeoV1_1;
 
-  private static final double GEAR_RATIO = 1.0;
-  private static final double EFFICIENCY = 0.9;
-  public static final double MAX_RPM = (MOTOR.getFreeSpeedRPM() / GEAR_RATIO) * EFFICIENCY;
-  private static final double ENCODER_CONVERSION_FACTOR = 1 / GEAR_RATIO;
-  private static final double KS = 0.15;
-  private static final double KV = (RobotConstants.MAX_BATTERY_VOLTAGE - KS) / MAX_RPM;
+  @RobotPreferencesValue
+  public static final RobotPreferences.EnumValue<ShooterParameters> PARAMETERS =
+      new RobotPreferences.EnumValue<ShooterParameters>(
+          "Arm+Shooter", "Shooter", ShooterParameters.PracticeShooter);
+
+  @RobotPreferencesValue
+  public static final RobotPreferences.DoubleValue LEFT_KP =
+      new RobotPreferences.DoubleValue("Arm+Shooter", "Left Shooter kP", 0.004);
+
+  @RobotPreferencesValue
+  public static final RobotPreferences.DoubleValue RIGHT_KP =
+      new RobotPreferences.DoubleValue("Arm+Shooter", "Right Shooter kP", 0.003);
 
   @RobotPreferencesValue
   public static final RobotPreferences.DoubleValue SPIN_FACTOR =
@@ -46,21 +47,21 @@ public class ShooterSubsystem extends SubsystemBase {
 
   private static final double RPM_TOLERANCE = 50.0;
 
-  private final CANSparkMax leftMotor =
-      new CANSparkMax(RobotConstants.CAN.SparkMax.SHOOTER_LEFT_PORT, MotorType.kBrushless);
-  private final CANSparkMax rightMotor =
-      new CANSparkMax(RobotConstants.CAN.SparkMax.SHOOTER_RIGHT_PORT, MotorType.kBrushless);
+  private final MotorAdapter leftMotor = PARAMETERS.getValue().createLeftMotor();
+  private final MotorAdapter rightMotor = PARAMETERS.getValue().createRighMotor();
 
   private double currentLeftRPM;
   private double currentRightRPM;
   private double goalRPM = 0;
 
-  private final RelativeEncoder leftEncoder = leftMotor.getEncoder();
-  private final RelativeEncoder rightEncoder = rightMotor.getEncoder();
+  private final RelativeEncoderAdapter leftEncoder = leftMotor.getEncoder();
+  private final RelativeEncoderAdapter rightEncoder = rightMotor.getEncoder();
 
-  private PIDController leftController = new PIDController(0.004, 0, 0); // TODO assign value
-  private PIDController rightController = new PIDController(0.003, 0, 0); // TODO assign value
-  private SimpleMotorFeedforward feedforward = new SimpleMotorFeedforward(KS, KV);
+  private PIDController leftController =
+      new PIDController(LEFT_KP.getValue(), 0, 0); // TODO assign value
+  private PIDController rightController =
+      new PIDController(RIGHT_KP.getValue(), 0, 0); // TODO assign value
+  private SimpleMotorFeedforward feedforward = PARAMETERS.getValue().getFeedfoward();
   private boolean isEnabled = false;
 
   private BooleanLogEntry enabledLogger =
@@ -74,12 +75,13 @@ public class ShooterSubsystem extends SubsystemBase {
 
   /** Creates ShooterSubsystem. */
   public ShooterSubsystem() {
-    leftMotor.setIdleMode(IdleMode.kCoast);
+    leftMotor.setBrakeMode(false);
     leftMotor.setInverted(true);
-    rightMotor.setIdleMode(IdleMode.kCoast);
+    rightMotor.setBrakeMode(false);
     rightMotor.setInverted(false);
-    leftEncoder.setVelocityConversionFactor(ENCODER_CONVERSION_FACTOR);
-    rightEncoder.setVelocityConversionFactor(ENCODER_CONVERSION_FACTOR);
+    double velocityConversionFactor = 1.0 / PARAMETERS.getValue().getGearRatio();
+    leftEncoder.setVelocityConversionFactor(velocityConversionFactor);
+    rightEncoder.setVelocityConversionFactor(velocityConversionFactor);
     leftController.setTolerance(RPM_TOLERANCE);
     rightController.setTolerance(RPM_TOLERANCE);
   }
@@ -88,6 +90,8 @@ public class ShooterSubsystem extends SubsystemBase {
     this.goalRPM = goalRPM;
     leftController.setSetpoint(goalRPM * SPIN_FACTOR.getValue());
     rightController.setSetpoint(goalRPM);
+    leftController.setPID(LEFT_KP.getValue(), 0, 0);
+    rightController.setPID(RIGHT_KP.getValue(), 0, 0);
     goalRPMLogger.append(goalRPM);
   }
 
