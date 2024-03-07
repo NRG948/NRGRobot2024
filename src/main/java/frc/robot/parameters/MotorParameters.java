@@ -13,7 +13,8 @@ public enum MotorParameters {
    * integrated Talon FX motor controller and encoders.
    */
   Falcon500(6380.0, 4.69, 2048),
-
+  /** A CTRE Kraken X60 motor with integrated Talon FX motor controller and encoders. */
+  KrakenX60(6000.0, 7.09, 2048),
   /**
    * A REV Robotics <a href="https://www.revrobotics.com/rev-21-1650/">NEO Brushless Motor V1.1</a>
    * with integrated encoder.

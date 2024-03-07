@@ -6,6 +6,7 @@
  */
 package frc.robot.parameters;
 
+import static frc.robot.parameters.MotorParameters.KrakenX60;
 import static frc.robot.parameters.MotorParameters.NeoV1_1;
 
 import com.revrobotics.CANSparkLowLevel.MotorType;
@@ -17,7 +18,8 @@ import frc.robot.motors.MotorAdapter;
 /** An enum representing the properties of the shooter for a specific robot instance. */
 public enum ShooterParameters {
   PracticeShooter(NeoV1_1, 4, 10, 1.0, 0.9, 0.15),
-  ;
+  CompetitonShooter(KrakenX60, 4, 10, 1.0, 0.9, 0.15) // TODO update for comp bot
+;
   private final MotorParameters motor;
   private final int leftDeviceID;
   private final int rightDeviceID;
