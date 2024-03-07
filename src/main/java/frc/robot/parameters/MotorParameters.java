@@ -13,14 +13,28 @@ public enum MotorParameters {
    * integrated Talon FX motor controller and encoders.
    */
   Falcon500(6380.0, 4.69, 2048),
-  /** A CTRE Kraken X60 motor with integrated Talon FX motor controller and encoders. */
+  /**
+   * A WestCoast Products <a href="https://docs.wcproducts.com/kraken-x60/kraken-x60-motor">Kraken
+   * X60</a> motor with integrated Talon FX motor controller and encoders.
+   */
   KrakenX60(6000.0, 7.09, 2048),
   /**
    * A REV Robotics <a href="https://www.revrobotics.com/rev-21-1650/">NEO Brushless Motor V1.1</a>
    * with integrated encoder.
    */
   NeoV1_1(5676.0, 3.75, 42),
-
+  /**
+   * A REV Robotics <a href="https://www.revrobotics.com/rev-21-1652/">NEO Vortex Brushless
+   * Motor</a> with <a href="https://www.revrobotics.com/rev-11-2158/">SparkMax</a> motor
+   * controller.
+   */
+  NeoVortexMax(6784.0, 3.6, 42),
+  /**
+   * A REV Robotics <a href="https://www.revrobotics.com/rev-21-1652/">NEO Vortex Brushless
+   * Motor</a> with <a href="https://www.revrobotics.com/rev-11-2159/">SparkFlex</a> motor
+   * controller.
+   */
+  NeoVortexFlex(6784.0, 3.6, 7168),
   /**
    * A REV Robotics <a href="https://www.revrobotics.com/rev-21-1651/">NEO 550 Brushless Motor</a>
    * with integrated encoder.
@@ -32,10 +46,12 @@ public enum MotorParameters {
   private int pulsesPerRevolution;
 
   /**
-   * Constructs an instance of this class.,
+   * Constructs an instance of this enum.
    *
    * @param freeSpeedRPM The free speed RPM.
    * @param stallTorque The stall torque in Nm.
+   * @param pulsesPerRevolution The number of pulses per revolution of the motor reported by the
+   *     integrated encoder.
    */
   MotorParameters(double freeSpeedRPM, double stallTorque, int pulsesPerRevolution) {
     this.freeSpeedRPM = freeSpeedRPM;
