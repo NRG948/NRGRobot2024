@@ -9,21 +9,47 @@ package frc.robot.parameters;
 import static frc.robot.parameters.MotorParameters.NeoV1_1;
 
 import com.revrobotics.CANSparkLowLevel.MotorType;
+import edu.wpi.first.math.controller.SimpleMotorFeedforward;
+import frc.robot.Constants.RobotConstants;
 import frc.robot.motors.CANSparkMaxMotorAdapter;
 import frc.robot.motors.MotorAdapter;
 
 /** An enum representing the properties of the shooter for a specific robot instance. */
 public enum ShooterParameters {
-  PracticeShooter(NeoV1_1, 4, 10),
+  PracticeShooter(NeoV1_1, 4, 10, 1.0, 0.9, 0.15),
   ;
   private final MotorParameters motor;
   private final int leftDeviceID;
   private final int rightDeviceID;
+  private final double maxRPM;
+  private final double gearRatio;
+  private final FeedforwardConstants feedforward;
 
-  ShooterParameters(MotorParameters motor, int leftDeviceID, int rightDeviceID) {
+  /**
+   * Constructs an instance of this enum.
+   *
+   * @param motor The shooter motor type.
+   * @param leftDeviceID The CAN id of left motor.
+   * @param rightDeviceID The CAN id of right motor.
+   * @param gearRatio The gear ratio.
+   * @param efficiency The estimated efficiency of system.
+   * @param kS The kS feedforward control constant.
+   */
+  ShooterParameters(
+      MotorParameters motor,
+      int leftDeviceID,
+      int rightDeviceID,
+      double gearRatio,
+      double efficiency,
+      double kS) {
     this.motor = motor;
     this.leftDeviceID = leftDeviceID;
     this.rightDeviceID = rightDeviceID;
+    this.gearRatio = gearRatio;
+
+    maxRPM = (motor.getFreeSpeedRPM() / gearRatio) * efficiency;
+    feedforward =
+        new FeedforwardConstants(kS, (RobotConstants.MAX_BATTERY_VOLTAGE - kS) / maxRPM, 0);
   }
 
   /***
@@ -56,5 +82,50 @@ public enum ShooterParameters {
    */
   public MotorAdapter createRighMotor() {
     return createMotorAdapter(motor, rightDeviceID);
+  }
+
+  /**
+   * Returns maximum RPM.
+   *
+   * @return
+   */
+  public double getMaxRPM() {
+    return maxRPM;
+  }
+
+  /**
+   * Returns Gear Ratio.
+   *
+   * @return
+   */
+  public double getGearRatio() {
+    return gearRatio;
+  }
+
+  /**
+   * Returns SimpleMotorFeedForward object for shooter.
+   *
+   * @return
+   */
+  public SimpleMotorFeedforward getFeedfoward() {
+    return new SimpleMotorFeedforward(feedforward.kS, feedforward.kV);
+  }
+
+  /**
+   * Returns kS feedfoward control constant.
+   *
+   * @return
+   */
+  public double getKS() {
+    return feedforward.kS;
+  }
+
+  /**
+   * Returns kV feedfoward control constant.
+   *
+   * @return
+   */
+  public double getKV() {
+    return feedforward.kV;
   }
 };
