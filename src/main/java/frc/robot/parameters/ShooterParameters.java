@@ -82,7 +82,7 @@ public enum ShooterParameters {
    * Creates the right motor.
    * @return
    */
-  public MotorAdapter createRighMotor() {
+  public MotorAdapter createRightMotor() {
     return createMotorAdapter(motor, rightDeviceID);
   }
 
