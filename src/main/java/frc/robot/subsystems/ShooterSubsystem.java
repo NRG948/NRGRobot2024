@@ -28,20 +28,20 @@ import java.util.Set;
 
 public class ShooterSubsystem extends SubsystemBase {
 
-  @RobotPreferencesValue
+  @RobotPreferencesValue(column = 1, row = 0)
   public static final RobotPreferences.EnumValue<ShooterParameters> PARAMETERS =
       new RobotPreferences.EnumValue<ShooterParameters>(
           "Arm+Shooter", "Shooter", ShooterParameters.PracticeShooter);
 
-  @RobotPreferencesValue
+  @RobotPreferencesValue(column = 1, row = 1)
   public static final RobotPreferences.DoubleValue LEFT_KP =
       new RobotPreferences.DoubleValue("Arm+Shooter", "Left Shooter kP", 0.004);
 
-  @RobotPreferencesValue
+  @RobotPreferencesValue(column = 1, row = 2)
   public static final RobotPreferences.DoubleValue RIGHT_KP =
       new RobotPreferences.DoubleValue("Arm+Shooter", "Right Shooter kP", 0.003);
 
-  @RobotPreferencesValue
+  @RobotPreferencesValue(column = 1, row = 3)
   public static final RobotPreferences.DoubleValue SPIN_FACTOR =
       new RobotPreferences.DoubleValue("Arm+Shooter", "Spin Factor", 0.85);
 

@@ -34,15 +34,15 @@ public class DriveUsingController extends Command {
   public static final RobotPreferences.DoubleValue KD_APRIL_TAG =
       new RobotPreferences.DoubleValue("AprilTag", "kD", 0);
 
-  @RobotPreferencesValue
+  @RobotPreferencesValue(column = 0, row = 1)
   public static final RobotPreferences.DoubleValue KP_NOTE =
       new RobotPreferences.DoubleValue("NoteVision", "kP", 0.7);
 
-  @RobotPreferencesValue
+  @RobotPreferencesValue(column = 1, row = 1)
   public static final RobotPreferences.DoubleValue KI_NOTE =
       new RobotPreferences.DoubleValue("NoteVision", "kI", 0.0);
 
-  @RobotPreferencesValue
+  @RobotPreferencesValue(column = 2, row = 1)
   public static final RobotPreferences.DoubleValue KD_NOTE =
       new RobotPreferences.DoubleValue("NoteVision", "kD", 0.0);
 

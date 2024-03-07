@@ -19,13 +19,21 @@ import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardLayout;
 import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
 import frc.robot.Constants.RobotConstants;
 
-@RobotPreferencesLayout(groupName = "NoteVision", column = 4, row = 0, width = 1, height = 3)
+@RobotPreferencesLayout(
+    groupName = "NoteVision",
+    column = 1,
+    row = 2,
+    width = 2,
+    height = 2,
+    type = "Grid Layout",
+    gridColumns = 3,
+    gridRows = 2)
 public class NoteVisionSubsystem extends PhotonVisionSubsystemBase {
-  @RobotPreferencesValue
+  @RobotPreferencesValue(column = 0, row = 0)
   public static final RobotPreferences.BooleanValue ENABLED =
       new RobotPreferences.BooleanValue("NoteVision", "Enabled", false);
 
-  @RobotPreferencesValue
+  @RobotPreferencesValue(column = 1, row = 0)
   public static final RobotPreferences.BooleanValue ENABLE_TAB =
       new RobotPreferences.BooleanValue("NoteVision", "Enable Tab", false);
 
