@@ -48,7 +48,7 @@ public class ShooterSubsystem extends SubsystemBase {
   private static final double RPM_TOLERANCE = 50.0;
 
   private final MotorAdapter leftMotor = PARAMETERS.getValue().createLeftMotor();
-  private final MotorAdapter rightMotor = PARAMETERS.getValue().createRighMotor();
+  private final MotorAdapter rightMotor = PARAMETERS.getValue().createRightMotor();
 
   private double currentLeftRPM;
   private double currentRightRPM;
