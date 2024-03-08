@@ -116,12 +116,13 @@ public class RobotContainer {
     operatorController.leftBumper().whileTrue(NoteCommands.intakeUntilNoteDetected(subsystems));
     operatorController.rightBumper().onTrue(NoteCommands.intakeAndAutoCenterNote(subsystems));
 
-    Trigger noteDetected = new Trigger(subsystems.indexer::isNoteDetected);
+    Trigger noteDetected = new Trigger(subsystems.indexer::isNoteAtShootPosition);
     noteDetected.onTrue(LEDs.fillColor(subsystems.statusLED, GREEN));
     noteDetected.onFalse(LEDs.fillColor(subsystems.statusLED, RED));
 
     Trigger shooterSpinning =
-        new Trigger(() -> subsystems.shooter.atGoalRPM() && subsystems.indexer.isNoteDetected());
+        new Trigger(
+            () -> subsystems.shooter.atGoalRPM() && subsystems.indexer.isNoteAtShootPosition());
     shooterSpinning.onTrue(LEDs.fillColor(subsystems.statusLED, PINK));
   }
 
@@ -174,7 +175,7 @@ public class RobotContainer {
             .withProperties(Map.of("Number of columns", 1, "Number of rows", 1))
             .withPosition(6, 0)
             .withSize(2, 2);
-    statusLayout.addBoolean("Note Detected", subsystems.indexer::isNoteDetected);
+    statusLayout.addBoolean("Note Detected", subsystems.indexer::isNoteAtShootPosition);
 
     RobotPreferences.addShuffleBoardTab();
 

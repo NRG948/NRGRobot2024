@@ -74,7 +74,7 @@ public class NoteCommands {
     IndexerSubsystem indexer = subsystems.indexer;
 
     return intake(subsystems)
-        .until(indexer::isNoteDetected) //
+        .until(indexer::isNoteAtShootPosition) //
         .finallyDo(
             () -> {
               intake.disable();
@@ -129,9 +129,9 @@ public class NoteCommands {
             Commands.runOnce(() -> indexer.intake(), indexer), //
             Commands.idle(indexer).withTimeout(initialIntakeSeconds), //
             Commands.runOnce(() -> indexer.outtake(), indexer), //
-            Commands.idle(indexer).until(() -> !indexer.isNoteDetected()), //
+            Commands.idle(indexer).until(() -> !indexer.isNoteAtShootPosition()), //
             Commands.runOnce(() -> indexer.intake(), indexer), //
-            Commands.idle(indexer).until(indexer::isNoteDetected)) //
+            Commands.idle(indexer).until(indexer::isNoteAtShootPosition)) //
         .finallyDo(
             () -> {
               indexer.disable();
@@ -195,7 +195,7 @@ public class NoteCommands {
                 ShooterCommands.setAndWaitForRPM(subsystems, rpm), //
                 Commands.runOnce(indexer::feed, indexer), //
                 Commands.idle(shooter, indexer) // Suppress default commands
-                    .until(() -> !indexer.isNoteDetected()),
+                    .until(() -> !indexer.isNoteAtShootPosition()),
                 Commands.idle(shooter, indexer) // Suppress default commands
                     .withTimeout(EXTRA_SHOT_DELAY))
             .finallyDo(
@@ -204,7 +204,7 @@ public class NoteCommands {
                   indexer.disable();
                 }), //
         Commands.none(), //
-        indexer::isNoteDetected);
+        indexer::isNoteAtShootPosition);
   }
 
   /***
@@ -219,12 +219,12 @@ public class NoteCommands {
         Commands.sequence( //
                 Commands.runOnce(indexer::feed, indexer), //
                 Commands.idle(indexer, shooter) // Suppress default commands
-                    .until(() -> !indexer.isNoteDetected()),
+                    .until(() -> !indexer.isNoteAtShootPosition()),
                 Commands.idle(indexer, shooter) // Suppress default commands
                     .withTimeout(EXTRA_SHOT_DELAY))
             .finallyDo(() -> indexer.disable()), //
         Commands.none(), //
-        indexer::isNoteDetected);
+        indexer::isNoteAtShootPosition);
   }
 
   /**

@@ -51,7 +51,12 @@ public class IndexerSubsystem extends SubsystemBase {
   public static final RobotPreferences.DoubleValue FEED_VELOCITY =
       new RobotPreferences.DoubleValue("Indexer+Intake", "Indexer Feed Velocity", 3.0);
 
-  private boolean noteDetected = false;
+  @RobotPreferencesValue
+  public static final RobotPreferences.BooleanValue HAS_LOWER_BEAM_BREAK =
+      new RobotPreferences.BooleanValue("Indexer+Intake", "Has Lower Beam Break", true);
+
+  private boolean noteAtShootPosition = false;
+  private boolean noteAtEntry = false;
   private boolean isEnabled = false;
   private double goalVelocity = 0;
   private double currentVelocity = 0;
@@ -59,11 +64,14 @@ public class IndexerSubsystem extends SubsystemBase {
   private final CANSparkMax motor =
       new CANSparkMax(RobotConstants.CAN.SparkMax.INDEXER_PORT, MotorType.kBrushless);
   private final RelativeEncoder encoder = motor.getEncoder();
-  private final SparkLimitSwitch beamBreak = motor.getForwardLimitSwitch(Type.kNormallyOpen);
+  private final SparkLimitSwitch upperBeamBreak = motor.getForwardLimitSwitch(Type.kNormallyOpen);
+  private final SparkLimitSwitch lowerBeamBreak = motor.getReverseLimitSwitch(Type.kNormallyOpen);
   private final SimpleMotorFeedforward indexerFeedfoward = new SimpleMotorFeedforward(KS, KV, KA);
 
-  private final BooleanLogEntry noteDetectedLogger =
-      new BooleanLogEntry(DataLogManager.getLog(), "Indexer Note Detector");
+  private final BooleanLogEntry noteAtShootPositionLogger =
+      new BooleanLogEntry(DataLogManager.getLog(), "Indexer/Note At Shoot Position");
+  private final BooleanLogEntry noteAtEntryLogger =
+      new BooleanLogEntry(DataLogManager.getLog(), "Indexer/Note At Entry");
   private final DoubleLogEntry goalVelocityLogger =
       new DoubleLogEntry(DataLogManager.getLog(), "Indexer/Goal Velocity");
 
@@ -77,11 +85,25 @@ public class IndexerSubsystem extends SubsystemBase {
     motor.setInverted(true);
     encoder.setVelocityConversionFactor(ENCODER_CONVERSION_FACTOR);
     encoder.setPositionConversionFactor(ENCODER_CONVERSION_FACTOR);
-    beamBreak.enableLimitSwitch(false);
+    upperBeamBreak.enableLimitSwitch(false);
   }
 
-  public boolean isNoteDetected() {
-    return noteDetected;
+  /**
+   * Returns whether the note is at the shoot position (upper beam break is broken).
+   *
+   * @return
+   */
+  public boolean isNoteAtShootPosition() {
+    return noteAtShootPosition;
+  }
+
+  /**
+   * Returns whether the note is at the entry of the indexer (lower beam break is broken).
+   *
+   * @return
+   */
+  public boolean isNoteAtEntry() {
+    return noteAtEntry;
   }
 
   public void feed() {
@@ -117,10 +139,16 @@ public class IndexerSubsystem extends SubsystemBase {
   @Override
   public void periodic() {
     // This method will be called once per scheduler run
-    boolean noteDetected = beamBreak.isPressed();
-    if (this.noteDetected != noteDetected) {
-      noteDetectedLogger.append(noteDetected);
-      this.noteDetected = noteDetected;
+    boolean noteAtShootPosition = upperBeamBreak.isPressed();
+    if (this.noteAtShootPosition != noteAtShootPosition) {
+      noteAtShootPositionLogger.append(noteAtShootPosition);
+      this.noteAtShootPosition = noteAtShootPosition;
+    }
+
+    boolean noteAtEntry = lowerBeamBreak.isPressed();
+    if (this.noteAtEntry != noteAtEntry) {
+      noteAtEntryLogger.append(noteAtEntry);
+      this.noteAtEntry = noteAtEntry;
     }
 
     currentVelocity = encoder.getVelocity();
@@ -149,6 +177,6 @@ public class IndexerSubsystem extends SubsystemBase {
     layout.addDouble("Goal Velocity", () -> goalVelocity);
     layout.addDouble("Current Velocity", () -> currentVelocity);
     layout.addBoolean("Enabled", () -> isEnabled);
-    layout.addBoolean("Note Detected", () -> noteDetected);
+    layout.addBoolean("Note Detected", () -> noteAtShootPosition);
   }
 }
