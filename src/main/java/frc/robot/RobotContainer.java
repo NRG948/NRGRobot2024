@@ -19,6 +19,7 @@ import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardLayout;
 import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
 import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
 import frc.robot.Constants.RobotConstants.OperatorConstants;
@@ -117,13 +118,18 @@ public class RobotContainer {
     operatorController.rightBumper().onTrue(NoteCommands.intakeAndAutoCenterNote(subsystems));
 
     Trigger noteDetected = new Trigger(subsystems.indexer::isNoteAtShootPosition);
-    noteDetected.onTrue(LEDs.fillColor(subsystems.statusLED, GREEN));
+    noteDetected.onTrue(
+        Commands.sequence(
+            LEDs.flashColor(subsystems.statusLED, GREEN),
+            LEDs.fillColor(subsystems.statusLED, GREEN)));
     noteDetected.onFalse(LEDs.fillColor(subsystems.statusLED, RED));
 
     Trigger shooterSpinning =
-        new Trigger(
-            () -> subsystems.shooter.atGoalRPM() && subsystems.indexer.isNoteAtShootPosition());
-    shooterSpinning.onTrue(LEDs.fillColor(subsystems.statusLED, PINK));
+        new Trigger(() -> subsystems.shooter.atGoalRPM() && subsystems.indexer.isNoteAtShootPosition());
+    shooterSpinning.onTrue(
+        Commands.sequence(
+            LEDs.flashColor(subsystems.statusLED, PINK),
+            LEDs.fillColor(subsystems.statusLED, PINK)));
   }
 
   /**
