@@ -17,7 +17,11 @@ import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.controller.ArmFeedforward;
 import edu.wpi.first.math.controller.ProfiledPIDController;
 import edu.wpi.first.math.trajectory.TrapezoidProfile;
+import edu.wpi.first.math.trajectory.TrapezoidProfile.State;
 import edu.wpi.first.networktables.GenericEntry;
+import edu.wpi.first.util.datalog.BooleanLogEntry;
+import edu.wpi.first.util.datalog.DoubleLogEntry;
+import edu.wpi.first.wpilibj.DataLogManager;
 import edu.wpi.first.wpilibj.DutyCycleEncoder;
 import edu.wpi.first.wpilibj.RobotController;
 import edu.wpi.first.wpilibj.shuffleboard.BuiltInLayouts;
@@ -107,6 +111,22 @@ public class ArmSubsystem extends SubsystemBase {
   private double currentGoal = STOWED_ANGLE;
 
   private double currentMotorVoltage = 0;
+  private DoubleLogEntry currentAngleLog =
+      new DoubleLogEntry(DataLogManager.getLog(), "/Arm/Current Angle");
+  private DoubleLogEntry currentGoalLog =
+      new DoubleLogEntry(DataLogManager.getLog(), "/Arm/Goal Angle");
+  private DoubleLogEntry currentMotorVoltageLog =
+      new DoubleLogEntry(DataLogManager.getLog(), "/Arm/Motor Voltage");
+  private DoubleLogEntry trapezoidStatePositionLog =
+      new DoubleLogEntry(DataLogManager.getLog(), "/Arm/State/Position");
+  private DoubleLogEntry trapezoidStateVelocityLog =
+      new DoubleLogEntry(DataLogManager.getLog(), "Arm/State/Velocity");
+  private DoubleLogEntry trapezoidStatePositionErrorLog =
+      new DoubleLogEntry(DataLogManager.getLog(), "/Arm/State/Position Error");
+  private DoubleLogEntry trapezoidStateVelocityErrorlog =
+      new DoubleLogEntry(DataLogManager.getLog(), "/Arm/State/Velocity Error");
+  private BooleanLogEntry enablePeriodicControlLog =
+      new BooleanLogEntry(DataLogManager.getLog(), "Arm/Enabled");
 
   private final ArmFeedforward feedForward = new ArmFeedforward(KS, KG, KV, KA);
   private final ProfiledPIDController controller =
@@ -148,11 +168,14 @@ public class ArmSubsystem extends SubsystemBase {
     this.currentGoal = goalAngle;
     controller.setGoal(goalAngle);
     enablePeriodicControl = true;
+    enablePeriodicControlLog.append(enablePeriodicControl);
+    currentGoalLog.append(goalAngle);
   }
 
   /** Disables periodic control. */
   public void disable() {
     enablePeriodicControl = false;
+    enablePeriodicControlLog.append(enablePeriodicControl);
     leftMotor.stopMotor();
     currentMotorVoltage = 0;
   }
@@ -185,6 +208,7 @@ public class ArmSubsystem extends SubsystemBase {
 
     leftMotor.setVoltage(voltage);
     currentMotorVoltage = voltage;
+    currentMotorVoltageLog.append(voltage);
   }
 
   /**
@@ -203,14 +227,19 @@ public class ArmSubsystem extends SubsystemBase {
     currentAngle = MathUtil.angleModulus(rawAngleOffset - absoluteEncoder.getDistance());
 
     if (enablePeriodicControl) {
+      currentAngleLog.append(currentAngle);
       // Turn off PID when nearly stowed
       if (currentAngle <= NEARLY_STOWED_ANGLE && currentGoal <= STOWED_ANGLE) {
         disable();
       } else {
         double feedback = controller.calculate(currentAngle);
+        State setpoint = controller.getSetpoint();
+        trapezoidStatePositionLog.append(setpoint.position);
+        trapezoidStateVelocityLog.append(setpoint.velocity);
+        trapezoidStatePositionErrorLog.append(controller.getPositionError());
+        trapezoidStateVelocityErrorlog.append(controller.getVelocityError());
         double feedForward =
-            this.feedForward.calculate(
-                currentAngle + CG_ANGLE_OFFSET, controller.getSetpoint().velocity);
+            this.feedForward.calculate(currentAngle + CG_ANGLE_OFFSET, setpoint.velocity);
         setMotorVoltages(feedForward + feedback);
       }
     }

@@ -125,7 +125,8 @@ public class RobotContainer {
     noteDetected.onFalse(LEDs.fillColor(subsystems.statusLED, RED));
 
     Trigger shooterSpinning =
-        new Trigger(() -> subsystems.shooter.atGoalRPM() && subsystems.indexer.isNoteAtShootPosition());
+        new Trigger(
+            () -> subsystems.shooter.atGoalRPM() && subsystems.indexer.isNoteAtShootPosition());
     shooterSpinning.onTrue(
         Commands.sequence(
             LEDs.flashColor(subsystems.statusLED, PINK),
