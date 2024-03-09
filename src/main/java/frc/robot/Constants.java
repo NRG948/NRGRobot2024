@@ -57,7 +57,7 @@ public final class Constants {
     public static final double SCORING_DISTANCE_FROM_AMP = Units.inchesToMeters(20);
 
     /** 3d transforms that moves the camera to the center of the robot. */
-    public static final double APRILTAG_CAMERA_PITCH = Math.toRadians(-15); // -13.5
+    public static final double APRILTAG_CAMERA_PITCH = Math.toRadians(-24);
 
     public static final double APRILTAG_CAMERA_YAW = Math.toRadians(180);
     public static final double APRILTAG_CAMERA_ROLL = Math.toRadians(0);
