@@ -27,7 +27,7 @@ public class Subsystems {
   public final StatusLEDSubsystem statusLED = new StatusLEDSubsystem();
   public final ArmSubsystem arm = new ArmSubsystem();
   public final IntakeSubsystem intake = new IntakeSubsystem();
-  public final ShooterSubsystem shooter = new ShooterSubsystem();
+  public final ShooterSubsystem shooter = new ShooterSubsystem(() -> drivetrain.getOrientation());
 
   public final Subsystem[] all;
 
