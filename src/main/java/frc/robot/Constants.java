@@ -83,6 +83,11 @@ public final class Constants {
 
     /** CAN Ids */
     public static class CAN {
+      public static class TalonFX {
+        public static final int CLIMBER_LEFT_PORT = 63; // TODO: change id
+        public static final int CLIMBER_RIGHT_PORT = 62; // TODO: change id
+      }
+
       public static class SparkMax {
         public static final int SHOOTER_LEFT_PORT = 4;
         public static final int SHOOTER_RIGHT_PORT = 10;
