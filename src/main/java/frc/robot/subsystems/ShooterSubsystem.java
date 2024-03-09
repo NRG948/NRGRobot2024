@@ -6,10 +6,16 @@
  */
 package frc.robot.subsystems;
 
+import java.util.Map;
+import java.util.Set;
+import java.util.function.Supplier;
+
 import com.nrg948.preferences.RobotPreferences;
 import com.nrg948.preferences.RobotPreferencesValue;
+
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.controller.SimpleMotorFeedforward;
+import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.networktables.GenericEntry;
 import edu.wpi.first.util.datalog.BooleanLogEntry;
 import edu.wpi.first.util.datalog.DoubleLogEntry;
@@ -23,11 +29,8 @@ import frc.robot.commands.NoteCommands;
 import frc.robot.motors.MotorAdapter;
 import frc.robot.motors.RelativeEncoderAdapter;
 import frc.robot.parameters.ShooterParameters;
-import java.util.Map;
-import java.util.Set;
 
 public class ShooterSubsystem extends SubsystemBase {
-
   @RobotPreferencesValue(column = 1, row = 0)
   public static final RobotPreferences.EnumValue<ShooterParameters> PARAMETERS =
       new RobotPreferences.EnumValue<ShooterParameters>(
@@ -54,6 +57,8 @@ public class ShooterSubsystem extends SubsystemBase {
   private double currentRightRPM;
   private double goalRPM = 0;
 
+  private Supplier<Rotation2d> orientationSupplier;
+
   private final RelativeEncoderAdapter leftEncoder = leftMotor.getEncoder();
   private final RelativeEncoderAdapter rightEncoder = rightMotor.getEncoder();
 
@@ -74,7 +79,9 @@ public class ShooterSubsystem extends SubsystemBase {
       new DoubleLogEntry(DataLogManager.getLog(), "/Shooter/Right RPM");
 
   /** Creates ShooterSubsystem. */
-  public ShooterSubsystem() {
+  public ShooterSubsystem(Supplier<Rotation2d> orientationSupplier) {
+    this.orientationSupplier = orientationSupplier;
+
     leftMotor.setBrakeMode(false);
     leftMotor.setInverted(true);
     rightMotor.setBrakeMode(false);
@@ -88,8 +95,13 @@ public class ShooterSubsystem extends SubsystemBase {
 
   private void setGoalRPMInternal(double goalRPM) {
     this.goalRPM = goalRPM;
-    leftController.setSetpoint(goalRPM * SPIN_FACTOR.getValue());
-    rightController.setSetpoint(goalRPM);
+    if (orientationSupplier.get().getRadians() > 0) {
+      leftController.setSetpoint(goalRPM * SPIN_FACTOR.getValue());
+      rightController.setSetpoint(goalRPM);
+    } else {
+      leftController.setSetpoint(goalRPM);
+      rightController.setSetpoint(goalRPM * SPIN_FACTOR.getValue());
+    }
     leftController.setPID(LEFT_KP.getValue(), 0, 0);
     rightController.setPID(RIGHT_KP.getValue(), 0, 0);
     goalRPMLogger.append(goalRPM);
@@ -104,7 +116,7 @@ public class ShooterSubsystem extends SubsystemBase {
   }
 
   public boolean atGoalRPM() {
-    return rightController.atSetpoint();
+    return rightController.atSetpoint() && leftController.atSetpoint();
   }
 
   /** Disables the Shooter PID controller and stops the motor. */
