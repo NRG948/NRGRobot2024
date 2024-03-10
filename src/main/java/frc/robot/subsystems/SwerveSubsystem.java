@@ -30,6 +30,7 @@ import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Pose3d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Rotation3d;
+import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
 import edu.wpi.first.math.kinematics.SwerveModulePosition;
@@ -57,9 +58,12 @@ import frc.robot.parameters.SwerveMotors;
 import frc.robot.util.SwerveModuleVelocities;
 import frc.robot.util.SwerveModuleVoltages;
 import java.util.Map;
+import java.util.Optional;
 
 @RobotPreferencesLayout(groupName = "Drive", column = 1, row = 0, width = 2, height = 2)
 public class SwerveSubsystem extends SubsystemBase {
+  private static final Rotation2d ROTATE_180_DEGREES = Rotation2d.fromDegrees(180);
+
   @RobotPreferencesValue
   public static RobotPreferences.EnumValue<SwerveDriveParameters> PARAMETERS =
       new RobotPreferences.EnumValue<SwerveDriveParameters>(
@@ -153,6 +157,8 @@ public class SwerveSubsystem extends SubsystemBase {
   private double rawOrientationOffset; // The offset to the corrected orientation in radians.
   private Rotation2d orientation = new Rotation2d();
   private Pose2d lastVisionMeasurement = new Pose2d();
+  private Optional<Translation2d> orientationTarget =
+      Optional.empty(); // absolute location to keep the robot oriented to tag
 
   private DoubleLogEntry rawOrientationLog =
       new DoubleLogEntry(DataLogManager.getLog(), "/SwerveSubsystem/rawOrientation");
@@ -252,6 +258,38 @@ public class SwerveSubsystem extends SubsystemBase {
       Pose2d visionMeasurment, double timestamp, Matrix<N3, N1> stdDevs) {
     odometry.addVisionMeasurement(visionMeasurment, timestamp, stdDevs);
     lastVisionMeasurement = visionMeasurment;
+  }
+
+  /**
+   * Sets the absolute location of the target to keep the robot oriented to.
+   *
+   * @param orientationTarget Target we want to orient to.
+   */
+  public void setAutoOrientationTarget(Translation2d orientationTarget) {
+    this.orientationTarget = Optional.of(orientationTarget);
+  }
+
+  /** Clears the orientation target. */
+  public void clearAutoOrientationTarget() {
+    orientationTarget = Optional.empty();
+  }
+
+  /**
+   * Returns the desired orientation when an orientation target is set.
+   *
+   * @return Returns an Optional<Rotation2d> when an orientation target is set. Otherwise, this
+   *     method returns Optional.empty().
+   */
+  public Optional<Rotation2d> getTargetOrientation() {
+    if (orientationTarget.isEmpty()) {
+      return Optional.empty();
+    }
+    return Optional.of(
+        orientationTarget
+            .get()
+            .minus(getPosition().getTranslation())
+            .getAngle()
+            .rotateBy(ROTATE_180_DEGREES));
   }
 
   /**

@@ -186,6 +186,10 @@ public class AprilTagSubsystem extends PhotonVisionSubsystemBase {
     return alliance == Alliance.Red ? 4 : 7;
   }
 
+  public Pose3d getSpeakerCenterAprilTag() {
+    return getAprilTagPose(getSpeakerCenterAprilTagID());
+  }
+
   public static int getAmpAprilTagID() {
     var alliance = DriverStation.getAlliance().get();
     return alliance == Alliance.Red ? 5 : 6;
