@@ -49,22 +49,16 @@
       }
     },
     {
-      "name": "Prepare To Shoot",
+      "name": "Set Shooter Continous",
       "waypointRelativePos": 0.3,
       "command": {
-        "type": "parallel",
+        "type": "sequential",
         "data": {
           "commands": [
             {
               "type": "named",
               "data": {
-                "name": "SetArmAngleSourceFarShot"
-              }
-            },
-            {
-              "type": "named",
-              "data": {
-                "name": "SetShooterRPMSourceFarShot"
+                "name": "SetShooterContinous"
               }
             }
           ]
