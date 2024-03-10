@@ -3,13 +3,13 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 7.83,
-        "y": 5.78
+        "x": 8.04,
+        "y": 5.84
       },
       "prevControl": null,
       "nextControl": {
-        "x": 6.897171374413923,
-        "y": 6.115584995108306
+        "x": 7.384081007782419,
+        "y": 6.5245890871378425
       },
       "isLocked": false,
       "linkedName": null
@@ -17,33 +17,33 @@
     {
       "anchor": {
         "x": 4.35,
-        "y": 6.6
+        "y": 5.55
       },
       "prevControl": {
-        "x": 5.337239132832777,
-        "y": 6.526115667401095
+        "x": 5.11508211628523,
+        "y": 7.216000766521106
       },
       "nextControl": null,
       "isLocked": false,
       "linkedName": null
     }
   ],
-  "rotationTargets": [],
+  "rotationTargets": [
+    {
+      "waypointRelativePos": 0.6,
+      "rotationDegrees": 0.0,
+      "rotateFast": false
+    }
+  ],
   "constraintZones": [],
   "eventMarkers": [
     {
-      "name": "New Event Marker",
-      "waypointRelativePos": 0,
+      "name": "Prepare to Shoot",
+      "waypointRelativePos": 0.15,
       "command": {
         "type": "sequential",
         "data": {
           "commands": [
-            {
-              "type": "named",
-              "data": {
-                "name": "AutoCenterNote"
-              }
-            },
             {
               "type": "parallel",
               "data": {
@@ -51,7 +51,7 @@
                   {
                     "type": "named",
                     "data": {
-                      "name": "SetArmAngleAmpFarShot"
+                      "name": "AutoCenterNote"
                     }
                   },
                   {
@@ -61,6 +61,12 @@
                     }
                   }
                 ]
+              }
+            },
+            {
+              "type": "named",
+              "data": {
+                "name": "SetArmAngleAmpFarShot"
               }
             }
           ]
@@ -76,13 +82,13 @@
   },
   "goalEndState": {
     "velocity": 0,
-    "rotation": 19.71867721220216,
+    "rotation": 1.3565985383853918,
     "rotateFast": false
   },
   "reversed": false,
   "folder": "Amp Sweep",
   "previewStartingState": {
-    "rotation": 0,
+    "rotation": -19.88433097773064,
     "velocity": 0
   },
   "useDefaultConstraints": true

@@ -3,25 +3,41 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 4.35,
-        "y": 5.55
+        "x": 8.12,
+        "y": 4.16
       },
       "prevControl": null,
       "nextControl": {
-        "x": 5.011604527025849,
-        "y": 6.778413963952611
+        "x": 7.434704742183022,
+        "y": 4.010648631984287
       },
       "isLocked": false,
       "linkedName": null
     },
     {
       "anchor": {
-        "x": 8.04,
-        "y": 5.84
+        "x": 5.398047233753502,
+        "y": 4.16
       },
       "prevControl": {
-        "x": 6.880243724162934,
-        "y": 6.69817450063943
+        "x": 6.181377044687932,
+        "y": 3.7913162849226465
+      },
+      "nextControl": {
+        "x": 5.083346061781186,
+        "y": 4.308117939088191
+      },
+      "isLocked": false,
+      "linkedName": null
+    },
+    {
+      "anchor": {
+        "x": 4.35,
+        "y": 5.55
+      },
+      "prevControl": {
+        "x": 4.46849585811131,
+        "y": 4.908866815189101
       },
       "nextControl": null,
       "isLocked": false,
@@ -32,8 +48,8 @@
   "constraintZones": [],
   "eventMarkers": [
     {
-      "name": "Stow Angle",
-      "waypointRelativePos": 0.15,
+      "name": "Auto Center Note",
+      "waypointRelativePos": 0,
       "command": {
         "type": "parallel",
         "data": {
@@ -41,24 +57,13 @@
             {
               "type": "named",
               "data": {
-                "name": "StowArm"
+                "name": "AutoCenterNote"
               }
-            }
-          ]
-        }
-      }
-    },
-    {
-      "name": "Intake",
-      "waypointRelativePos": 0.5,
-      "command": {
-        "type": "parallel",
-        "data": {
-          "commands": [
+            },
             {
               "type": "named",
               "data": {
-                "name": "Intake"
+                "name": "SetShooterRPMAmpFarShot"
               }
             }
           ]
@@ -74,11 +79,11 @@
   },
   "goalEndState": {
     "velocity": 0,
-    "rotation": -19.02024580323531,
+    "rotation": 0,
     "rotateFast": false
   },
   "reversed": false,
-  "folder": "Amp Sweep",
+  "folder": "Mid Amp Sweep",
   "previewStartingState": {
     "rotation": 0,
     "velocity": 0
