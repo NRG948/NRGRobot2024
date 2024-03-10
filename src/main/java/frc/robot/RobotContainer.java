@@ -31,6 +31,7 @@ import frc.robot.commands.InterruptAll;
 import frc.robot.commands.LEDs;
 import frc.robot.commands.NoteCommands;
 import frc.robot.commands.Pathfinding;
+import frc.robot.commands.SetShooterContinous;
 import frc.robot.subsystems.ArmSubsystem;
 import frc.robot.subsystems.IndexerSubsystem;
 import frc.robot.subsystems.Subsystems;
@@ -105,6 +106,7 @@ public class RobotContainer {
     operatorController.povDown().whileTrue(NoteCommands.outtake(subsystems));
     operatorController.povRight().whileTrue(NoteCommands.outakeToAmp(subsystems));
     operatorController.back().onTrue(new InterruptAll(subsystems));
+    operatorController.leftTrigger().whileTrue(new SetShooterContinous(subsystems));
     // operatorController.b().whileTrue(new SetShooterContinous(subsystems));
     operatorController
         .b()
