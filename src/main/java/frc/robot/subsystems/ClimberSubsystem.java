@@ -44,6 +44,11 @@ public class ClimberSubsystem extends SubsystemBase {
     setVoltage(UNWIND_VOLTAGE.getValue());
   }
 
+  public void stopMotors(){
+    winchLeftMotor.stopMotor();
+    winchRightMotor.stopMotor();
+  }
+
   @Override
   public void periodic() {
     // This method will be called once per scheduler run
