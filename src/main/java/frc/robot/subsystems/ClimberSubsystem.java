@@ -18,6 +18,10 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 @RobotPreferencesLayout(groupName = "Climber", column = 0, row = 1, height = 3, width = 1)
 public class ClimberSubsystem extends SubsystemBase {
   @RobotPreferencesValue
+  public static final RobotPreferences.BooleanValue ENABLED =
+      new RobotPreferences.BooleanValue("Climber", "Enabled", false);
+
+  @RobotPreferencesValue
   public static final RobotPreferences.DoubleValue WIND_VOLTAGE =
       new RobotPreferences.DoubleValue("Climber", "Winch Wind Voltage", 3.0);
 
