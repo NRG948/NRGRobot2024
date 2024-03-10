@@ -72,7 +72,7 @@ public enum SwerveDriveParameters {
       new int[] {31, 32, 33, 34}, // CANCoder CAN IDs
       new double[] {186.5, 69.61, 172.62, 21.27},
       new FeedforwardConstants(0.14566, 2.3072, 0.0393),
-      new FeedforwardConstants(0.11411975, 157.9575, 10.1638)), // TODO: Redo characterization
+      0.15), // TODO: Redo characterization
   CompetitionBase2024(
       24.2, // TODO: Find out real mass
       Units.inchesToMeters(22.55),
@@ -217,6 +217,72 @@ public enum SwerveDriveParameters {
         new TrapezoidProfile.Constraints(this.maxSteeringSpeed, this.maxSteeringAcceleration);
     this.robotRotationalConstraints =
         new TrapezoidProfile.Constraints(this.maxRotationalSpeed, this.maxRotationalAcceleration);
+  }
+
+  /**
+   * Constructs an instance of this enum.
+   *
+   * <p><b>NOTE:</b> The distance between wheels are expressed in the NWU coordinate system relative
+   * to the robot frame as shown below.
+   *
+   * <p>
+   *
+   * <pre>
+   * <code>
+   *            ^
+   * +--------+ | x
+   * |O      O| |
+   * |        | |
+   * |        | |
+   * |O      O| |
+   * +--------+ |
+   *            |
+   * <----------+
+   *  y       (0,0)
+   * </code>
+   * </pre>
+   *
+   * @param robotMass The mass of the robot in Kg.
+   * @param wheelDistanceX The distance between the wheels along the X axis in meters.
+   * @param wheelDistanceY The distance between the wheels along the Y axis in meters.
+   * @param swerveModule The swerve module used by the robot.
+   * @param driveMotor The motor used by swerve module drive on the robot.
+   * @param steeringMotor The motor used by the swerve module steering on the robot.
+   * @param motorIds An array containing the CAN IDs of the swerve module drive motors in the order
+   *     front left drive and steering, front right drive and steering, back left drive and
+   *     steering, back right drive and steering.
+   * @param angleEncoderIds An array containing the CAN IDs of the swerve module angle encoders in
+   *     the order front left, front right, back left, back right.
+   * @param driveFeedforward The drive feedforward constants.
+   * @param steeringFeedforward The steering feedforward constants.
+   */
+  private SwerveDriveParameters(
+      double robotMass,
+      double wheelDistanceX,
+      double wheelDistanceY,
+      SwerveModuleParameters swerveModule,
+      MotorParameters driveMotor,
+      MotorParameters steeringMotor,
+      int[] motorIds,
+      int[] angleEncoderIds,
+      double[] angleOffset,
+      FeedforwardConstants driveFeedForward,
+      double steeringkS) {
+    this(
+        robotMass,
+        wheelDistanceX,
+        wheelDistanceY,
+        swerveModule,
+        driveMotor,
+        steeringMotor,
+        motorIds,
+        angleEncoderIds,
+        angleOffset,
+        driveFeedForward,
+        new CalculatedFeedforwardConstants(
+            steeringkS,
+            () -> swerveModule.calculateMaxSteeringSpeed(steeringMotor),
+            () -> swerveModule.calculateMaxSteeringAcceleration(steeringMotor, robotMass)));
   }
 
   /**
