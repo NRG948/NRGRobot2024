@@ -32,9 +32,9 @@ import org.javatuples.LabelValue;
 
 @RobotPreferencesLayout(
     groupName = "Autonomous",
-    column = 6,
+    column = 7,
     row = 0,
-    width = 3,
+    width = 2,
     height = 4,
     type = "Grid Layout",
     gridColumns = 2,

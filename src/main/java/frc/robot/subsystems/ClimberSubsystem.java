@@ -11,15 +11,17 @@ import static frc.robot.Constants.RobotConstants.CAN.TalonFX.CLIMBER_RIGHT_PORT;
 
 import com.ctre.phoenix6.hardware.TalonFX;
 import com.nrg948.preferences.RobotPreferences;
+import com.nrg948.preferences.RobotPreferencesLayout;
 import com.nrg948.preferences.RobotPreferencesValue;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
+@RobotPreferencesLayout(groupName = "Climber", column = 0, row = 1, height = 3, width = 1)
 public class ClimberSubsystem extends SubsystemBase {
-  @RobotPreferencesValue()
+  @RobotPreferencesValue
   public static final RobotPreferences.DoubleValue WIND_VOLTAGE =
       new RobotPreferences.DoubleValue("Climber", "Winch Wind Voltage", 3.0);
 
-  @RobotPreferencesValue()
+  @RobotPreferencesValue
   public static final RobotPreferences.DoubleValue UNWIND_VOLTAGE =
       new RobotPreferences.DoubleValue("Climber", "Winch Unwind Voltage", 1.5);
 
@@ -44,7 +46,7 @@ public class ClimberSubsystem extends SubsystemBase {
     setVoltage(UNWIND_VOLTAGE.getValue());
   }
 
-  public void stopMotors(){
+  public void stopMotors() {
     winchLeftMotor.stopMotor();
     winchRightMotor.stopMotor();
   }
