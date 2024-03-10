@@ -6,13 +6,8 @@
  */
 package frc.robot.subsystems;
 
-import java.util.Map;
-import java.util.Set;
-import java.util.function.Supplier;
-
 import com.nrg948.preferences.RobotPreferences;
 import com.nrg948.preferences.RobotPreferencesValue;
-
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.controller.SimpleMotorFeedforward;
 import edu.wpi.first.math.geometry.Rotation2d;
@@ -29,6 +24,9 @@ import frc.robot.commands.NoteCommands;
 import frc.robot.motors.MotorAdapter;
 import frc.robot.motors.RelativeEncoderAdapter;
 import frc.robot.parameters.ShooterParameters;
+import java.util.Map;
+import java.util.Set;
+import java.util.function.Supplier;
 
 public class ShooterSubsystem extends SubsystemBase {
   @RobotPreferencesValue(column = 1, row = 0)
