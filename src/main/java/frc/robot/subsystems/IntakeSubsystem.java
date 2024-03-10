@@ -12,6 +12,7 @@ import com.revrobotics.CANSparkBase.IdleMode;
 import com.revrobotics.CANSparkLowLevel.MotorType;
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.RelativeEncoder;
+
 import edu.wpi.first.math.controller.SimpleMotorFeedforward;
 import edu.wpi.first.wpilibj.shuffleboard.BuiltInLayouts;
 import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardLayout;
@@ -19,9 +20,12 @@ import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants.RobotConstants;
 import frc.robot.Constants.RobotConstants.CAN;
-import frc.robot.parameters.MotorParameters;
+import frc.robot.parameters.IntakeParameters;
 
-/** The intake subsystem is responsible for acquiring game elements from the floor. */
+/**
+ * The intake subsystem is responsible for acquiring game elements from the
+ * floor.
+ */
 public class IntakeSubsystem extends SubsystemBase {
   private final CANSparkMax motor = new CANSparkMax(CAN.SparkMax.INTAKE_PORT, MotorType.kBrushless);
   private final RelativeEncoder encoder = motor.getEncoder();
@@ -29,23 +33,27 @@ public class IntakeSubsystem extends SubsystemBase {
   private double goalVelocity;
   private double currentVelocity;
 
-  public static double GEAR_RATIO = 3 * 26 / 24;
-  public static double INTAKE_DIAMETER = 0.036; // Diameter in meters
-  public static double ENCODER_CONVERSION_FACTOR = (Math.PI * INTAKE_DIAMETER) / GEAR_RATIO;
+  @RobotPreferencesValue
+  public static RobotPreferences.EnumValue<IntakeParameters> PARAMETERS = new RobotPreferences.EnumValue<IntakeParameters>(
+      "Indexer+Intake", "Robot Base", IntakeParameters.PracticeBase2024);
 
-  public static double MAX_VELOCITY =
-      (MotorParameters.NeoV1_1.getFreeSpeedRPM() * Math.PI * INTAKE_DIAMETER) / (GEAR_RATIO * 60);
-  public static double MAX_ACCELERATION =
-      (2 * MotorParameters.NeoV1_1.getStallTorque() * GEAR_RATIO * Math.PI * INTAKE_DIAMETER)
-          / RobotConstants.INDEXER_MASS;
+  public static double GEAR_RATIO = PARAMETERS.getValue().getGearRatio();
+  public static double INTAKE_DIAMETER = 0.036; // Diameter in meters
+  public static double ENCODER_CONVERSION_FACTOR = (Math.PI * INTAKE_DIAMETER) / PARAMETERS.getValue().getGearRatio();
+
+  public static double MAX_VELOCITY = (PARAMETERS.getValue().getMotorParameters().getFreeSpeedRPM() * Math.PI
+      * INTAKE_DIAMETER) / (GEAR_RATIO * 60);
+  public static double MAX_ACCELERATION = (2 * PARAMETERS.getValue().getMotorParameters().getFreeSpeedRPM() * GEAR_RATIO
+      * Math.PI * INTAKE_DIAMETER)
+      / RobotConstants.INDEXER_MASS;
 
   public static double KS = 0.15;
   public static double KV = (RobotConstants.MAX_BATTERY_VOLTAGE - KS) / MAX_VELOCITY;
   public static double KA = (RobotConstants.MAX_BATTERY_VOLTAGE - KS) / MAX_ACCELERATION;
 
   @RobotPreferencesValue
-  public static final RobotPreferences.DoubleValue INTAKE_VELOCITY =
-      new RobotPreferences.DoubleValue("Indexer+Intake", "Indexer Intake Velocity", 1.0);
+  public static final RobotPreferences.DoubleValue INTAKE_VELOCITY = new RobotPreferences.DoubleValue("Indexer+Intake",
+      "Indexer Intake Velocity", 1.0);
 
   private final SimpleMotorFeedforward feedforward = new SimpleMotorFeedforward(KS, KV, KA);
 
@@ -99,8 +107,7 @@ public class IntakeSubsystem extends SubsystemBase {
   }
 
   public void addShuffleboardLayout(ShuffleboardTab tab) {
-    ShuffleboardLayout layout =
-        tab.getLayout("Intake", BuiltInLayouts.kList).withPosition(0, 0).withSize(2, 3);
+    ShuffleboardLayout layout = tab.getLayout("Intake", BuiltInLayouts.kList).withPosition(0, 0).withSize(2, 3);
     layout.addDouble("Goal Velocity", () -> goalVelocity);
     layout.addDouble("Current Velocity", () -> currentVelocity);
     layout.addBoolean("Enabled", () -> isEnabled);
