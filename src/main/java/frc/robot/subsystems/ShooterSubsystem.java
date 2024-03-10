@@ -53,7 +53,6 @@ public class ShooterSubsystem extends SubsystemBase {
 
   private double currentLeftRPM;
   private double currentRightRPM;
-  private double goalRPM = 0;
 
   private Supplier<Rotation2d> orientationSupplier;
 
@@ -69,8 +68,10 @@ public class ShooterSubsystem extends SubsystemBase {
 
   private BooleanLogEntry enabledLogger =
       new BooleanLogEntry(DataLogManager.getLog(), "/Shooter/Enabled");
-  private DoubleLogEntry goalRPMLogger =
-      new DoubleLogEntry(DataLogManager.getLog(), "/Shooter/Goal RPM");
+  private DoubleLogEntry leftGoalRPMLogger =
+      new DoubleLogEntry(DataLogManager.getLog(), "/Shooter/Left Goal RPM");
+  private DoubleLogEntry rightGoalRPMLogger =
+      new DoubleLogEntry(DataLogManager.getLog(), "/Shooter/Right Goal RPM");
   private DoubleLogEntry leftRPMLogger =
       new DoubleLogEntry(DataLogManager.getLog(), "/Shooter/Left RPM");
   private DoubleLogEntry rightRPMLogger =
@@ -92,7 +93,6 @@ public class ShooterSubsystem extends SubsystemBase {
   }
 
   private void setGoalRPMInternal(double goalRPM) {
-    this.goalRPM = goalRPM;
     if (orientationSupplier.get().getRadians() > 0) {
       leftController.setSetpoint(goalRPM * SPIN_FACTOR.getValue());
       rightController.setSetpoint(goalRPM);
@@ -102,7 +102,8 @@ public class ShooterSubsystem extends SubsystemBase {
     }
     leftController.setPID(LEFT_KP.getValue(), 0, 0);
     rightController.setPID(RIGHT_KP.getValue(), 0, 0);
-    goalRPMLogger.append(goalRPM);
+    leftGoalRPMLogger.append(leftController.getSetpoint());
+    rightGoalRPMLogger.append(rightController.getSetpoint());
   }
 
   public void setGoalRPM(double goalShooterRPM) {
@@ -121,14 +122,13 @@ public class ShooterSubsystem extends SubsystemBase {
   public void disable() {
     if (isEnabled) {
       enabledLogger.append(false);
-      goalRPMLogger.append(0);
+      leftGoalRPMLogger.append(0);
     }
 
     isEnabled = false;
     stopMotor();
     leftController.reset();
     rightController.reset();
-    goalRPM = 0;
   }
 
   /** Stops Shooter Motor. */
@@ -139,10 +139,6 @@ public class ShooterSubsystem extends SubsystemBase {
 
   public double getRPM() {
     return currentLeftRPM;
-  }
-
-  public double getGoalRPM() {
-    return goalRPM;
   }
 
   public boolean isEnabled() {
@@ -161,8 +157,8 @@ public class ShooterSubsystem extends SubsystemBase {
     currentRightRPM = rightEncoder.getVelocity();
 
     if (isEnabled) {
-      double leftVoltage = feedforward.calculate(goalRPM);
-      double rightVoltage = feedforward.calculate(goalRPM);
+      double leftVoltage = feedforward.calculate(leftController.getSetpoint());
+      double rightVoltage = feedforward.calculate(rightController.getSetpoint());
 
       leftVoltage += leftController.calculate(currentLeftRPM);
       rightVoltage += rightController.calculate(currentRightRPM);
@@ -177,15 +173,19 @@ public class ShooterSubsystem extends SubsystemBase {
   public void addShuffleboardLayout(ShuffleboardTab tab, Subsystems subsystems) {
     ShuffleboardLayout shooterLayout =
         tab.getLayout("Shooter", BuiltInLayouts.kGrid)
-            .withProperties(Map.of("Number of columns", 2, "Number of rows", 4))
+            .withProperties(Map.of("Number of columns", 2, "Number of rows", 5))
             .withPosition(4, 0)
             .withSize(2, 4);
 
-    shooterLayout.addDouble("Goal RPM", () -> goalRPM).withPosition(0, 0);
-    shooterLayout.addDouble("Left RPM", () -> currentLeftRPM).withPosition(1, 0);
-    shooterLayout.addDouble("Right RPM", () -> currentRightRPM).withPosition(0, 1);
-    shooterLayout.addBoolean("Enabled", () -> isEnabled).withPosition(1, 1);
-    GenericEntry rpmEntry = shooterLayout.add("RPM", 0).withPosition(0, 2).getEntry();
+    shooterLayout.addDouble("Goal Left RPM", () -> leftController.getSetpoint()).withPosition(0, 0);
+    shooterLayout
+        .addDouble("Goal Right RPM", () -> rightController.getSetpoint())
+        .withPosition(1, 0);
+    shooterLayout.addDouble("Left RPM", () -> currentLeftRPM).withPosition(0, 1);
+    shooterLayout.addDouble("Right RPM", () -> currentRightRPM).withPosition(1, 1);
+    shooterLayout.addBoolean("Enabled", () -> isEnabled).withPosition(0, 2);
+
+    GenericEntry rpmEntry = shooterLayout.add("RPM", 0).withPosition(0, 3).getEntry();
     shooterLayout
         .add(
             "Shoot",
@@ -197,13 +197,13 @@ public class ShooterSubsystem extends SubsystemBase {
                       NoteCommands.shoot(subsystems, rpm));
                 },
                 Set.of(subsystems.shooter, subsystems.indexer)))
-        .withPosition(0, 3);
+        .withPosition(0, 4);
     shooterLayout
         .add(
             "Cancel",
             Commands.race( // should this be parallel?
                 Commands.runOnce(subsystems.indexer::disable, subsystems.indexer),
                 Commands.runOnce(subsystems.shooter::disable, subsystems.shooter)))
-        .withPosition(1, 3);
+        .withPosition(1, 4);
   }
 }
