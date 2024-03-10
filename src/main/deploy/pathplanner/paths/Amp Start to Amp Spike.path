@@ -4,24 +4,24 @@
     {
       "anchor": {
         "x": 0.77,
-        "y": 6.660923784481021
+        "y": 6.66
       },
       "prevControl": null,
       "nextControl": {
-        "x": 1.3640297527095648,
-        "y": 6.72909113315261
+        "x": 1.2878210124133878,
+        "y": 6.361035899091086
       },
       "isLocked": false,
       "linkedName": null
     },
     {
       "anchor": {
-        "x": 2.5149846740974624,
-        "y": 6.77778209648946
+        "x": 2.75,
+        "y": 6.85
       },
       "prevControl": {
-        "x": 1.7374721477719621,
-        "y": 6.735436908660072
+        "x": 2.0230950021274587,
+        "y": 6.655226392845905
       },
       "nextControl": null,
       "isLocked": false,
@@ -30,9 +30,9 @@
   ],
   "rotationTargets": [
     {
-      "waypointRelativePos": 0.6,
-      "rotationDegrees": 51.863511953268635,
-      "rotateFast": false
+      "waypointRelativePos": 1.0,
+      "rotationDegrees": 65.0,
+      "rotateFast": true
     }
   ],
   "constraintZones": [],
@@ -69,7 +69,7 @@
   "reversed": false,
   "folder": "Amp Sweep",
   "previewStartingState": {
-    "rotation": 59.30027744918558,
+    "rotation": 57.41395983798554,
     "velocity": 0
   },
   "useDefaultConstraints": true
