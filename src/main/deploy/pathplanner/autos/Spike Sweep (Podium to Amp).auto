@@ -52,7 +52,7 @@
         {
           "type": "path",
           "data": {
-            "pathName": "Amp Spike to Subwoofer"
+            "pathName": "Source Spike to Subwoofer"
           }
         },
         {
@@ -89,7 +89,7 @@
         {
           "type": "path",
           "data": {
-            "pathName": "Source Spike to Subwoofer"
+            "pathName": "Amp Spike to Subwoofer"
           }
         },
         {
