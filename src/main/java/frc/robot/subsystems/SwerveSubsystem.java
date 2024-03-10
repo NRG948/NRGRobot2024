@@ -392,7 +392,7 @@ public class SwerveSubsystem extends SubsystemBase {
    *     front right, back left, back right
    */
   public void setModuleStates(SwerveModuleState[] states) {
-    setModuleStates(states);
+    drivetrain.setModuleStates(states);
   }
 
   /**

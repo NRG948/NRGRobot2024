@@ -139,7 +139,7 @@ public class RobotContainer {
    * @return the command to run in autonomous
    */
   public Command getAutonomousCommand() {
-    return autonomous.getAutonomousCommand();
+    return autonomous.getAutonomousCommand(subsystems);
   }
 
   public void disabledInit() {
