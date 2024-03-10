@@ -8,6 +8,7 @@ package frc.robot;
 
 import com.nrg948.autonomous.Autonomous;
 import com.pathplanner.lib.auto.AutoBuilder;
+import com.pathplanner.lib.controllers.PPHolonomicDriveController;
 import com.pathplanner.lib.util.HolonomicPathFollowerConfig;
 import com.pathplanner.lib.util.PIDConstants;
 import com.pathplanner.lib.util.ReplanningConfig;
@@ -59,6 +60,8 @@ public class RobotAutonomous {
           return false;
         },
         subsystems.drivetrain);
+    PPHolonomicDriveController.setRotationTargetOverride(
+        subsystems.drivetrain::getTargetOrientation);
 
     this.chooser = Autonomous.getChooser(subsystems, "frc.robot");
   }

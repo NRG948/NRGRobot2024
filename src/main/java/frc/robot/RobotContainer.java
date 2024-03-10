@@ -91,6 +91,27 @@ public class RobotContainer {
     driverController.a().onTrue(Pathfinding.pathFindToSpeakerFront());
     driverController.b().whileTrue(Pathfinding.pathFindToAmp());
     driverController.y().whileTrue(Pathfinding.pathFindToAmp2());
+    driverController
+        .rightStick()
+        .onTrue(
+            Commands.runOnce(
+                () -> {
+                  if (subsystems.aprilTag.isPresent()) {
+                    subsystems.drivetrain.setAutoOrientationTarget(
+                        subsystems
+                            .aprilTag
+                            .get()
+                            .getSpeakerCenterAprilTag()
+                            .toPose2d()
+                            .getTranslation());
+                  }
+                },
+                subsystems.drivetrain));
+    driverController
+        .rightStick()
+        .onFalse(
+            Commands.runOnce(
+                () -> subsystems.drivetrain.clearAutoOrientationTarget(), subsystems.drivetrain));
 
     operatorController
         .start()
