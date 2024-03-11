@@ -34,7 +34,10 @@ import frc.robot.commands.Pathfinding;
 import frc.robot.commands.SetShooterContinous;
 import frc.robot.subsystems.ArmSubsystem;
 import frc.robot.subsystems.IndexerSubsystem;
+import frc.robot.subsystems.ShooterSubsystem;
+import frc.robot.subsystems.StatusLEDSubsystem;
 import frc.robot.subsystems.Subsystems;
+import frc.robot.subsystems.SwerveSubsystem;
 import java.util.Map;
 
 /**
@@ -86,6 +89,11 @@ public class RobotContainer {
    * joysticks}.
    */
   private void configureBindings() {
+    SwerveSubsystem drivetrain = subsystems.drivetrain;
+    ShooterSubsystem shooter = subsystems.shooter;
+    IndexerSubsystem indexer = subsystems.indexer;
+    StatusLEDSubsystem statusLED = subsystems.statusLED;
+
     driverController.start().onTrue(DriveCommands.resetOrientation(subsystems));
     driverController.back().onTrue(new InterruptAll(subsystems));
     driverController.a().onTrue(Pathfinding.pathFindToSpeakerFront());
@@ -97,7 +105,7 @@ public class RobotContainer {
             Commands.runOnce(
                 () -> {
                   if (subsystems.aprilTag.isPresent()) {
-                    subsystems.drivetrain.setAutoOrientationTarget(
+                    drivetrain.setAutoOrientationTarget(
                         subsystems
                             .aprilTag
                             .get()
@@ -106,12 +114,10 @@ public class RobotContainer {
                             .getTranslation());
                   }
                 },
-                subsystems.drivetrain));
+                drivetrain));
     driverController
         .rightStick()
-        .onFalse(
-            Commands.runOnce(
-                () -> subsystems.drivetrain.clearAutoOrientationTarget(), subsystems.drivetrain));
+        .onFalse(Commands.runOnce(() -> drivetrain.clearAutoOrientationTarget(), drivetrain));
 
     operatorController
         .start()
@@ -122,8 +128,7 @@ public class RobotContainer {
                 Math.toRadians(Autos.SPIKE_SHOT_ANGLE.getValue())));
     operatorController
         .povUp()
-        .whileTrue(
-            NoteCommands.shootAtCurrentRPM(subsystems).finallyDo(subsystems.shooter::disable));
+        .whileTrue(NoteCommands.shootAtCurrentRPM(subsystems).finallyDo(shooter::disable));
     operatorController.povDown().whileTrue(NoteCommands.outtake(subsystems));
     operatorController.povRight().whileTrue(NoteCommands.outakeToAmp(subsystems));
     operatorController.back().onTrue(new InterruptAll(subsystems));
@@ -140,20 +145,15 @@ public class RobotContainer {
     operatorController.leftBumper().whileTrue(NoteCommands.intakeUntilNoteDetected(subsystems));
     operatorController.rightBumper().onTrue(NoteCommands.intakeAndAutoCenterNote(subsystems));
 
-    Trigger noteDetected = new Trigger(subsystems.indexer::isNoteAtShootPosition);
+    Trigger noteDetected = new Trigger(indexer::isNoteAtShootPosition);
     noteDetected.onTrue(
-        Commands.sequence(
-            LEDs.flashColor(subsystems.statusLED, GREEN),
-            LEDs.fillColor(subsystems.statusLED, GREEN)));
-    noteDetected.onFalse(LEDs.fillColor(subsystems.statusLED, RED));
+        Commands.sequence(LEDs.flashColor(statusLED, GREEN), LEDs.fillColor(statusLED, GREEN)));
+    noteDetected.onFalse(LEDs.fillColor(statusLED, RED));
 
     Trigger shooterSpinning =
-        new Trigger(
-            () -> subsystems.shooter.atGoalRPM() && subsystems.indexer.isNoteAtShootPosition());
+        new Trigger(() -> shooter.atGoalRPM() && indexer.isNoteAtShootPosition());
     shooterSpinning.onTrue(
-        Commands.sequence(
-            LEDs.flashColor(subsystems.statusLED, PINK),
-            LEDs.fillColor(subsystems.statusLED, PINK)));
+        Commands.sequence(LEDs.flashColor(statusLED, PINK), LEDs.fillColor(statusLED, PINK)));
   }
 
   /**
