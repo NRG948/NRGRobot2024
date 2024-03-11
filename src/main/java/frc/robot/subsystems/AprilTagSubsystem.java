@@ -181,20 +181,41 @@ public class AprilTagSubsystem extends PhotonVisionSubsystemBase {
     return target.get().getYaw();
   }
 
+  /**
+   * Returns the ID of the center speaker APrilTag based on the alliance.
+   *
+   * @return The center speaker AprilTag ID.
+   */
   public static int getSpeakerCenterAprilTagID() {
     var alliance = DriverStation.getAlliance().get();
     return alliance == Alliance.Red ? 4 : 7;
   }
 
-  public Pose3d getSpeakerCenterAprilTag() {
+  /**
+   * Returns the pose of the center speaker AprilTag based on alliance.
+   *
+   * @return The center speaker AprilTag pose.
+   */
+  public Pose3d getSpeakerCenterAprilTagPose() {
     return getAprilTagPose(getSpeakerCenterAprilTagID());
   }
 
+  /**
+   * Returns the ID of the AMP AprilTag based on alliance.
+   *
+   * @return The AMP AprilTag ID.
+   */
   public static int getAmpAprilTagID() {
     var alliance = DriverStation.getAlliance().get();
     return alliance == Alliance.Red ? 5 : 6;
   }
 
+  /**
+   * Return the pose of the specified AprilTag.
+   *
+   * @param id The ID of the AprilTag.
+   * @return The pose of the AprilTag.
+   */
   public Pose3d getAprilTagPose(int id) {
     return aprilTagLayout.getTagPose(id).orElse(NO_APRILTAG);
   }

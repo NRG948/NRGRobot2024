@@ -101,7 +101,7 @@ public class RobotContainer {
                         subsystems
                             .aprilTag
                             .get()
-                            .getSpeakerCenterAprilTag()
+                            .getSpeakerCenterAprilTagPose()
                             .toPose2d()
                             .getTranslation());
                   }
