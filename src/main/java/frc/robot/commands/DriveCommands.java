@@ -108,7 +108,7 @@ public final class DriveCommands {
     return Commands.runOnce(
         () -> {
           if (subsystems.aprilTag.isPresent()) {
-            drivetrain.setAutoOrientationTarget(
+            drivetrain.enableAutoOrientationTarget(
                 subsystems
                     .aprilTag
                     .get()
@@ -128,6 +128,6 @@ public final class DriveCommands {
    */
   public static Command disableAutoOrientation(Subsystems subsystems) {
     SwerveSubsystem drivetrain = subsystems.drivetrain;
-    return Commands.runOnce(() -> drivetrain.clearAutoOrientationTarget(), drivetrain);
+    return Commands.runOnce(() -> drivetrain.disableAutoOrientation(), drivetrain);
   }
 }
