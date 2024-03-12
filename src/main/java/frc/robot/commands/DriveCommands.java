@@ -168,6 +168,7 @@ public final class DriveCommands {
                   double angleToTarget = Math.toRadians(noteVision.get().getAngleToBestTarget());
                   double targetOrientation =
                       MathUtil.angleModulus(angleToTarget + currentOrientation);
+
                   return Optional.of(new Rotation2d(targetOrientation));
                 });
           }
