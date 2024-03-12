@@ -9,7 +9,8 @@ package frc.robot.commands;
 import com.nrg948.preferences.RobotPreferences;
 import com.nrg948.preferences.RobotPreferencesValue;
 import edu.wpi.first.math.MathUtil;
-import edu.wpi.first.math.controller.PIDController;
+// import edu.wpi.first.math.controller.PIDController;
+import edu.wpi.first.math.controller.ProfiledPIDController;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
@@ -49,7 +50,7 @@ public class DriveUsingController extends Command {
   private final SwerveSubsystem drivetrain;
   private final Optional<NoteVisionSubsystem> noteVision;
   private final CommandXboxController xboxController;
-  private PIDController controller;
+  private ProfiledPIDController controller;
 
   /** Creates a new DriveUsingController. */
   public DriveUsingController(Subsystems subsystems, CommandXboxController xboxController) {
@@ -64,11 +65,14 @@ public class DriveUsingController extends Command {
   @Override
   public void initialize() {
     controller =
-        new PIDController(
-            KP_APRIL_TAG.getValue(), KI_APRIL_TAG.getValue(), KD_APRIL_TAG.getValue());
+        new ProfiledPIDController(
+            KP_APRIL_TAG.getValue(),
+            KI_APRIL_TAG.getValue(),
+            KD_APRIL_TAG.getValue(),
+            SwerveSubsystem.getRotationalConstraints());
     controller.enableContinuousInput(-Math.PI, Math.PI);
     controller.setIZone(Math.toRadians(5));
-    controller.reset();
+    controller.reset(drivetrain.getOrientation().getRadians());
   }
 
   // Called every time the scheduler runs while the command is scheduled.
@@ -99,7 +103,12 @@ public class DriveUsingController extends Command {
     // priority
     if (targetOrientation.isPresent()) {
       controller.setPID(KP_APRIL_TAG.getValue(), KI_APRIL_TAG.getValue(), KD_APRIL_TAG.getValue());
-      rSpeed = controller.calculate(currentOrientation, targetOrientation.get().getRadians());
+      double feedback =
+          controller.calculate(currentOrientation, targetOrientation.get().getRadians());
+      rSpeed =
+          feedback
+              + (controller.getSetpoint().velocity
+                  / SwerveSubsystem.getRotationalConstraints().maxVelocity);
     } else if (optionalNoteTarget.isPresent()) {
       double angleToTarget = Math.toRadians(noteVision.get().getAngleToBestTarget());
       double newOrientation = MathUtil.angleModulus(currentOrientation + angleToTarget);
