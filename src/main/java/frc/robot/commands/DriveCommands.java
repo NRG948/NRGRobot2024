@@ -96,4 +96,38 @@ public final class DriveCommands {
           return alliance.orElse(Alliance.Blue);
         });
   }
+
+  /**
+   * Returns a command that enables auto orientation to the current alliance speaker.
+   *
+   * @param subsystems The subsystem container.
+   * @return
+   */
+  public static Command autoOrientToSpeaker(Subsystems subsystems) {
+    SwerveSubsystem drivetrain = subsystems.drivetrain;
+    return Commands.runOnce(
+        () -> {
+          if (subsystems.aprilTag.isPresent()) {
+            drivetrain.setAutoOrientationTarget(
+                subsystems
+                    .aprilTag
+                    .get()
+                    .getSpeakerCenterAprilTagPose()
+                    .toPose2d()
+                    .getTranslation());
+          }
+        },
+        drivetrain);
+  }
+
+  /**
+   * Returns a command that disables auto orientation.
+   *
+   * @param subsystems The subsystems container.
+   * @return
+   */
+  public static Command disableAutoOrientation(Subsystems subsystems) {
+    SwerveSubsystem drivetrain = subsystems.drivetrain;
+    return Commands.runOnce(() -> drivetrain.clearAutoOrientationTarget(), drivetrain);
+  }
 }
