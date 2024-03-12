@@ -40,7 +40,6 @@ import frc.robot.subsystems.IndexerSubsystem;
 import frc.robot.subsystems.ShooterSubsystem;
 import frc.robot.subsystems.StatusLEDSubsystem;
 import frc.robot.subsystems.Subsystems;
-import frc.robot.subsystems.SwerveSubsystem;
 import java.util.Map;
 
 /**
@@ -92,7 +91,6 @@ public class RobotContainer {
    * joysticks}.
    */
   private void configureBindings() {
-    SwerveSubsystem drivetrain = subsystems.drivetrain;
     ShooterSubsystem shooter = subsystems.shooter;
     IndexerSubsystem indexer = subsystems.indexer;
     StatusLEDSubsystem statusLED = subsystems.statusLED;
@@ -100,9 +98,11 @@ public class RobotContainer {
     driverController.start().onTrue(DriveCommands.resetOrientation(subsystems));
     driverController.back().onTrue(new InterruptAll(subsystems));
     driverController.a().onTrue(Pathfinding.pathFindToSpeakerFront());
-    driverController.y().whileTrue(Pathfinding.pathFindToAmp2());
     driverController.b().onTrue(DriveCommands.autoOrientToSpeaker(subsystems));
     driverController.b().onFalse(DriveCommands.disableAutoOrientation(subsystems));
+    driverController.x().onTrue(DriveCommands.autoOrientToNote(subsystems));
+    driverController.x().onFalse(DriveCommands.disableAutoOrientation(subsystems));
+    driverController.y().whileTrue(Pathfinding.pathFindToAmp2());
     driverController.rightStick().onTrue(DriveCommands.autoOrientToSpeaker(subsystems));
     driverController.rightStick().onFalse(DriveCommands.disableAutoOrientation(subsystems));
     driverController.povUp().whileTrue(ClimberCommands.manualClimbChain(subsystems));
