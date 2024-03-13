@@ -27,7 +27,7 @@ public class ClimberSubsystem extends SubsystemBase {
 
   @RobotPreferencesValue
   public static final RobotPreferences.DoubleValue UNWIND_VOLTAGE =
-      new RobotPreferences.DoubleValue("Climber", "Winch Unwind Voltage", 1.5);
+      new RobotPreferences.DoubleValue("Climber", "Winch Unwind Voltage", -1.5);
 
   private final TalonFX winchLeftMotor = new TalonFX(CLIMBER_LEFT_PORT);
   private final TalonFX winchRightMotor = new TalonFX(CLIMBER_RIGHT_PORT);
