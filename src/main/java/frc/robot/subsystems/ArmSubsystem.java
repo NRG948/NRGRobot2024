@@ -32,6 +32,7 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
 import frc.robot.Constants.RobotConstants;
 import frc.robot.commands.ArmCommands;
+import frc.robot.parameters.ArmParameters;
 import frc.robot.parameters.MotorParameters;
 import java.util.Map;
 import java.util.Set;
@@ -71,14 +72,19 @@ public class ArmSubsystem extends SubsystemBase {
   public static RobotPreferences.DoubleValue TRAP_ANGLE =
       new RobotPreferences.DoubleValue("Arm+Shooter", "Trap Angle", 45);
 
-  public static final double GEAR_RATIO = (5 * 4 * 3 * 42 / 15.0);
+  @RobotPreferencesValue
+  public static RobotPreferences.EnumValue<ArmParameters> PARAMETERS =
+      new RobotPreferences.EnumValue<ArmParameters>(
+          "Arm+Shooter", "Robot Base", ArmParameters.PracticeBase2024);
+
+  public static final double GEAR_RATIO = PARAMETERS.getValue().getGearRatio();
   public static final double MASS = 12.5;
   public static final double RADIANS_PER_REVOLUTION = (2 * Math.PI) / GEAR_RATIO;
-  public static final MotorParameters MOTOR = MotorParameters.NeoV1_1;
+  public static final MotorParameters MOTOR = PARAMETERS.getValue().getMotorParameters();
   public static final double EFFICIENCY = 1;
   public static final double MAX_ANGULAR_SPEED =
       EFFICIENCY * MOTOR.getFreeSpeedRPM() * RADIANS_PER_REVOLUTION / 60.0;
-  public static final double ARM_LENGTH = 0.57;
+  public static final double ARM_LENGTH = PARAMETERS.getValue().getArmLength();
   public static final double MAX_ANGULAR_ACCELERATION =
       EFFICIENCY * ((2 * MOTOR.getStallTorque() * GEAR_RATIO) / (MASS * ARM_LENGTH));
   public static final TrapezoidProfile.Constraints CONSTRAINTS =
