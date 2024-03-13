@@ -28,7 +28,7 @@ public class SetShooterContinous extends Command {
   /** A array of shooter params sorted from nearest to farthest. */
   private final ShooterParams[] shooterParams = { // TODO Determine accurate parameters
     new ShooterParams(1.0, -11, 2200),
-    new ShooterParams(2.0, 5, 2200),
+    new ShooterParams(2.0, 4.5, 2500),
     new ShooterParams(3.0, 16, 3100),
     new ShooterParams(4.0, 22, 4100),
     new ShooterParams(5.0, 24.5, 4700),
