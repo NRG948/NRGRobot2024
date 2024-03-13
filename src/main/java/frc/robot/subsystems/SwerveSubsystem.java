@@ -59,6 +59,7 @@ import frc.robot.util.SwerveModuleVelocities;
 import frc.robot.util.SwerveModuleVoltages;
 import java.util.Map;
 import java.util.Optional;
+import java.util.function.Supplier;
 
 @RobotPreferencesLayout(groupName = "Drive", column = 1, row = 0, width = 2, height = 2)
 public class SwerveSubsystem extends SubsystemBase {
@@ -157,8 +158,8 @@ public class SwerveSubsystem extends SubsystemBase {
   private double rawOrientationOffset; // The offset to the corrected orientation in radians.
   private Rotation2d orientation = new Rotation2d();
   private Pose2d lastVisionMeasurement = new Pose2d();
-  private Optional<Translation2d> orientationTarget =
-      Optional.empty(); // absolute location to keep the robot oriented to tag
+  private Supplier<Optional<Rotation2d>> targetOrientationSupplier =
+      () -> Optional.empty(); // absolute location to keep the robot oriented to tag
 
   private DoubleLogEntry rawOrientationLog =
       new DoubleLogEntry(DataLogManager.getLog(), "/SwerveSubsystem/rawOrientation");
@@ -265,13 +266,28 @@ public class SwerveSubsystem extends SubsystemBase {
    *
    * @param orientationTarget Target we want to orient to.
    */
-  public void setAutoOrientationTarget(Translation2d orientationTarget) {
-    this.orientationTarget = Optional.of(orientationTarget);
+  public void enableAutoOrientationTarget(Translation2d orientationTarget) {
+    this.targetOrientationSupplier =
+        () ->
+            Optional.of(
+                orientationTarget
+                    .minus(getPosition().getTranslation())
+                    .getAngle()
+                    .rotateBy(ROTATE_180_DEGREES));
+  }
+
+  /**
+   * Enables auto orientation mode.
+   *
+   * @param targetOrientationSupplier Supplies the target orientation.
+   */
+  public void enableAutoOrientation(Supplier<Optional<Rotation2d>> targetOrientationSupplier) {
+    this.targetOrientationSupplier = targetOrientationSupplier;
   }
 
   /** Clears the orientation target. */
-  public void clearAutoOrientationTarget() {
-    orientationTarget = Optional.empty();
+  public void disableAutoOrientation() {
+    targetOrientationSupplier = () -> Optional.empty();
   }
 
   /**
@@ -281,15 +297,7 @@ public class SwerveSubsystem extends SubsystemBase {
    *     method returns Optional.empty().
    */
   public Optional<Rotation2d> getTargetOrientation() {
-    if (orientationTarget.isEmpty()) {
-      return Optional.empty();
-    }
-    return Optional.of(
-        orientationTarget
-            .get()
-            .minus(getPosition().getTranslation())
-            .getAngle()
-            .rotateBy(ROTATE_180_DEGREES));
+    return targetOrientationSupplier.get();
   }
 
   /**

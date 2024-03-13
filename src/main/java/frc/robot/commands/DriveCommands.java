@@ -8,6 +8,7 @@ package frc.robot.commands;
 
 import com.nrg948.preferences.RobotPreferences;
 import com.nrg948.preferences.RobotPreferencesValue;
+import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.geometry.Pose3d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Rotation3d;
@@ -19,6 +20,7 @@ import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
 import frc.robot.Constants.RobotConstants;
 import frc.robot.subsystems.AprilTagSubsystem;
+import frc.robot.subsystems.NoteVisionSubsystem;
 import frc.robot.subsystems.Subsystems;
 import frc.robot.subsystems.SwerveSubsystem;
 import java.util.Map;
@@ -95,5 +97,64 @@ public final class DriveCommands {
           Optional<Alliance> alliance = DriverStation.getAlliance();
           return alliance.orElse(Alliance.Blue);
         });
+  }
+
+  /**
+   * Returns a command that enables auto orientation to the current alliance speaker.
+   *
+   * @param subsystems The subsystem container.
+   * @return
+   */
+  public static Command autoOrientToSpeaker(Subsystems subsystems) {
+    SwerveSubsystem drivetrain = subsystems.drivetrain;
+    return Commands.runOnce(
+        () -> {
+          if (subsystems.aprilTag.isPresent()) {
+            drivetrain.enableAutoOrientationTarget(
+                subsystems
+                    .aprilTag
+                    .get()
+                    .getSpeakerCenterAprilTagPose()
+                    .toPose2d()
+                    .getTranslation());
+          }
+        },
+        drivetrain);
+  }
+
+  /**
+   * Returns a command to enable auto orient to note mode.
+   * 
+   * @param subsystems The subsystems container.
+   * @return
+   */
+  public static Command autoOrientToNote(Subsystems subsystems) {
+    SwerveSubsystem drivetrain = subsystems.drivetrain;
+    Optional<NoteVisionSubsystem> noteVision = subsystems.noteVision;
+    return Commands.runOnce(
+        () -> {
+          if (noteVision.isPresent()) {
+            drivetrain.enableAutoOrientation(
+                () -> {
+                  double currentOrientation = drivetrain.getOrientation().getRadians();
+                  double angleToTarget = Math.toRadians(noteVision.get().getAngleToBestTarget());
+                  double targetOrientation =
+                      MathUtil.angleModulus(angleToTarget + currentOrientation);
+                  return Optional.of(new Rotation2d(targetOrientation));
+                });
+          }
+        },
+        drivetrain);
+  }
+
+  /**
+   * Returns a command that disables auto orientation.
+   *
+   * @param subsystems The subsystems container.
+   * @return
+   */
+  public static Command disableAutoOrientation(Subsystems subsystems) {
+    SwerveSubsystem drivetrain = subsystems.drivetrain;
+    return Commands.runOnce(() -> drivetrain.disableAutoOrientation(), drivetrain);
   }
 }

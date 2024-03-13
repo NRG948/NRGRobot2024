@@ -175,6 +175,9 @@ public final class Autos {
     eventMaps.put(
         "IntakeUntilNoteDetectedNoAutoCentering", NoteCommands.intakeUntilNoteDetected(subsystems));
 
+    eventMaps.put("AutoOrientToSpeaker", DriveCommands.autoOrientToSpeaker(subsystems));
+    eventMaps.put("DisableAutoOrientation", DriveCommands.disableAutoOrientation(subsystems));
+
     return eventMaps;
   }
 
