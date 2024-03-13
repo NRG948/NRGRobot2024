@@ -119,20 +119,20 @@ public class RobotContainer {
         .rightStick()
         .onFalse(Commands.runOnce(() -> drivetrain.clearAutoOrientationTarget(), drivetrain));
 
-    operatorController
-        .start()
-        .onTrue(
-            NoteCommands.prepareToShoot(
-                subsystems,
-                Autos.SPIKE_SHOT_RPM.getValue(),
-                Math.toRadians(Autos.SPIKE_SHOT_ANGLE.getValue())));
+    // operatorController
+    //     .start()
+    //     .onTrue(
+    //         NoteCommands.prepareToShoot(
+    //             subsystems,
+    //             Autos.SPIKE_SHOT_RPM.getValue(),
+    //             Math.toRadians(Autos.SPIKE_SHOT_ANGLE.getValue())));
     operatorController
         .povUp()
         .whileTrue(NoteCommands.shootAtCurrentRPM(subsystems).finallyDo(shooter::disable));
     operatorController.povDown().whileTrue(NoteCommands.outtake(subsystems));
     operatorController.povRight().whileTrue(NoteCommands.outakeToAmp(subsystems));
     operatorController.back().onTrue(new InterruptAll(subsystems));
-    operatorController.leftTrigger().whileTrue(new SetShooterContinous(subsystems));
+    operatorController.start().whileTrue(new SetShooterContinous(subsystems));
     // operatorController.b().whileTrue(new SetShooterContinous(subsystems));
     operatorController
         .b()
