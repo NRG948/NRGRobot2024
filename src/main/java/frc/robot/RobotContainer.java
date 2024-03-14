@@ -115,10 +115,10 @@ public class RobotContainer {
     operatorController.povDown().whileTrue(NoteCommands.outtake(subsystems));
     operatorController.povRight().whileTrue(NoteCommands.outakeToAmp(subsystems));
     operatorController.back().onTrue(new InterruptAll(subsystems));
-    operatorController.start().whileTrue(new SetShooterContinous(subsystems));
+    operatorController.b().whileTrue(new SetShooterContinous(subsystems));
     // operatorController.b().whileTrue(new SetShooterContinous(subsystems));
     operatorController
-        .b()
+        .back()
         .onTrue(
             NoteCommands.prepareToShoot(
                 subsystems, Autos.SUBWOOFER_SHOT_RPM.getValue(), ArmSubsystem.STOWED_ANGLE));
