@@ -118,7 +118,7 @@ public class RobotContainer {
     operatorController.b().whileTrue(new SetShooterContinous(subsystems));
     // operatorController.b().whileTrue(new SetShooterContinous(subsystems));
     operatorController
-        .back()
+        .start()
         .onTrue(
             NoteCommands.prepareToShoot(
                 subsystems, Autos.SUBWOOFER_SHOT_RPM.getValue(), ArmSubsystem.STOWED_ANGLE));
