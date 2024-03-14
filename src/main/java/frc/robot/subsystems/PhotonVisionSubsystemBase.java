@@ -91,6 +91,16 @@ public abstract class PhotonVisionSubsystemBase extends SubsystemBase {
   }
 
   /**
+   * Returns the angle to the specified target in radians
+   *
+   * @param target The target.
+   * @return The angle to target in radians.
+   */
+  public static double calculateAngleToTarget(PhotonTrackedTarget target) {
+    return Math.toRadians(-target.getYaw());
+  }
+
+  /**
    * Returns the transform from the camera to center of the robot.
    *
    * @return The transform from the camera to center of the robot.

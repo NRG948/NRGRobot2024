@@ -178,7 +178,7 @@ public class AprilTagSubsystem extends PhotonVisionSubsystemBase {
     if (target.isEmpty()) {
       return 0.0;
     }
-    return target.get().getYaw();
+    return calculateAngleToTarget(target.get());
   }
 
   /**
@@ -189,6 +189,16 @@ public class AprilTagSubsystem extends PhotonVisionSubsystemBase {
   public static int getSpeakerCenterAprilTagID() {
     var alliance = DriverStation.getAlliance().get();
     return alliance == Alliance.Red ? 4 : 7;
+  }
+
+  /**
+   * Returns the speaker center AprilTag.
+   *
+   * @return A non empty Optional value if we detect specified AprilTag. Otherwise returns
+   *     Optional.empty.
+   */
+  public Optional<PhotonTrackedTarget> getSpeakerCenterAprilTag() {
+    return getTarget(getSpeakerCenterAprilTagID());
   }
 
   /**
