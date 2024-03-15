@@ -20,11 +20,13 @@ import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardLayout;
 import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
+import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
 import frc.robot.Constants.RobotConstants.OperatorConstants;
 import frc.robot.commands.ArmCommands;
 import frc.robot.commands.Autos;
+import frc.robot.commands.ClimberCommands;
 import frc.robot.commands.DriveCommands;
 import frc.robot.commands.DriveUsingController;
 import frc.robot.commands.InterruptAll;
@@ -33,6 +35,7 @@ import frc.robot.commands.NoteCommands;
 import frc.robot.commands.Pathfinding;
 import frc.robot.commands.SetShooterContinous;
 import frc.robot.subsystems.ArmSubsystem;
+import frc.robot.subsystems.ClimberSubsystem;
 import frc.robot.subsystems.IndexerSubsystem;
 import frc.robot.subsystems.ShooterSubsystem;
 import frc.robot.subsystems.StatusLEDSubsystem;
@@ -101,6 +104,8 @@ public class RobotContainer {
     driverController.y().whileTrue(Pathfinding.pathFindToAmp2());
     driverController.rightStick().onTrue(DriveCommands.autoOrientToSpeaker(subsystems));
     driverController.rightStick().onFalse(DriveCommands.disableAutoOrientation(subsystems));
+    driverController.povUp().whileTrue(ClimberCommands.manualClimbChain(subsystems));
+    driverController.povDown().whileTrue(ClimberCommands.manualClimbDownChain(subsystems));
 
     // operatorController
     //     .start()
