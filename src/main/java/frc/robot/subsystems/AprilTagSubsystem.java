@@ -39,7 +39,15 @@ import org.photonvision.PhotonPoseEstimator.PoseStrategy;
 import org.photonvision.targeting.PhotonTrackedTarget;
 
 /** This subsystem is responsible for getting target information from PhotonVision. */
-@RobotPreferencesLayout(groupName = "AprilTag", row = 0, column = 3, width = 1, height = 4)
+@RobotPreferencesLayout(
+    groupName = "AprilTag",
+    column = 2,
+    row = 2,
+    width = 2,
+    height = 2,
+    type = "Grid Layout",
+    gridColumns = 2,
+    gridRows = 2)
 public class AprilTagSubsystem extends PhotonVisionSubsystemBase {
   public static final Matrix<N3, N1> SINGLE_TAG_STD_DEVS = VecBuilder.fill(4, 4, 8);
   public static final Matrix<N3, N1> MULTI_TAG_STD_DEVS = VecBuilder.fill(0.5, 0.5, 1);
@@ -47,11 +55,11 @@ public class AprilTagSubsystem extends PhotonVisionSubsystemBase {
   public static EstimatedRobotPose NO_APRILTAG_ESTIMATE =
       new EstimatedRobotPose(NO_APRILTAG, 0, List.of(), PoseStrategy.LOWEST_AMBIGUITY);
 
-  @RobotPreferencesValue
+  @RobotPreferencesValue(column = 0, row = 0)
   public static final RobotPreferences.BooleanValue ENABLED =
       new RobotPreferences.BooleanValue("AprilTag", "Enabled", false);
 
-  @RobotPreferencesValue
+  @RobotPreferencesValue(column = 1, row = 0)
   public static final RobotPreferences.BooleanValue ENABLE_TAB =
       new RobotPreferences.BooleanValue("AprilTag", "Enable Tab", false);
 

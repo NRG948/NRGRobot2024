@@ -61,16 +61,24 @@ import java.util.Map;
 import java.util.Optional;
 import java.util.function.Supplier;
 
-@RobotPreferencesLayout(groupName = "Drive", column = 1, row = 0, width = 2, height = 2)
+@RobotPreferencesLayout(
+    groupName = "Drive",
+    column = 1,
+    row = 0,
+    width = 3,
+    height = 2,
+    type = "Grid Layout",
+    gridColumns = 3,
+    gridRows = 2)
 public class SwerveSubsystem extends SubsystemBase {
   private static final Rotation2d ROTATE_180_DEGREES = Rotation2d.fromDegrees(180);
 
-  @RobotPreferencesValue
+  @RobotPreferencesValue(column = 0, row = 0)
   public static RobotPreferences.EnumValue<SwerveDriveParameters> PARAMETERS =
       new RobotPreferences.EnumValue<SwerveDriveParameters>(
           "Drive", "Robot Base", SwerveDriveParameters.PracticeBase2024);
 
-  @RobotPreferencesValue
+  @RobotPreferencesValue(column = 1, row = 0)
   public static RobotPreferences.BooleanValue ENABLE_DRIVE_TAB =
       new RobotPreferences.BooleanValue("Drive", "Enable Tab", false);
 
