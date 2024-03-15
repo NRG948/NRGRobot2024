@@ -16,6 +16,7 @@ public class InterruptAll extends Command {
   public InterruptAll(Subsystems subsystems) {
     this.subsystems = subsystems;
     addRequirements(subsystems.all);
+    subsystems.drivetrain.disableAutoOrientation();
   }
 
   // Called when the command is initially scheduled.
