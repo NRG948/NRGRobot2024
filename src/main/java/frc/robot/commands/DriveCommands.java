@@ -147,8 +147,7 @@ public final class DriveCommands {
                   }
                 });
           }
-        },
-        drivetrain);
+        });
   }
 
   /**
@@ -172,8 +171,7 @@ public final class DriveCommands {
                   return Optional.of(new Rotation2d(targetOrientation));
                 });
           }
-        },
-        drivetrain);
+        });
   }
 
   /**
@@ -184,6 +182,6 @@ public final class DriveCommands {
    */
   public static Command disableAutoOrientation(Subsystems subsystems) {
     SwerveSubsystem drivetrain = subsystems.drivetrain;
-    return Commands.runOnce(() -> drivetrain.disableAutoOrientation(), drivetrain);
+    return Commands.runOnce(() -> drivetrain.disableAutoOrientation());
   }
 }
