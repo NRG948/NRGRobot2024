@@ -23,17 +23,17 @@ import frc.robot.Constants.RobotConstants;
     groupName = "NoteVision",
     column = 1,
     row = 2,
-    width = 2,
+    width = 1,
     height = 2,
     type = "Grid Layout",
-    gridColumns = 3,
+    gridColumns = 1,
     gridRows = 2)
 public class NoteVisionSubsystem extends PhotonVisionSubsystemBase {
   @RobotPreferencesValue(column = 0, row = 0)
   public static final RobotPreferences.BooleanValue ENABLED =
       new RobotPreferences.BooleanValue("NoteVision", "Enabled", false);
 
-  @RobotPreferencesValue(column = 1, row = 0)
+  @RobotPreferencesValue(column = 0, row = 1)
   public static final RobotPreferences.BooleanValue ENABLE_TAB =
       new RobotPreferences.BooleanValue("NoteVision", "Enable Tab", false);
 

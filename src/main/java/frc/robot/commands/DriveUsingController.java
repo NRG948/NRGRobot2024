@@ -6,8 +6,9 @@
  */
 package frc.robot.commands;
 
+import com.nrg948.preferences.RobotPreferences;
+import com.nrg948.preferences.RobotPreferencesValue;
 import edu.wpi.first.math.MathUtil;
-// import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.controller.ProfiledPIDController;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.wpilibj2.command.Command;
@@ -18,6 +19,18 @@ import java.util.Optional;
 
 public class DriveUsingController extends Command {
   private static final double DEADBAND = 0.08;
+
+  @RobotPreferencesValue(column = 0, row = 1)
+  public static final RobotPreferences.DoubleValue AUTO_ORIENT_KP =
+      new RobotPreferences.DoubleValue("Drive", "Auto Orient kP", 1.0);
+
+  @RobotPreferencesValue(column = 1, row = 1)
+  public static final RobotPreferences.DoubleValue AUTO_ORIENT_KI =
+      new RobotPreferences.DoubleValue("Drive", "Auto Orient kI", 0);
+
+  @RobotPreferencesValue(column = 2, row = 1)
+  public static final RobotPreferences.DoubleValue AUTO_ORIENT_KD =
+      new RobotPreferences.DoubleValue("Drive", "Auto Orient kD", 0);
 
   private final SwerveSubsystem drivetrain;
   private final CommandXboxController xboxController;
@@ -34,8 +47,14 @@ public class DriveUsingController extends Command {
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
+    // We initialize the PID controller and PID constant in initialize. To make preferences changes
+    // take effect immediately, press the "interrupt all" button.
     controller =
-        new ProfiledPIDController(1.0, 0.0, 0.0, SwerveSubsystem.getRotationalConstraints());
+        new ProfiledPIDController(
+            AUTO_ORIENT_KP.getValue(),
+            AUTO_ORIENT_KI.getValue(),
+            AUTO_ORIENT_KD.getValue(),
+            SwerveSubsystem.getRotationalConstraints());
     controller.enableContinuousInput(-Math.PI, Math.PI);
     controller.setIZone(Math.toRadians(5));
     controller.reset(drivetrain.getOrientation().getRadians());

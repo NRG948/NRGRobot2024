@@ -33,7 +33,7 @@ public final class DriveCommands {
 
   public static Rotation2d ROTATE_180_DEGREES = Rotation2d.fromDegrees(180);
 
-  @RobotPreferencesValue
+  @RobotPreferencesValue(column = 1, row = 1)
   public static final RobotPreferences.BooleanValue USE_ESTIMATED_POSE =
       new RobotPreferences.BooleanValue("AprilTag", "Use Estimated Pose", false);
 
