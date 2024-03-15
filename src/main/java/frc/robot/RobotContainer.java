@@ -177,6 +177,7 @@ public class RobotContainer {
   public void teleopInit() {
     subsystems.drivetrain.setBrakeMode(true);
     subsystems.indexer.setBrakeMode(true);
+    subsystems.drivetrain.disableAutoOrientation();
   }
 
   public void periodic() {
