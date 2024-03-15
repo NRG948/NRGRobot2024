@@ -28,15 +28,15 @@
           "data": {
             "commands": [
               {
-                "type": "wait",
+                "type": "named",
                 "data": {
-                  "waitTime": 2.0
+                  "name": "IntakeUntilNoteDetected"
                 }
               },
               {
-                "type": "named",
+                "type": "wait",
                 "data": {
-                  "name": "IntakeUntilNoteDetectedNoAutoCentering"
+                  "waitTime": 2.0
                 }
               }
             ]
@@ -49,19 +49,32 @@
           }
         },
         {
-          "type": "race",
+          "type": "sequential",
           "data": {
             "commands": [
               {
-                "type": "wait",
+                "type": "named",
                 "data": {
-                  "waitTime": 2.0
+                  "name": "DisableAutoOrientationMode"
                 }
               },
               {
-                "type": "named",
+                "type": "race",
                 "data": {
-                  "name": "ShootSourceFarShot"
+                  "commands": [
+                    {
+                      "type": "wait",
+                      "data": {
+                        "waitTime": 2.0
+                      }
+                    },
+                    {
+                      "type": "named",
+                      "data": {
+                        "name": "ShootAtCurrentRPM"
+                      }
+                    }
+                  ]
                 }
               }
             ]
@@ -99,19 +112,32 @@
           }
         },
         {
-          "type": "race",
+          "type": "parallel",
           "data": {
             "commands": [
               {
-                "type": "wait",
+                "type": "named",
                 "data": {
-                  "waitTime": 2.0
+                  "name": "DisableAutoOrientationMode"
                 }
               },
               {
-                "type": "named",
+                "type": "race",
                 "data": {
-                  "name": "ShootSourceFarShot"
+                  "commands": [
+                    {
+                      "type": "wait",
+                      "data": {
+                        "waitTime": 2.0
+                      }
+                    },
+                    {
+                      "type": "named",
+                      "data": {
+                        "name": "ShootAtCurrentRPM"
+                      }
+                    }
+                  ]
                 }
               }
             ]
