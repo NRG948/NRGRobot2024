@@ -100,8 +100,9 @@ public class RobotContainer {
     driverController.start().onTrue(DriveCommands.resetOrientation(subsystems));
     driverController.back().onTrue(new InterruptAll(subsystems));
     driverController.a().onTrue(Pathfinding.pathFindToSpeakerFront());
-    driverController.b().whileTrue(Pathfinding.pathFindToAmp());
     driverController.y().whileTrue(Pathfinding.pathFindToAmp2());
+    driverController.b().onTrue(DriveCommands.autoOrientToSpeaker(subsystems));
+    driverController.b().onFalse(DriveCommands.disableAutoOrientation(subsystems));
     driverController.rightStick().onTrue(DriveCommands.autoOrientToSpeaker(subsystems));
     driverController.rightStick().onFalse(DriveCommands.disableAutoOrientation(subsystems));
     driverController.povUp().whileTrue(ClimberCommands.manualClimbChain(subsystems));
@@ -159,6 +160,7 @@ public class RobotContainer {
     subsystems.indexer.disable();
     subsystems.shooter.disable();
     subsystems.arm.disable();
+    subsystems.drivetrain.disableAutoOrientation();
   }
 
   public void disabledPeriodic() {
