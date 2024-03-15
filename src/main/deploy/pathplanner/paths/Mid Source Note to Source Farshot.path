@@ -50,7 +50,7 @@
     },
     {
       "name": "Prepare To Shoot",
-      "waypointRelativePos": 0.3,
+      "waypointRelativePos": 0.5,
       "command": {
         "type": "parallel",
         "data": {
@@ -58,13 +58,24 @@
             {
               "type": "named",
               "data": {
-                "name": "SetArmAngleSourceFarShot"
+                "name": "SetShooterContinuous"
               }
-            },
+            }
+          ]
+        }
+      }
+    },
+    {
+      "name": "AutoOrientToSpeaker",
+      "waypointRelativePos": 0.65,
+      "command": {
+        "type": "parallel",
+        "data": {
+          "commands": [
             {
               "type": "named",
               "data": {
-                "name": "SetShooterRPMSourceFarShot"
+                "name": "AutoOrientToSpeaker"
               }
             }
           ]
