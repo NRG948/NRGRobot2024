@@ -18,7 +18,7 @@ import frc.robot.motors.MotorAdapter;
 /** An enum representing the properties of the shooter for a specific robot instance. */
 public enum ShooterParameters {
   PracticeShooter(NeoV1_1, 4, 10, 1.0, 0.9, 0.15),
-  CompetitionShooter(KrakenX60, 4, 10, 1.0, 0.9, 0.15) // TODO update for comp bot
+  CompetitionShooter(KrakenX60, 4, 15, 1.0, 0.9, 0.15) // TODO update for comp bot
 ;
   private final MotorParameters motor;
   private final int leftDeviceID;
