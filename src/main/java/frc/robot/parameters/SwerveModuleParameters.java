@@ -52,6 +52,10 @@ public enum SwerveModuleParameters {
       150.0 / 7.0,
       true),
 
+  /** An MK4I Swerve Module in the L2+ - Faster configuration. */
+  MK4IFaster(
+      Units.inchesToMeters(Constants.RobotConstants.WHEEL_DIAMETER_INCHES), 5.9, 150.0 / 7.0, true),
+
   /** An MK4I Swerve Module in the L3 - Very Fast configuration. */
   MK4IVeryFast(
       Units.inchesToMeters(Constants.RobotConstants.WHEEL_DIAMETER_INCHES),
