@@ -156,6 +156,7 @@ public final class Autos {
     eventMaps.put(
         "SetArmAngleSubwooferSideShot", setArmAngle(subsystems, SUBWOOFER_SIDE_SHOT_ANGLE));
     eventMaps.put("SetArmAngleSubwooferShot", setArmAngle(subsystems, SUBWOOFER_SHOT_ANGLE));
+    eventMaps.put("SetShooterContinuous", new SetShooterContinous(subsystems));
 
     eventMaps.put("ShootSourceFarShot", shoot(subsystems, SOURCE_FARSHOT_RPM));
     eventMaps.put("ShootAmpFarShot", shoot(subsystems, AMP_FARSHOT_RPM));
@@ -175,6 +176,9 @@ public final class Autos {
         NoteCommands.autoCenterNote(subsystems, NoteCommands.AUTO_CENTER_NOTE_CONTINUATION));
     eventMaps.put(
         "IntakeUntilNoteDetectedNoAutoCentering", NoteCommands.intakeUntilNoteDetected(subsystems));
+
+    eventMaps.put("AutoOrientToSpeaker", DriveCommands.autoOrientToSpeaker(subsystems));
+    eventMaps.put("DisableAutoOrientation", DriveCommands.disableAutoOrientation(subsystems));
 
     return eventMaps;
   }

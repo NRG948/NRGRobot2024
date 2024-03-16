@@ -25,6 +25,7 @@ import edu.wpi.first.wpilibj2.command.button.Trigger;
 import frc.robot.Constants.RobotConstants.OperatorConstants;
 import frc.robot.commands.ArmCommands;
 import frc.robot.commands.Autos;
+import frc.robot.commands.ClimberCommands;
 import frc.robot.commands.DriveCommands;
 import frc.robot.commands.DriveUsingController;
 import frc.robot.commands.InterruptAll;
@@ -37,7 +38,6 @@ import frc.robot.subsystems.IndexerSubsystem;
 import frc.robot.subsystems.ShooterSubsystem;
 import frc.robot.subsystems.StatusLEDSubsystem;
 import frc.robot.subsystems.Subsystems;
-import frc.robot.subsystems.SwerveSubsystem;
 import java.util.Map;
 
 /**
@@ -89,7 +89,6 @@ public class RobotContainer {
    * joysticks}.
    */
   private void configureBindings() {
-    SwerveSubsystem drivetrain = subsystems.drivetrain;
     ShooterSubsystem shooter = subsystems.shooter;
     IndexerSubsystem indexer = subsystems.indexer;
     StatusLEDSubsystem statusLED = subsystems.statusLED;
@@ -97,45 +96,33 @@ public class RobotContainer {
     driverController.start().onTrue(DriveCommands.resetOrientation(subsystems));
     driverController.back().onTrue(new InterruptAll(subsystems));
     driverController.a().onTrue(Pathfinding.pathFindToSpeakerFront());
-    driverController.b().whileTrue(Pathfinding.pathFindToAmp());
+    driverController.b().onTrue(DriveCommands.autoOrientToSpeaker(subsystems));
+    driverController.b().onFalse(DriveCommands.disableAutoOrientation(subsystems));
+    driverController.x().onTrue(DriveCommands.autoOrientToNote(subsystems));
+    driverController.x().onFalse(DriveCommands.disableAutoOrientation(subsystems));
     driverController.y().whileTrue(Pathfinding.pathFindToAmp2());
-    driverController
-        .rightStick()
-        .onTrue(
-            Commands.runOnce(
-                () -> {
-                  if (subsystems.aprilTag.isPresent()) {
-                    drivetrain.setAutoOrientationTarget(
-                        subsystems
-                            .aprilTag
-                            .get()
-                            .getSpeakerCenterAprilTagPose()
-                            .toPose2d()
-                            .getTranslation());
-                  }
-                },
-                drivetrain));
-    driverController
-        .rightStick()
-        .onFalse(Commands.runOnce(() -> drivetrain.clearAutoOrientationTarget(), drivetrain));
+    driverController.rightStick().onTrue(DriveCommands.autoOrientToSpeaker(subsystems));
+    driverController.rightStick().onFalse(DriveCommands.disableAutoOrientation(subsystems));
+    driverController.povUp().whileTrue(ClimberCommands.manualClimbChain(subsystems));
+    driverController.povDown().whileTrue(ClimberCommands.manualClimbDownChain(subsystems));
 
-    operatorController
-        .start()
-        .onTrue(
-            NoteCommands.prepareToShoot(
-                subsystems,
-                Autos.SPIKE_SHOT_RPM.getValue(),
-                Math.toRadians(Autos.SPIKE_SHOT_ANGLE.getValue())));
+    // operatorController
+    //     .start()
+    //     .onTrue(
+    //         NoteCommands.prepareToShoot(
+    //             subsystems,
+    //             Autos.SPIKE_SHOT_RPM.getValue(),
+    //             Math.toRadians(Autos.SPIKE_SHOT_ANGLE.getValue())));
     operatorController
         .povUp()
         .whileTrue(NoteCommands.shootAtCurrentRPM(subsystems).finallyDo(shooter::disable));
     operatorController.povDown().whileTrue(NoteCommands.outtake(subsystems));
     operatorController.povRight().whileTrue(NoteCommands.outakeToAmp(subsystems));
     operatorController.back().onTrue(new InterruptAll(subsystems));
-    operatorController.leftTrigger().whileTrue(new SetShooterContinous(subsystems));
+    operatorController.b().whileTrue(new SetShooterContinous(subsystems));
     // operatorController.b().whileTrue(new SetShooterContinous(subsystems));
     operatorController
-        .b()
+        .start()
         .onTrue(
             NoteCommands.prepareToShoot(
                 subsystems, Autos.SUBWOOFER_SHOT_RPM.getValue(), ArmSubsystem.STOWED_ANGLE));
@@ -171,6 +158,7 @@ public class RobotContainer {
     subsystems.indexer.disable();
     subsystems.shooter.disable();
     subsystems.arm.disable();
+    subsystems.drivetrain.disableAutoOrientation();
   }
 
   public void disabledPeriodic() {

@@ -222,7 +222,11 @@ public class NoteCommands {
                     .until(() -> !indexer.isNoteAtShootPosition()),
                 Commands.idle(indexer, shooter) // Suppress default commands
                     .withTimeout(EXTRA_SHOT_DELAY))
-            .finallyDo(() -> indexer.disable()), //
+            .finallyDo(
+                () -> {
+                  indexer.disable();
+                  shooter.disable();
+                }), //
         Commands.none(), //
         indexer::isNoteAtShootPosition);
   }

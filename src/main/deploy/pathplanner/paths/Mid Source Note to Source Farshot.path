@@ -49,8 +49,8 @@
       }
     },
     {
-      "name": "Set Shooter Continous",
-      "waypointRelativePos": 0.3,
+      "name": "Prepare To Shoot",
+      "waypointRelativePos": 0.5,
       "command": {
         "type": "sequential",
         "data": {
@@ -58,7 +58,24 @@
             {
               "type": "named",
               "data": {
-                "name": "SetShooterContinous"
+                "name": "SetShooterContinuous"
+              }
+            }
+          ]
+        }
+      }
+    },
+    {
+      "name": "AutoOrientToSpeaker",
+      "waypointRelativePos": 0.65,
+      "command": {
+        "type": "parallel",
+        "data": {
+          "commands": [
+            {
+              "type": "named",
+              "data": {
+                "name": "AutoOrientToSpeaker"
               }
             }
           ]

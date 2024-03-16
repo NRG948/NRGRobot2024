@@ -17,7 +17,7 @@ import java.util.Optional;
 /** A container class to manage all of the robot subsystems. */
 public class Subsystems {
 
-  @RobotPreferencesValue
+  @RobotPreferencesValue(column = 0, row = 1)
   public static final RobotPreferences.BooleanValue ENABLE_POSE_ESTIMATION =
       new RobotPreferences.BooleanValue("AprilTag", "Enable Pose Estimation", true);
 
