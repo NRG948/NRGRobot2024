@@ -18,8 +18,6 @@ import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardLayout;
 import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj2.command.Command;
-import edu.wpi.first.wpilibj2.command.Commands;
-import frc.robot.commands.Autos;
 import frc.robot.subsystems.Subsystems;
 import frc.robot.subsystems.SwerveSubsystem;
 
@@ -73,7 +71,7 @@ public class RobotAutonomous {
    */
   public Command getAutonomousCommand(Subsystems subsystems) {
 
-    return Commands.sequence(Autos.alignWheels(subsystems), this.chooser.getSelected());
+    return this.chooser.getSelected();
   }
 
   /**

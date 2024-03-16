@@ -52,7 +52,7 @@
       "name": "Prepare To Shoot",
       "waypointRelativePos": 0.5,
       "command": {
-        "type": "parallel",
+        "type": "sequential",
         "data": {
           "commands": [
             {
