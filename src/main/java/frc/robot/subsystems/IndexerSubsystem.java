@@ -24,20 +24,25 @@ import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardLayout;
 import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants.RobotConstants;
-import frc.robot.parameters.MotorParameters;
+import frc.robot.parameters.IndexerParameters;
 
 @RobotPreferencesLayout(groupName = "Indexer+Intake", column = 6, row = 0, width = 1, height = 4)
 public class IndexerSubsystem extends SubsystemBase {
 
-  public static double GEAR_RATIO = 3 * 26 / 15;
-  public static double INDEXER_DIAMETER = 0.033; // Diameter in meters
+  @RobotPreferencesValue
+  public static RobotPreferences.EnumValue<IndexerParameters> PARAMETERS =
+      new RobotPreferences.EnumValue<IndexerParameters>(
+          "Intake", "Robot Base", IndexerParameters.PracticeBase2024);
+
+  public static final double GEAR_RATIO = PARAMETERS.getValue().getGearRatio();
+  public static final double INDEXER_DIAMETER = PARAMETERS.getValue().getDiameter();
   public static double ENCODER_CONVERSION_FACTOR = (Math.PI * INDEXER_DIAMETER) / GEAR_RATIO;
 
   public static double MAX_VELOCITY =
-      (MotorParameters.NeoV1_1.getFreeSpeedRPM() * Math.PI * INDEXER_DIAMETER) / (GEAR_RATIO * 60);
+      (PARAMETERS.getValue().getMotorParameters().getFreeSpeedRPM() * Math.PI * INDEXER_DIAMETER) / (GEAR_RATIO * 60);
   public static double MAX_ACCELERATION =
-      (2 * MotorParameters.NeoV1_1.getStallTorque() * GEAR_RATIO * Math.PI * INDEXER_DIAMETER)
-          / RobotConstants.INDEXER_MASS;
+      (2 * PARAMETERS.getValue().getMotorParameters().getStallTorque() * GEAR_RATIO * Math.PI * INDEXER_DIAMETER)
+          / PARAMETERS.getValue().getMass();
 
   public static double KS = 0.15;
   public static double KV = (RobotConstants.MAX_BATTERY_VOLTAGE - KS) / MAX_VELOCITY;
