@@ -101,8 +101,6 @@ public class RobotContainer {
     driverController.x().onTrue(DriveCommands.autoOrientToNote(subsystems));
     driverController.x().onFalse(DriveCommands.disableAutoOrientation(subsystems));
     driverController.y().whileTrue(Pathfinding.pathFindToAmp2());
-    driverController.rightStick().onTrue(DriveCommands.autoOrientToSpeaker(subsystems));
-    driverController.rightStick().onFalse(DriveCommands.disableAutoOrientation(subsystems));
     driverController.povUp().whileTrue(ClimberCommands.manualClimbChain(subsystems));
     driverController.povDown().whileTrue(ClimberCommands.manualClimbDownChain(subsystems));
 
