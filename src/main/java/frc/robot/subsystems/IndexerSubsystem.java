@@ -88,7 +88,7 @@ public class IndexerSubsystem extends SubsystemBase {
   /** Creates a new IndexerSubsystem. */
   public IndexerSubsystem() {
     motor.setIdleMode(IdleMode.kBrake);
-    motor.setInverted(!Robot.isCompBot);
+    motor.setInverted(PARAMETERS.getValue().getInverted());
     encoder.setVelocityConversionFactor(ENCODER_CONVERSION_FACTOR);
     encoder.setPositionConversionFactor(ENCODER_CONVERSION_FACTOR);
     upperBeamBreak.enableLimitSwitch(false);
