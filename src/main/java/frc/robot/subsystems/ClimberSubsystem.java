@@ -10,6 +10,7 @@ import static frc.robot.Constants.RobotConstants.CAN.TalonFX.CLIMBER_LEFT_PORT;
 import static frc.robot.Constants.RobotConstants.CAN.TalonFX.CLIMBER_RIGHT_PORT;
 
 import com.ctre.phoenix6.hardware.TalonFX;
+import com.ctre.phoenix6.signals.NeutralModeValue;
 import com.nrg948.preferences.RobotPreferences;
 import com.nrg948.preferences.RobotPreferencesLayout;
 import com.nrg948.preferences.RobotPreferencesValue;
@@ -35,6 +36,9 @@ public class ClimberSubsystem extends SubsystemBase {
   /** Creates a new ClimberSubsystem. */
   public ClimberSubsystem() {
     winchLeftMotor.setInverted(true);
+    winchLeftMotor.setNeutralMode(NeutralModeValue.Brake);
+    winchRightMotor.setNeutralMode(NeutralModeValue.Brake);
+    // TODO: add current limits to both motors.
   }
 
   public void setVoltage(double voltage) {
@@ -44,7 +48,7 @@ public class ClimberSubsystem extends SubsystemBase {
 
   public void wind() {
     setVoltage(WIND_VOLTAGE.getValue());
-  }
+      }
 
   public void unwind() {
     setVoltage(UNWIND_VOLTAGE.getValue());

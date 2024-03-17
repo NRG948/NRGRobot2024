@@ -16,13 +16,17 @@ import frc.robot.subsystems.ShooterSubsystem;
 import frc.robot.subsystems.Subsystems;
 
 public class NoteCommands {
+
   private static final double EXTRA_SHOT_DELAY = 0.2;
 
   /** The initial intake time when autoCenterNote is in sequence with intakeUntilNoteDetected. */
   public static double AUTO_CENTER_NOTE_CONTINUATION = 0;
 
   /** The inital intake time when autoCenterNote is used standalone. */
-  public static double AUTO_CENTER_NOTE_STANDALONE = 0.05;
+  public static double AUTO_CENTER_NOTE_STANDALONE = 0.1;
+
+  /** The final delay for intaking the note during auto centering. */
+  private static final double FINAL_INTAKE_SECONDS = 0.1;
 
   /**
    * Returns a sequence of commands to intake the note into the indexer until interrupted by another
@@ -74,7 +78,7 @@ public class NoteCommands {
     IndexerSubsystem indexer = subsystems.indexer;
 
     return intake(subsystems)
-        .until(indexer::isNoteAtShootPosition) //
+        .until(indexer::isNoteBreakingUpperBeam) //
         .finallyDo(
             () -> {
               intake.disable();
@@ -127,14 +131,17 @@ public class NoteCommands {
     IndexerSubsystem indexer = subsystems.indexer;
     return Commands.sequence(
             Commands.runOnce(() -> indexer.intake(), indexer), //
-            Commands.idle(indexer).withTimeout(initialIntakeSeconds), //
-            Commands.runOnce(() -> indexer.outtake(), indexer), //
-            Commands.idle(indexer).until(() -> !indexer.isNoteAtShootPosition()), //
+            Commands.idle(indexer).withTimeout(initialIntakeSeconds),
+            Commands.runOnce(() -> System.out.println("BEFORE")), //
+            Commands.run(() -> indexer.outtake(), indexer)
+                .until(() -> !indexer.isNoteBreakingUpperBeam()),
+            Commands.runOnce(() -> System.out.println("AFTER")), //
             Commands.runOnce(() -> indexer.intake(), indexer), //
-            Commands.idle(indexer).until(indexer::isNoteAtShootPosition)) //
+            Commands.idle(indexer).withTimeout(FINAL_INTAKE_SECONDS)) //
         .finallyDo(
             () -> {
               indexer.disable();
+              System.out.println("DISABLE");
             });
   }
 
@@ -195,7 +202,7 @@ public class NoteCommands {
                 ShooterCommands.setAndWaitForRPM(subsystems, rpm), //
                 Commands.runOnce(indexer::feed, indexer), //
                 Commands.idle(shooter, indexer) // Suppress default commands
-                    .until(() -> !indexer.isNoteAtShootPosition()),
+                    .until(() -> !indexer.isNoteBreakingUpperBeam()),
                 Commands.idle(shooter, indexer) // Suppress default commands
                     .withTimeout(EXTRA_SHOT_DELAY))
             .finallyDo(
@@ -204,7 +211,7 @@ public class NoteCommands {
                   indexer.disable();
                 }), //
         Commands.none(), //
-        indexer::isNoteAtShootPosition);
+        indexer::isNoteBreakingEitherBeam);
   }
 
   /***
@@ -219,7 +226,7 @@ public class NoteCommands {
         Commands.sequence( //
                 Commands.runOnce(indexer::feed, indexer), //
                 Commands.idle(indexer, shooter) // Suppress default commands
-                    .until(() -> !indexer.isNoteAtShootPosition()),
+                    .until(() -> !indexer.isNoteBreakingUpperBeam()),
                 Commands.idle(indexer, shooter) // Suppress default commands
                     .withTimeout(EXTRA_SHOT_DELAY))
             .finallyDo(
@@ -228,7 +235,7 @@ public class NoteCommands {
                   shooter.disable();
                 }), //
         Commands.none(), //
-        indexer::isNoteAtShootPosition);
+        indexer::isNoteBreakingEitherBeam);
   }
 
   /**

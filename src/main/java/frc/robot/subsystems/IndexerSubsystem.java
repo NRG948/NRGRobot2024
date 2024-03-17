@@ -24,6 +24,7 @@ import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardLayout;
 import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants.RobotConstants;
+import frc.robot.parameters.MotorParameters;
 import frc.robot.parameters.IndexerParameters;
 
 @RobotPreferencesLayout(groupName = "Indexer+Intake", column = 6, row = 0, width = 1, height = 4)
@@ -60,8 +61,8 @@ public class IndexerSubsystem extends SubsystemBase {
   public static final RobotPreferences.BooleanValue HAS_LOWER_BEAM_BREAK =
       new RobotPreferences.BooleanValue("Indexer+Intake", "Has Lower Beam Break", true);
 
-  private boolean noteAtShootPosition = false;
-  private boolean noteAtEntry = false;
+  private boolean noteBreakingUpperBeam = false;
+  private boolean noteBreakingLowerBeam = false;
   private boolean isEnabled = false;
   private double goalVelocity = 0;
   private double currentVelocity = 0;
@@ -87,10 +88,11 @@ public class IndexerSubsystem extends SubsystemBase {
   /** Creates a new IndexerSubsystem. */
   public IndexerSubsystem() {
     motor.setIdleMode(IdleMode.kBrake);
-    motor.setInverted(true);
+    motor.setInverted(!Robot.isCompBot);
     encoder.setVelocityConversionFactor(ENCODER_CONVERSION_FACTOR);
     encoder.setPositionConversionFactor(ENCODER_CONVERSION_FACTOR);
     upperBeamBreak.enableLimitSwitch(false);
+    lowerBeamBreak.enableLimitSwitch(false);
   }
 
   /**
@@ -98,8 +100,8 @@ public class IndexerSubsystem extends SubsystemBase {
    *
    * @return
    */
-  public boolean isNoteAtShootPosition() {
-    return noteAtShootPosition;
+  public boolean isNoteBreakingUpperBeam() {
+    return noteBreakingUpperBeam;
   }
 
   /**
@@ -107,8 +109,12 @@ public class IndexerSubsystem extends SubsystemBase {
    *
    * @return
    */
-  public boolean isNoteAtEntry() {
-    return noteAtEntry;
+  public boolean isNoteBreakingLowerBeam() {
+    return noteBreakingLowerBeam;
+  }
+
+  public boolean isNoteBreakingEitherBeam() {
+    return noteBreakingUpperBeam || noteBreakingLowerBeam;
   }
 
   public void feed() {
@@ -144,16 +150,16 @@ public class IndexerSubsystem extends SubsystemBase {
   @Override
   public void periodic() {
     // This method will be called once per scheduler run
-    boolean noteAtShootPosition = upperBeamBreak.isPressed();
-    if (this.noteAtShootPosition != noteAtShootPosition) {
-      noteAtShootPositionLogger.append(noteAtShootPosition);
-      this.noteAtShootPosition = noteAtShootPosition;
+    boolean noteBreakingUpperBeam = upperBeamBreak.isPressed();
+    if (this.noteBreakingUpperBeam != noteBreakingUpperBeam) {
+      noteAtShootPositionLogger.append(noteBreakingUpperBeam);
+      this.noteBreakingUpperBeam = noteBreakingUpperBeam;
     }
 
-    boolean noteAtEntry = lowerBeamBreak.isPressed();
-    if (this.noteAtEntry != noteAtEntry) {
-      noteAtEntryLogger.append(noteAtEntry);
-      this.noteAtEntry = noteAtEntry;
+    boolean noteBreakingLowerBeam = lowerBeamBreak.isPressed();
+    if (this.noteBreakingLowerBeam != noteBreakingLowerBeam) {
+      noteAtEntryLogger.append(noteBreakingLowerBeam);
+      this.noteBreakingLowerBeam = noteBreakingLowerBeam;
     }
 
     currentVelocity = encoder.getVelocity();
@@ -182,6 +188,7 @@ public class IndexerSubsystem extends SubsystemBase {
     layout.addDouble("Goal Velocity", () -> goalVelocity);
     layout.addDouble("Current Velocity", () -> currentVelocity);
     layout.addBoolean("Enabled", () -> isEnabled);
-    layout.addBoolean("Note Detected", () -> noteAtShootPosition);
+    layout.addBoolean("Upper Note Detected", () -> noteBreakingUpperBeam);
+    layout.addBoolean("Lower Note Detected", () -> noteBreakingLowerBeam);
   }
 }

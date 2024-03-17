@@ -9,11 +9,12 @@ package frc.robot.motors;
 import com.revrobotics.CANSparkBase.IdleMode;
 import com.revrobotics.CANSparkLowLevel;
 import com.revrobotics.CANSparkMax;
+import com.revrobotics.RelativeEncoder;
 
 /** An adapter class implementing a common interface on the CANSparkMax motor controller. */
-public class CANSparkMaxMotorAdapter implements MotorAdapter {
+public class CANSparkMaxAdapter implements MotorandEncoderAdapter {
   private CANSparkMax motor;
-  private CANSparkMaxRelativeEncoderAdapter encoder;
+  private RelativeEncoder encoder;
 
   /**
    * Contructs an instance of this class.
@@ -21,9 +22,9 @@ public class CANSparkMaxMotorAdapter implements MotorAdapter {
    * @param deviceID The CAN ID of the motor.
    * @param motorType The type of the motor.
    */
-  public CANSparkMaxMotorAdapter(int deviceID, CANSparkLowLevel.MotorType motorType) {
+  public CANSparkMaxAdapter(int deviceID, CANSparkLowLevel.MotorType motorType) {
     motor = new CANSparkMax(deviceID, motorType);
-    encoder = new CANSparkMaxRelativeEncoderAdapter(motor.getEncoder());
+    encoder = motor.getEncoder();
   }
 
   @Override
@@ -62,7 +63,12 @@ public class CANSparkMaxMotorAdapter implements MotorAdapter {
   }
 
   @Override
-  public RelativeEncoderAdapter getEncoder() {
-    return encoder;
+  public void setVelocityConversionFactor(double factor) {
+    encoder.setVelocityConversionFactor(factor);
+  }
+
+  @Override
+  public double getVelocity() {
+    return encoder.getVelocity();
   }
 }
