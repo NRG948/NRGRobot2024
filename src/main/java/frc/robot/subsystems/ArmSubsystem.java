@@ -31,7 +31,6 @@ import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
 import frc.robot.Constants.RobotConstants;
-import frc.robot.Robot;
 import frc.robot.commands.ArmCommands;
 import frc.robot.parameters.ArmParameters;
 import frc.robot.parameters.MotorParameters;
@@ -76,13 +75,13 @@ public class ArmSubsystem extends SubsystemBase {
   @RobotPreferencesValue
   public static RobotPreferences.EnumValue<ArmParameters> PARAMETERS =
       new RobotPreferences.EnumValue<ArmParameters>(
-          "Arm+Shooter", "Robot Base", ArmParameters.PracticeBase2024);
+          "Arm+Shooter", "Arm", ArmParameters.PracticeBase2024);
 
   public static final double GEAR_RATIO = PARAMETERS.getValue().getGearRatio();
   public static final double MASS = 12.5;
   public static final double RADIANS_PER_REVOLUTION = (2 * Math.PI) / GEAR_RATIO;
   public static final MotorParameters MOTOR = PARAMETERS.getValue().getMotorParameters();
-  public static final double EFFICIENCY = 1;
+  public static final double EFFICIENCY = 1.1;
   public static final double MAX_ANGULAR_SPEED =
       EFFICIENCY * MOTOR.getFreeSpeedRPM() * RADIANS_PER_REVOLUTION / 60.0;
   public static final double ARM_LENGTH = PARAMETERS.getValue().getArmLength();
@@ -95,13 +94,14 @@ public class ArmSubsystem extends SubsystemBase {
   public static final double KA =
       (RobotConstants.MAX_BATTERY_VOLTAGE - KS) / MAX_ANGULAR_ACCELERATION;
   public static final double KG = KA * 9.81;
-  private static final double CG_ANGLE_OFFSET = Math.toRadians(Robot.isCompBot ? -5 : 8);
-  public static final double STOWED_ANGLE = Math.toRadians(Robot.isCompBot ? -20.0 : -11.0);
+  private static final double CG_ANGLE_OFFSET =
+      Math.toRadians(PARAMETERS.getValue().getCGAngleOffset());
+  public static final double STOWED_ANGLE = Math.toRadians(PARAMETERS.getValue().getStowedAngle());
   private static final double NEARLY_STOWED_ANGLE = STOWED_ANGLE + Math.toRadians(1.5);
   private static final double ARM_RADIANS_PER_MOTOR_ROTATION = (2 * Math.PI) / GEAR_RATIO;
   private static final double LOWER_ANGLE_LIMIT = STOWED_ANGLE;
   private static final double UPPER_ANGLE_LIMIT = Math.toRadians(70);
-  private static final double ANGLE_TOLERANCE = Math.toRadians(3);
+  private static final double ANGLE_TOLERANCE = Math.toRadians(1);
 
   private final CANSparkMax leftMotor =
       new CANSparkMax(RobotConstants.CAN.SparkMax.ARM_LEFT_PORT, MotorType.kBrushless);
@@ -112,7 +112,8 @@ public class ArmSubsystem extends SubsystemBase {
   private final DutyCycleEncoder absoluteEncoder =
       new DutyCycleEncoder(Constants.RobotConstants.DigitalIO.ARM_ABSOLUTE_ENCODER);
 
-  private static final double rawAngleOffset = Math.toRadians(Robot.isCompBot ? -120.75 : 7.39);
+  private static final double rawAngleOffset =
+      Math.toRadians(PARAMETERS.getValue().getRawAngleOffset());
 
   private double currentAngle = STOWED_ANGLE;
   private double currentGoal = STOWED_ANGLE;
@@ -153,7 +154,7 @@ public class ArmSubsystem extends SubsystemBase {
     controller.setTolerance(ANGLE_TOLERANCE);
 
     // Limit the amount of integral windup
-    controller.setIntegratorRange(-0.1, 0.02);
+    controller.setIntegratorRange(-0.075, 0.075);
     controller.setIZone(Math.toRadians(3));
 
     System.out.println("Arm max velocity: " + Math.toDegrees(MAX_ANGULAR_SPEED));
