@@ -39,12 +39,12 @@ public final class Constants {
     }
 
     /** The total number of LEDs on the addressable LED string. */
-    public static final int LED_COUNT = 11;
+    public static final int LED_COUNT = 26;
 
     /** Defines sub-segments on the addressable LED string. */
     public static class LEDSegment {
       public static final int STATUS_FIRST_LED = 0;
-      public static final int STATUS_LED_COUNT = 11;
+      public static final int STATUS_LED_COUNT = 26;
     }
 
     /** Field of View of Camera in degrees. */
@@ -84,15 +84,15 @@ public final class Constants {
     /** CAN Ids */
     public static class CAN {
       public static class TalonFX {
-        public static final int CLIMBER_LEFT_PORT = 63; // TODO: change id
-        public static final int CLIMBER_RIGHT_PORT = 62; // TODO: change id
+        public static final int CLIMBER_LEFT_PORT = 3;
+        public static final int CLIMBER_RIGHT_PORT = 17;
       }
 
       public static class SparkMax {
         public static final int INTAKE_PORT = 2;
         public static final int ARM_LEFT_PORT = 1;
         public static final int ARM_RIGHT_PORT = 11;
-        public static final int INDEXER_PORT = 3;
+        public static final int INDEXER_PORT = 16;
       }
     }
 
