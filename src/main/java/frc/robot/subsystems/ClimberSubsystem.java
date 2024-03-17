@@ -38,14 +38,15 @@ public class ClimberSubsystem extends SubsystemBase {
   /** Creates a new ClimberSubsystem. */
   public ClimberSubsystem() {
     winchLeftMotor.setInverted(true);
+    winchRightMotor.setInverted(false);
     winchLeftMotor.setNeutralMode(NeutralModeValue.Brake);
     winchRightMotor.setNeutralMode(NeutralModeValue.Brake);
 
-    TalonFXConfiguration config = new TalonFXConfiguration();
-    config.CurrentLimits =
-        new CurrentLimitsConfigs().withStatorCurrentLimitEnable(true).withStatorCurrentLimit(80);
-    winchLeftMotor.getConfigurator().apply(config);
-    winchRightMotor.getConfigurator().apply(config);
+    // TalonFXConfiguration config = new TalonFXConfiguration();
+    // config.CurrentLimits =
+    //     new CurrentLimitsConfigs().withStatorCurrentLimitEnable(true).withStatorCurrentLimit(80);
+    // winchLeftMotor.getConfigurator().apply(config);
+    // winchRightMotor.getConfigurator().apply(config);
   }
 
   public void setVoltage(double voltage) {
