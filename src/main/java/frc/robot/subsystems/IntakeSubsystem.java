@@ -32,7 +32,7 @@ public class IntakeSubsystem extends SubsystemBase {
   @RobotPreferencesValue
   public static RobotPreferences.EnumValue<IntakeParameters> PARAMETERS =
       new RobotPreferences.EnumValue<IntakeParameters>(
-          "Indexer+Intake", "Robot Base", IntakeParameters.PracticeBase2024);
+          "Indexer+Intake", "Intake", IntakeParameters.PracticeBase2024);
 
   public static double GEAR_RATIO = PARAMETERS.getValue().getGearRatio();
   public static double INTAKE_DIAMETER = 0.036; // Diameter in meters
