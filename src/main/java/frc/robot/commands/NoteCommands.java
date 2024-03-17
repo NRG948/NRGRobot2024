@@ -74,7 +74,7 @@ public class NoteCommands {
     IndexerSubsystem indexer = subsystems.indexer;
 
     return intake(subsystems)
-        .until(indexer::isNoteAtShootPosition) //
+        .until(indexer::isNoteBreakingLowerBeam) //
         .finallyDo(
             () -> {
               intake.disable();
@@ -127,14 +127,17 @@ public class NoteCommands {
     IndexerSubsystem indexer = subsystems.indexer;
     return Commands.sequence(
             Commands.runOnce(() -> indexer.intake(), indexer), //
-            Commands.idle(indexer).withTimeout(initialIntakeSeconds), //
-            Commands.runOnce(() -> indexer.outtake(), indexer), //
-            Commands.idle(indexer).until(() -> !indexer.isNoteAtShootPosition()), //
+            Commands.idle(indexer).withTimeout(initialIntakeSeconds),
+            Commands.runOnce(() -> System.out.println("BEFORE")), //
+            Commands.run(() -> indexer.outtake(), indexer),
+            // .until(() -> !indexer.isNoteBreakingUpperBeam()),
+            Commands.runOnce(() -> System.out.println("AFTER")), //
             Commands.runOnce(() -> indexer.intake(), indexer), //
-            Commands.idle(indexer).until(indexer::isNoteAtShootPosition)) //
+            Commands.idle(indexer).until(indexer::isNoteBreakingUpperBeam)) //
         .finallyDo(
             () -> {
               indexer.disable();
+              System.out.println("DISABLE");
             });
   }
 
@@ -195,7 +198,7 @@ public class NoteCommands {
                 ShooterCommands.setAndWaitForRPM(subsystems, rpm), //
                 Commands.runOnce(indexer::feed, indexer), //
                 Commands.idle(shooter, indexer) // Suppress default commands
-                    .until(() -> !indexer.isNoteAtShootPosition()),
+                    .until(() -> !indexer.isNoteBreakingUpperBeam()),
                 Commands.idle(shooter, indexer) // Suppress default commands
                     .withTimeout(EXTRA_SHOT_DELAY))
             .finallyDo(
@@ -204,7 +207,7 @@ public class NoteCommands {
                   indexer.disable();
                 }), //
         Commands.none(), //
-        indexer::isNoteAtShootPosition);
+        indexer::isNoteBreakingUpperBeam);
   }
 
   /***
@@ -219,7 +222,7 @@ public class NoteCommands {
         Commands.sequence( //
                 Commands.runOnce(indexer::feed, indexer), //
                 Commands.idle(indexer, shooter) // Suppress default commands
-                    .until(() -> !indexer.isNoteAtShootPosition()),
+                    .until(() -> !indexer.isNoteBreakingUpperBeam()),
                 Commands.idle(indexer, shooter) // Suppress default commands
                     .withTimeout(EXTRA_SHOT_DELAY))
             .finallyDo(
@@ -228,7 +231,7 @@ public class NoteCommands {
                   shooter.disable();
                 }), //
         Commands.none(), //
-        indexer::isNoteAtShootPosition);
+        indexer::isNoteBreakingUpperBeam);
   }
 
   /**
