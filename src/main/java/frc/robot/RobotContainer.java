@@ -132,13 +132,13 @@ public class RobotContainer {
     operatorController.leftBumper().whileTrue(NoteCommands.intakeUntilNoteDetected(subsystems));
     operatorController.rightBumper().onTrue(NoteCommands.intakeAndAutoCenterNote(subsystems));
 
-    Trigger noteDetected = new Trigger(indexer::isNoteBreakingUpperBeam);
+    Trigger noteDetected = new Trigger(indexer::isNoteBreakingEitherBeam);
     noteDetected.onTrue(
         Commands.sequence(LEDs.flashColor(statusLED, GREEN), LEDs.fillColor(statusLED, GREEN)));
     noteDetected.onFalse(LEDs.fillColor(statusLED, RED));
 
     Trigger shooterSpinning =
-        new Trigger(() -> shooter.atGoalRPM() && indexer.isNoteBreakingUpperBeam());
+        new Trigger(() -> shooter.atGoalRPM() && indexer.isNoteBreakingEitherBeam());
     shooterSpinning.onTrue(
         Commands.sequence(LEDs.flashColor(statusLED, PINK), LEDs.fillColor(statusLED, PINK)));
   }
