@@ -24,7 +24,6 @@ import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardLayout;
 import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants.RobotConstants;
-import frc.robot.parameters.MotorParameters;
 import frc.robot.parameters.IndexerParameters;
 
 @RobotPreferencesLayout(groupName = "Indexer+Intake", column = 6, row = 0, width = 1, height = 4)
@@ -33,7 +32,7 @@ public class IndexerSubsystem extends SubsystemBase {
   @RobotPreferencesValue
   public static RobotPreferences.EnumValue<IndexerParameters> PARAMETERS =
       new RobotPreferences.EnumValue<IndexerParameters>(
-          "Intake", "Robot Base", IndexerParameters.PracticeBase2024);
+          "Indexer+Intake", "Indexer", IndexerParameters.PracticeBase2024);
 
   public static final double GEAR_RATIO = PARAMETERS.getValue().getGearRatio();
   public static final double INDEXER_DIAMETER = PARAMETERS.getValue().getDiameter();
