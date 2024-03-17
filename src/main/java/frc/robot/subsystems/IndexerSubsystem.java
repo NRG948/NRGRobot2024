@@ -33,7 +33,7 @@ public class IndexerSubsystem extends SubsystemBase {
   @RobotPreferencesValue
   public static RobotPreferences.EnumValue<IndexerParameters> PARAMETERS =
       new RobotPreferences.EnumValue<IndexerParameters>(
-          "Intake", "Robot Base", IndexerParameters.PracticeBase2024);
+          "Indexer+Intake", "Indexer", IndexerParameters.PracticeBase2024);
 
   public static final double GEAR_RATIO = PARAMETERS.getValue().getGearRatio();
   public static final double INDEXER_DIAMETER = PARAMETERS.getValue().getDiameter();
