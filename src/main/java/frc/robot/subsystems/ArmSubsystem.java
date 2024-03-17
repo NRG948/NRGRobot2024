@@ -31,6 +31,7 @@ import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
 import frc.robot.Constants.RobotConstants;
+import frc.robot.Robot;
 import frc.robot.commands.ArmCommands;
 import frc.robot.parameters.ArmParameters;
 import frc.robot.parameters.MotorParameters;
@@ -94,8 +95,8 @@ public class ArmSubsystem extends SubsystemBase {
   public static final double KA =
       (RobotConstants.MAX_BATTERY_VOLTAGE - KS) / MAX_ANGULAR_ACCELERATION;
   public static final double KG = KA * 9.81;
-  private static final double CG_ANGLE_OFFSET = Math.toRadians(8);
-  public static final double STOWED_ANGLE = Math.toRadians(-11.0);
+  private static final double CG_ANGLE_OFFSET = Math.toRadians(Robot.isCompBot ? -5 : 8);
+  public static final double STOWED_ANGLE = Math.toRadians(Robot.isCompBot ? -20.0 : -11.0);
   private static final double NEARLY_STOWED_ANGLE = STOWED_ANGLE + Math.toRadians(1.5);
   private static final double ARM_RADIANS_PER_MOTOR_ROTATION = (2 * Math.PI) / GEAR_RATIO;
   private static final double LOWER_ANGLE_LIMIT = STOWED_ANGLE;
@@ -111,7 +112,7 @@ public class ArmSubsystem extends SubsystemBase {
   private final DutyCycleEncoder absoluteEncoder =
       new DutyCycleEncoder(Constants.RobotConstants.DigitalIO.ARM_ABSOLUTE_ENCODER);
 
-  private double rawAngleOffset = Math.toRadians(7.39);
+  private static final double rawAngleOffset = Math.toRadians(Robot.isCompBot ? -120.75 : 7.39);
 
   private double currentAngle = STOWED_ANGLE;
   private double currentGoal = STOWED_ANGLE;
