@@ -6,25 +6,36 @@
  */
 package frc.robot.parameters;
 
-import static frc.robot.parameters.MotorParameters.KrakenX60;
 import static frc.robot.parameters.MotorParameters.NeoV1_1;
 
 /** Add your docs here. */
 public enum ArmParameters {
-  PracticeBase2024(5 * 4 * 3 * 42 / 15.0, NeoV1_1, 12.5, 0.57),
-  CompetitionBase2024(5 * 4 * 3 * 42 / 15.0, KrakenX60, 12.5, 0.57);
+  PracticeBase2024(5 * 4 * 3 * 42 / 15.0, NeoV1_1, 12.5, 0.57, -11.0, 7.39, 8.0),
+  CompetitionBase2024(5 * 4 * 3 * 42 / 15.0, NeoV1_1, 14.9, 0.42, -20.0, -120.75, 11.0);
 
   private final double gearRatio;
   private final MotorParameters motorParameters;
   private final double mass;
-  public final double arm_length;
+  public final double armLength;
+  private final double stowedAngle;
+  private final double rawAngleOffset;
+  private final double CGAngleOffset;
 
   private ArmParameters(
-      double gearRatio, MotorParameters motorParameters, double mass, double arm_length) {
+      double gearRatio,
+      MotorParameters motorParameters,
+      double mass,
+      double armLength,
+      double stowedAngle,
+      double rawAngleOffset,
+      double CGAngleOffset) {
     this.gearRatio = gearRatio;
     this.motorParameters = motorParameters;
     this.mass = mass;
-    this.arm_length = arm_length;
+    this.armLength = armLength;
+    this.stowedAngle = stowedAngle;
+    this.rawAngleOffset = rawAngleOffset;
+    this.CGAngleOffset = CGAngleOffset;
   }
 
   public double getGearRatio() {
@@ -40,6 +51,18 @@ public enum ArmParameters {
   }
 
   public double getArmLength() {
-    return arm_length;
+    return armLength;
+  }
+
+  public double getStowedAngle() {
+    return stowedAngle;
+  }
+
+  public double getRawAngleOffset() {
+    return rawAngleOffset;
+  }
+
+  public double getCGAngleOffset() {
+    return CGAngleOffset;
   }
 }
