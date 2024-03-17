@@ -12,8 +12,9 @@ import static frc.robot.parameters.MotorParameters.NeoV1_1;
 import com.revrobotics.CANSparkLowLevel.MotorType;
 import edu.wpi.first.math.controller.SimpleMotorFeedforward;
 import frc.robot.Constants.RobotConstants;
-import frc.robot.motors.CANSparkMaxMotorAdapter;
-import frc.robot.motors.MotorAdapter;
+import frc.robot.motors.CANSparkMaxAdapter;
+import frc.robot.motors.CANTalonFXAdapter;
+import frc.robot.motors.MotorandEncoderAdapter;
 
 /** An enum representing the properties of the shooter for a specific robot instance. */
 public enum ShooterParameters {
@@ -60,10 +61,14 @@ public enum ShooterParameters {
    * @param deviceID The CAN ID of the motor controller.
    * @return
    */
-  private static MotorAdapter createMotorAdapter(MotorParameters motorParameters, int deviceID) {
+  private static MotorandEncoderAdapter createMotorAdapter(
+      MotorParameters motorParameters, int deviceID) {
     switch (motorParameters) {
       case NeoV1_1:
-        return new CANSparkMaxMotorAdapter(deviceID, MotorType.kBrushless);
+        return new CANSparkMaxAdapter(deviceID, MotorType.kBrushless);
+
+      case KrakenX60:
+        return new CANTalonFXAdapter(deviceID);
 
       default:
         throw new IllegalArgumentException("Invalid Motor Value");
@@ -74,7 +79,7 @@ public enum ShooterParameters {
    * Creates the left motor.
    * @return
    */
-  public MotorAdapter createLeftMotor() {
+  public MotorandEncoderAdapter createLeftMotor() {
     return createMotorAdapter(motor, leftDeviceID);
   }
 
@@ -82,7 +87,7 @@ public enum ShooterParameters {
    * Creates the right motor.
    * @return
    */
-  public MotorAdapter createRightMotor() {
+  public MotorandEncoderAdapter createRightMotor() {
     return createMotorAdapter(motor, rightDeviceID);
   }
 
