@@ -87,6 +87,7 @@ public class IndexerSubsystem extends SubsystemBase {
     encoder.setVelocityConversionFactor(ENCODER_CONVERSION_FACTOR);
     encoder.setPositionConversionFactor(ENCODER_CONVERSION_FACTOR);
     upperBeamBreak.enableLimitSwitch(false);
+    lowerBeamBreak.enableLimitSwitch(false);
   }
 
   /**
@@ -105,6 +106,10 @@ public class IndexerSubsystem extends SubsystemBase {
    */
   public boolean isNoteBreakingLowerBeam() {
     return noteBreakingLowerBeam;
+  }
+
+  public boolean isNoteBreakingEitherBeam() {
+    return noteBreakingUpperBeam || noteBreakingLowerBeam;
   }
 
   public void feed() {
