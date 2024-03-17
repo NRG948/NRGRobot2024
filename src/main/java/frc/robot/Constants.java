@@ -6,11 +6,12 @@
  */
 package frc.robot;
 
-import edu.wpi.first.math.geometry.Rotation3d;
+import com.nrg948.preferences.RobotPreferences;
+import com.nrg948.preferences.RobotPreferencesValue;
 import edu.wpi.first.math.geometry.Transform3d;
-import edu.wpi.first.math.geometry.Translation3d;
 import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj.util.Color8Bit;
+import frc.robot.parameters.VisionParameters;
 
 /**
  * The Constants class provides a convenient place for teams to hold robot-wide numerical or boolean
@@ -56,18 +57,13 @@ public final class Constants {
     /** Distance robot should be from amp to score. */
     public static final double SCORING_DISTANCE_FROM_AMP = Units.inchesToMeters(20);
 
-    /** 3d transforms that moves the camera to the center of the robot. */
-    public static final double APRILTAG_CAMERA_PITCH = Math.toRadians(-24);
+    @RobotPreferencesValue
+    public static RobotPreferences.EnumValue<VisionParameters> PARAMETERS =
+      new RobotPreferences.EnumValue<VisionParameters>(
+          "AprilTagCamera", "Robot Vision", VisionParameters.CompetitionBase2024);
 
-    public static final double APRILTAG_CAMERA_YAW = Math.toRadians(180);
-    public static final double APRILTAG_CAMERA_ROLL = Math.toRadians(0);
-
-    public static final Transform3d APRILTAG_ROBOT_TO_CAMERA =
-        new Transform3d(
-            new Translation3d(
-                Units.inchesToMeters(-11.25), Units.inchesToMeters(0), Units.inchesToMeters(13.75)),
-            new Rotation3d(APRILTAG_CAMERA_ROLL, APRILTAG_CAMERA_PITCH, APRILTAG_CAMERA_YAW));
-
+    public static final Transform3d APRILTAG_ROBOT_TO_CAMERA = PARAMETERS.getValue().getRobotToCamera();
+    
     public static final Transform3d APRILTAG_CAMERA_TO_ROBOT = APRILTAG_ROBOT_TO_CAMERA.inverse();
 
     public static final Transform3d NOTE_ROBOT_TO_CAMERA =
