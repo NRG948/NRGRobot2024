@@ -59,11 +59,12 @@ public final class Constants {
 
     @RobotPreferencesValue
     public static RobotPreferences.EnumValue<VisionParameters> PARAMETERS =
-      new RobotPreferences.EnumValue<VisionParameters>(
-          "AprilTagCamera", "Robot Vision", VisionParameters.CompetitionBase2024);
+        new RobotPreferences.EnumValue<VisionParameters>(
+            "AprilTag", "Robot Vision", VisionParameters.CompetitionBase2024);
 
-    public static final Transform3d APRILTAG_ROBOT_TO_CAMERA = PARAMETERS.getValue().getRobotToCamera();
-    
+    public static final Transform3d APRILTAG_ROBOT_TO_CAMERA =
+        PARAMETERS.getValue().getRobotToCamera();
+
     public static final Transform3d APRILTAG_CAMERA_TO_ROBOT = APRILTAG_ROBOT_TO_CAMERA.inverse();
 
     public static final Transform3d NOTE_ROBOT_TO_CAMERA =

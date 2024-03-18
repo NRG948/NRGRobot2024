@@ -39,9 +39,14 @@ public class IndexerSubsystem extends SubsystemBase {
   public static double ENCODER_CONVERSION_FACTOR = (Math.PI * INDEXER_DIAMETER) / GEAR_RATIO;
 
   public static double MAX_VELOCITY =
-      (PARAMETERS.getValue().getMotorParameters().getFreeSpeedRPM() * Math.PI * INDEXER_DIAMETER) / (GEAR_RATIO * 60);
+      (PARAMETERS.getValue().getMotorParameters().getFreeSpeedRPM() * Math.PI * INDEXER_DIAMETER)
+          / (GEAR_RATIO * 60);
   public static double MAX_ACCELERATION =
-      (2 * PARAMETERS.getValue().getMotorParameters().getStallTorque() * GEAR_RATIO * Math.PI * INDEXER_DIAMETER)
+      (2
+              * PARAMETERS.getValue().getMotorParameters().getStallTorque()
+              * GEAR_RATIO
+              * Math.PI
+              * INDEXER_DIAMETER)
           / PARAMETERS.getValue().getMass();
 
   public static double KS = 0.15;
