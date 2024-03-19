@@ -45,7 +45,7 @@ public class ShooterSubsystem extends SubsystemBase {
   public static final RobotPreferences.DoubleValue SPIN_FACTOR =
       new RobotPreferences.DoubleValue("Arm+Shooter", "Spin Factor", 0.85);
 
-  private static final double RPM_TOLERANCE = 50.0;
+  private static final double RPM_TOLERANCE = 100.0;
 
   private final MotorandEncoderAdapter leftMotor = PARAMETERS.getValue().createLeftMotor();
   private final MotorandEncoderAdapter rightMotor = PARAMETERS.getValue().createRightMotor();
