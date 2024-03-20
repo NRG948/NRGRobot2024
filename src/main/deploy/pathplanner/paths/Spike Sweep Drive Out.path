@@ -3,25 +3,41 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 2.47,
+        "x": 2.57,
         "y": 5.54
       },
       "prevControl": null,
       "nextControl": {
-        "x": 3.3416820780861616,
-        "y": 7.090230249372009
+        "x": 3.956720381634148,
+        "y": 4.971533200063856
       },
       "isLocked": false,
       "linkedName": null
     },
     {
       "anchor": {
-        "x": 7.771580147702191,
-        "y": 5.782014257842141
+        "x": 5.063826514421477,
+        "y": 4.386646941232814
       },
       "prevControl": {
-        "x": 6.677082610234133,
-        "y": 6.734032825935659
+        "x": 4.311829895924423,
+        "y": 4.898422417709976
+      },
+      "nextControl": {
+        "x": 5.662666282273552,
+        "y": 3.979103210333485
+      },
+      "isLocked": false,
+      "linkedName": null
+    },
+    {
+      "anchor": {
+        "x": 8.03,
+        "y": 4.06
+      },
+      "prevControl": {
+        "x": 5.857374770381421,
+        "y": 4.06
       },
       "nextControl": null,
       "isLocked": false,
@@ -42,6 +58,23 @@
               "type": "named",
               "data": {
                 "name": "StowArm"
+              }
+            }
+          ]
+        }
+      }
+    },
+    {
+      "name": "Intake",
+      "waypointRelativePos": 1.7,
+      "command": {
+        "type": "sequential",
+        "data": {
+          "commands": [
+            {
+              "type": "named",
+              "data": {
+                "name": "IntakeUntilNoteDetected"
               }
             }
           ]
