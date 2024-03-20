@@ -62,6 +62,14 @@ public class IndexerSubsystem extends SubsystemBase {
       new RobotPreferences.DoubleValue("Indexer+Intake", "Indexer Feed Velocity", 3.0);
 
   @RobotPreferencesValue
+  public static final RobotPreferences.DoubleValue AMP_OUTAKE_VELOCITY =
+      new RobotPreferences.DoubleValue("Indexer+Intake", "Amp Outake Velocity", 3.0);
+
+  @RobotPreferencesValue
+  public static final RobotPreferences.DoubleValue AUTO_CENTER_VELOCITY =
+      new RobotPreferences.DoubleValue("Indexer+Intake", "Auto Center Velocity", 2.0);
+
+  @RobotPreferencesValue
   public static final RobotPreferences.BooleanValue HAS_LOWER_BEAM_BREAK =
       new RobotPreferences.BooleanValue("Indexer+Intake", "Has Lower Beam Break", true);
 
@@ -84,10 +92,6 @@ public class IndexerSubsystem extends SubsystemBase {
       new BooleanLogEntry(DataLogManager.getLog(), "Indexer/Note At Entry");
   private final DoubleLogEntry goalVelocityLogger =
       new DoubleLogEntry(DataLogManager.getLog(), "Indexer/Goal Velocity");
-
-  @RobotPreferencesValue
-  public static final RobotPreferences.DoubleValue AMP_OUTAKE_VELOCITY =
-      new RobotPreferences.DoubleValue("Indexer+Intake", "Amp Outake Velocity", 3.0);
 
   /** Creates a new IndexerSubsystem. */
   public IndexerSubsystem() {
@@ -122,28 +126,25 @@ public class IndexerSubsystem extends SubsystemBase {
   }
 
   public void feed() {
-    isEnabled = true;
-    goalVelocity = FEED_VELOCITY.getValue();
+    intake(FEED_VELOCITY.getValue());
   }
 
   public void intake() {
-    isEnabled = true;
-    goalVelocity = IntakeSubsystem.INTAKE_VELOCITY.getValue();
+    intake(IntakeSubsystem.INTAKE_VELOCITY.getValue());
   }
 
   public void outtake() {
-    isEnabled = true;
-    goalVelocity = -IntakeSubsystem.INTAKE_VELOCITY.getValue();
-  }
-  
-  public void intake(double reduction) {
-    isEnabled = true; 
-    goalVelocity = IntakeSubsystem.INTAKE_VELOCITY.getValue() * reduction;
+    outtake(IntakeSubsystem.INTAKE_VELOCITY.getValue());
   }
 
-  public void outtake(double reduction) {
-    isEnabled = true; 
-    goalVelocity = -IntakeSubsystem.INTAKE_VELOCITY.getValue() * reduction;
+  public void intake(double velocity) {
+    isEnabled = true;
+    goalVelocity = velocity;
+  }
+
+  public void outtake(double velocity) {
+    isEnabled = true;
+    goalVelocity = -velocity;
   }
 
   public void outtakeToAmp() {
