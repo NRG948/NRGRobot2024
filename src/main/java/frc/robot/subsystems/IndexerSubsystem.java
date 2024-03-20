@@ -135,6 +135,16 @@ public class IndexerSubsystem extends SubsystemBase {
     isEnabled = true;
     goalVelocity = -IntakeSubsystem.INTAKE_VELOCITY.getValue();
   }
+  
+  public void intake(double reduction) {
+    isEnabled = true; 
+    goalVelocity = IntakeSubsystem.INTAKE_VELOCITY.getValue() * reduction;
+  }
+
+  public void outtake(double reduction) {
+    isEnabled = true; 
+    goalVelocity = -IntakeSubsystem.INTAKE_VELOCITY.getValue() * reduction;
+  }
 
   public void outtakeToAmp() {
     isEnabled = true;
