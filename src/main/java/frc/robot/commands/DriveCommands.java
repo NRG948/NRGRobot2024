@@ -13,7 +13,6 @@ import edu.wpi.first.math.geometry.Pose3d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Rotation3d;
 import edu.wpi.first.math.geometry.Transform3d;
-import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.geometry.Translation3d;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.DriverStation.Alliance;
@@ -132,18 +131,19 @@ public final class DriveCommands {
                   } else {
                     // The speaker center AprilTag is not visible, so orient the robot to the
                     // absolute location relative to the current estimated robot pose.
-                    Translation2d aprilTagLocation =
-                        subsystems
-                            .aprilTag
-                            .get()
-                            .getSpeakerCenterAprilTagPose()
-                            .toPose2d()
-                            .getTranslation();
-                    return Optional.of(
-                        aprilTagLocation
-                            .minus(drivetrain.getPosition().getTranslation())
-                            .getAngle()
-                            .rotateBy(ROTATE_180_DEGREES));
+                    // Translation2d aprilTagLocation =
+                    //     subsystems
+                    //         .aprilTag
+                    //         .get()
+                    //         .getSpeakerCenterAprilTagPose()
+                    //         .toPose2d()
+                    //         .getTranslation();
+                    // return Optional.of(
+                    //     aprilTagLocation
+                    //         .minus(drivetrain.getPosition().getTranslation())
+                    //         .getAngle()
+                    //         .rotateBy(ROTATE_180_DEGREES));
+                    return Optional.of(drivetrain.getOrientation());
                   }
                 });
           }
