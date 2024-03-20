@@ -6,6 +6,9 @@
  */
 package frc.robot.commands;
 
+import com.nrg948.preferences.RobotPreferences;
+import com.nrg948.preferences.RobotPreferencesValue;
+
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
@@ -27,6 +30,10 @@ public class NoteCommands {
 
   /** The final delay for intaking the note during auto centering. */
   private static final double FINAL_INTAKE_SECONDS = 0.1;
+
+  @RobotPreferencesValue
+  public static final RobotPreferences.DoubleValue AUTO_CENTER_VELOCITY_REDUCTION =
+      new RobotPreferences.DoubleValue("Indexer+Intake", "Auto Center Velocity Reduction", 0.5);
 
   /**
    * Returns a sequence of commands to intake the note into the indexer until interrupted by another
@@ -130,13 +137,13 @@ public class NoteCommands {
   public static Command autoCenterNote(Subsystems subsystems, double initialIntakeSeconds) {
     IndexerSubsystem indexer = subsystems.indexer;
     return Commands.sequence(
-            Commands.runOnce(() -> indexer.intake(), indexer), //
+            Commands.runOnce(() -> indexer.intake(AUTO_CENTER_VELOCITY_REDUCTION.getValue()), indexer), //
             Commands.idle(indexer).withTimeout(initialIntakeSeconds),
             Commands.runOnce(() -> System.out.println("BEFORE")), //
-            Commands.run(() -> indexer.outtake(), indexer)
+            Commands.run(() -> indexer.outtake(AUTO_CENTER_VELOCITY_REDUCTION.getValue()), indexer)
                 .until(() -> !indexer.isNoteBreakingUpperBeam()),
             Commands.runOnce(() -> System.out.println("AFTER")), //
-            Commands.runOnce(() -> indexer.intake(), indexer), //
+            Commands.runOnce(() -> indexer.intake(AUTO_CENTER_VELOCITY_REDUCTION.getValue()), indexer), //
             Commands.idle(indexer).withTimeout(FINAL_INTAKE_SECONDS)) //
         .finallyDo(
             () -> {
