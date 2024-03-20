@@ -142,9 +142,7 @@ public class IndexerSubsystem extends SubsystemBase {
     goalVelocity = velocity;
   }
 
-  /**
-   * Outtake at the absolute given velocity.  
-  */
+  /** Outtake at the absolute given velocity. */
   public void outtake(double velocity) {
     isEnabled = true;
     goalVelocity = -Math.abs(velocity);
