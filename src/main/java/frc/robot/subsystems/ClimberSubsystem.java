@@ -9,6 +9,7 @@ package frc.robot.subsystems;
 import static frc.robot.Constants.RobotConstants.CAN.TalonFX.CLIMBER_LEFT_PORT;
 import static frc.robot.Constants.RobotConstants.CAN.TalonFX.CLIMBER_RIGHT_PORT;
 
+import com.ctre.phoenix6.hardware.CANcoder;
 import com.ctre.phoenix6.hardware.TalonFX;
 import com.ctre.phoenix6.signals.NeutralModeValue;
 import com.nrg948.preferences.RobotPreferences;
@@ -32,6 +33,14 @@ public class ClimberSubsystem extends SubsystemBase {
 
   private final TalonFX winchLeftMotor = new TalonFX(CLIMBER_LEFT_PORT);
   private final TalonFX winchRightMotor = new TalonFX(CLIMBER_RIGHT_PORT);
+
+
+  private final CANcoder winchLeftEncoder = new CANcoder(CLIMBER_LEFT_PORT);
+  private final CANcoder winchRightEncoder = new CANcoder(CLIMBER_RIGHT_PORT);
+
+  /* getAbsolutePosistion returns rotation between -0.5 and 0.999, so multiply it by 360 to get the angle */
+  private final double winchLeftAngle =  360.0 * winchLeftEncoder.getAbsolutePosition().getValue();
+  private final double winchRightAngle =  360.0 * winchRightEncoder.getAbsolutePosition().getValue();
 
   /** Creates a new ClimberSubsystem. */
   public ClimberSubsystem() {
