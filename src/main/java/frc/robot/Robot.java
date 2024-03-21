@@ -7,6 +7,8 @@
 package frc.robot;
 
 import com.nrg948.Common;
+import edu.wpi.first.wpilibj.PowerDistribution;
+import edu.wpi.first.wpilibj.PowerDistribution.ModuleType;
 import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
@@ -20,6 +22,7 @@ import edu.wpi.first.wpilibj2.command.CommandScheduler;
 public class Robot extends TimedRobot {
 
   private Command autonomousCommand;
+  PowerDistribution powerDistribution = new PowerDistribution(1, ModuleType.kRev);
 
   private RobotContainer robotContainer;
 
@@ -32,6 +35,7 @@ public class Robot extends TimedRobot {
     // Initialize the NRG Common Library before creating the RobotContainer so that
     // it is initialized and ready for use by the subsystems.
     Common.init("frc.robot");
+    powerDistribution.setSwitchableChannel(true);
 
     // Instantiate our RobotContainer.  This will perform all our button bindings, and put our
     // autonomous chooser on the dashboard.
