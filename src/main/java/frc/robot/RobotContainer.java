@@ -101,8 +101,8 @@ public class RobotContainer {
     driverController.x().onTrue(DriveCommands.autoOrientToNote(subsystems));
     driverController.x().onFalse(DriveCommands.disableAutoOrientation(subsystems));
     driverController.y().whileTrue(Pathfinding.pathFindToAmp2());
-    driverController.povUp().whileTrue(ClimberCommands.manualClimbChain(subsystems));
-    driverController.povDown().whileTrue(ClimberCommands.manualClimbDownChain(subsystems));
+    driverController.leftBumper().whileTrue(ClimberCommands.manualClimbChain(subsystems));
+    driverController.rightBumper().whileTrue(ClimberCommands.manualClimbDownChain(subsystems));
 
     // operatorController
     //     .start()
@@ -115,7 +115,9 @@ public class RobotContainer {
         .povUp()
         .whileTrue(NoteCommands.shootAtCurrentRPM(subsystems).finallyDo(shooter::disable));
     operatorController.povDown().whileTrue(NoteCommands.outtake(subsystems));
-    operatorController.povRight().whileTrue(NoteCommands.outakeToAmp(subsystems));
+    // operatorController.povRight().whileTrue(NoteCommands.outakeToAmp(subsystems));
+    operatorController.povRight().whileTrue(NoteCommands.shoot(subsystems, 800));
+    operatorController.povLeft().onTrue(ArmCommands.seekToAngle(subsystems, Math.toRadians(15)));
     operatorController.back().onTrue(new InterruptAll(subsystems));
     operatorController.b().whileTrue(new SetShooterContinous(subsystems));
     // operatorController.b().whileTrue(new SetShooterContinous(subsystems));
