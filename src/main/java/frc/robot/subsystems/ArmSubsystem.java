@@ -97,10 +97,10 @@ public class ArmSubsystem extends SubsystemBase {
   private static final double CG_ANGLE_OFFSET =
       Math.toRadians(PARAMETERS.getValue().getCGAngleOffset());
   public static final double STOWED_ANGLE = Math.toRadians(PARAMETERS.getValue().getStowedAngle());
-  private static final double NEARLY_STOWED_ANGLE = STOWED_ANGLE + Math.toRadians(1.5);
+  private static final double NEARLY_STOWED_ANGLE = STOWED_ANGLE + Math.toRadians(3);
   private static final double ARM_RADIANS_PER_MOTOR_ROTATION = (2 * Math.PI) / GEAR_RATIO;
   private static final double LOWER_ANGLE_LIMIT = STOWED_ANGLE;
-  private static final double UPPER_ANGLE_LIMIT = Math.toRadians(70);
+  private static final double UPPER_ANGLE_LIMIT = Math.toRadians(85);
   private static final double ANGLE_TOLERANCE = Math.toRadians(1);
 
   private final CANSparkMax leftMotor =
@@ -154,7 +154,7 @@ public class ArmSubsystem extends SubsystemBase {
     controller.setTolerance(ANGLE_TOLERANCE);
 
     // Limit the amount of integral windup
-    controller.setIntegratorRange(-0.075, 0.075);
+    controller.setIntegratorRange(-0.3, 0.3);
     controller.setIZone(Math.toRadians(3));
 
     System.out.println("Arm max velocity: " + Math.toDegrees(MAX_ANGULAR_SPEED));
@@ -241,13 +241,14 @@ public class ArmSubsystem extends SubsystemBase {
         disable();
       } else {
         double feedback = controller.calculate(currentAngle);
+        feedback = MathUtil.clamp(feedback, -2, 8);
         State setpoint = controller.getSetpoint();
         trapezoidStatePositionLog.append(setpoint.position);
         trapezoidStateVelocityLog.append(setpoint.velocity);
         trapezoidStatePositionErrorLog.append(controller.getPositionError());
         trapezoidStateVelocityErrorlog.append(controller.getVelocityError());
-        double feedForward =
-            this.feedForward.calculate(currentAngle + CG_ANGLE_OFFSET, setpoint.velocity);
+        double feedForward = 0;
+        // this.feedForward.calculate(currentAngle + CG_ANGLE_OFFSET, setpoint.velocity);
         setMotorVoltages(feedForward + feedback);
       }
     }
