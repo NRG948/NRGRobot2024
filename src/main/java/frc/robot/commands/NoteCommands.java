@@ -78,7 +78,7 @@ public class NoteCommands {
     IndexerSubsystem indexer = subsystems.indexer;
 
     return intake(subsystems)
-        .until(indexer::isNoteBreakingUpperBeam) //
+        .until(indexer::isNoteBreakingEitherBeam) //
         .finallyDo(
             () -> {
               intake.disable();
@@ -130,9 +130,9 @@ public class NoteCommands {
   public static Command autoCenterNote(Subsystems subsystems, double initialIntakeSeconds) {
     IndexerSubsystem indexer = subsystems.indexer;
     return Commands.sequence(
-            Commands.runOnce(
-                () -> indexer.intake(IndexerSubsystem.AUTO_CENTER_VELOCITY.getValue()),
-                indexer), //
+            Commands.run(
+                    () -> indexer.intake(IndexerSubsystem.AUTO_CENTER_VELOCITY.getValue()), indexer)
+                .until(() -> indexer.isNoteBreakingUpperBeam()),
             Commands.idle(indexer).withTimeout(initialIntakeSeconds),
             Commands.runOnce(() -> System.out.println("BEFORE")), //
             Commands.run(
