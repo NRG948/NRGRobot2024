@@ -16,11 +16,11 @@
     },
     {
       "anchor": {
-        "x": 2.65,
+        "x": 2.6,
         "y": 3.85
       },
       "prevControl": {
-        "x": 1.4487456152033273,
+        "x": 1.3987456152033275,
         "y": 3.9479822471095325
       },
       "nextControl": null,
@@ -41,7 +41,7 @@
             {
               "type": "named",
               "data": {
-                "name": "Intake"
+                "name": "IntakeUntilNoteDetectedNoAutoCentering"
               }
             }
           ]

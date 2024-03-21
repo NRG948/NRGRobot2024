@@ -124,7 +124,7 @@
               {
                 "type": "named",
                 "data": {
-                  "name": "IntakeUntilNoteDetectedNoAutoCentering"
+                  "name": "IntakeUntilNoteDetected"
                 }
               }
             ]
@@ -153,6 +153,12 @@
           "type": "path",
           "data": {
             "pathName": "Spike Sweep Drive Out"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "Drive Out Back"
           }
         }
       ]
