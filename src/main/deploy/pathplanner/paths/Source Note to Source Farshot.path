@@ -8,20 +8,36 @@
       },
       "prevControl": null,
       "nextControl": {
-        "x": 6.215497887698029,
-        "y": 1.2854414320928298
+        "x": 6.179299732375018,
+        "y": 0.7913766827533683
       },
       "isLocked": false,
       "linkedName": null
     },
     {
       "anchor": {
-        "x": 3.69,
-        "y": 2.596102286221667
+        "x": 4.61,
+        "y": 1.55
       },
       "prevControl": {
-        "x": 4.352222504445009,
-        "y": 2.0319151638303294
+        "x": 5.586046388377764,
+        "y": 1.1384393252247067
+      },
+      "nextControl": {
+        "x": 3.8083804747101895,
+        "y": 1.8880116730821161
+      },
+      "isLocked": false,
+      "linkedName": null
+    },
+    {
+      "anchor": {
+        "x": 2.54,
+        "y": 3.33
+      },
+      "prevControl": {
+        "x": 2.87050304380507,
+        "y": 2.913986896676084
       },
       "nextControl": null,
       "isLocked": false,
@@ -70,28 +86,11 @@
           ]
         }
       }
-    },
-    {
-      "name": "AutoOrientToSpeaker",
-      "waypointRelativePos": 0.6,
-      "command": {
-        "type": "parallel",
-        "data": {
-          "commands": [
-            {
-              "type": "named",
-              "data": {
-                "name": "AutoOrientToSpeaker"
-              }
-            }
-          ]
-        }
-      }
     }
   ],
   "globalConstraints": {
-    "maxVelocity": 5.0,
-    "maxAcceleration": 5.0,
+    "maxVelocity": 4.5,
+    "maxAcceleration": 4.5,
     "maxAngularVelocity": 540.0,
     "maxAngularAcceleration": 720.0
   },
