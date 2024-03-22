@@ -8,20 +8,36 @@
       },
       "prevControl": null,
       "nextControl": {
-        "x": 7.518419501771741,
-        "y": 1.5353487609217378
+        "x": 7.142261612762279,
+        "y": 1.963546726070418
       },
       "isLocked": false,
       "linkedName": null
     },
     {
       "anchor": {
-        "x": 3.69,
-        "y": 2.6
+        "x": 4.614717422813849,
+        "y": 1.545770826905387
       },
       "prevControl": {
-        "x": 4.43250249729199,
-        "y": 1.6333162898612796
+        "x": 5.7427123505594295,
+        "y": 1.2951052874063693
+      },
+      "nextControl": {
+        "x": 3.6616525609164294,
+        "y": 1.7575630184381463
+      },
+      "isLocked": false,
+      "linkedName": null
+    },
+    {
+      "anchor": {
+        "x": 2.54,
+        "y": 3.33
+      },
+      "prevControl": {
+        "x": 2.880947441278974,
+        "y": 2.8408761143169796
       },
       "nextControl": null,
       "isLocked": false,
@@ -64,23 +80,6 @@
           ]
         }
       }
-    },
-    {
-      "name": "AutoOrientToSpeaker",
-      "waypointRelativePos": 0.65,
-      "command": {
-        "type": "parallel",
-        "data": {
-          "commands": [
-            {
-              "type": "named",
-              "data": {
-                "name": "AutoOrientToSpeaker"
-              }
-            }
-          ]
-        }
-      }
     }
   ],
   "globalConstraints": {
@@ -91,7 +90,7 @@
   },
   "goalEndState": {
     "velocity": 0,
-    "rotation": -43.0,
+    "rotation": -45.744059202888714,
     "rotateFast": false
   },
   "reversed": false,
