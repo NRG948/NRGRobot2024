@@ -3,25 +3,25 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 1.37,
-        "y": 5.54
+        "x": 1.36,
+        "y": 5.6
       },
       "prevControl": null,
       "nextControl": {
-        "x": 1.4480207286767173,
-        "y": 4.930355310812248
+        "x": 1.4380207286767173,
+        "y": 4.990355310812248
       },
       "isLocked": false,
       "linkedName": null
     },
     {
       "anchor": {
-        "x": 2.6513193714406413,
+        "x": 2.6,
         "y": 3.85
       },
       "prevControl": {
-        "x": 1.8913292382308806,
-        "y": 4.145277992236849
+        "x": 1.3987456152033275,
+        "y": 3.9479822471095325
       },
       "nextControl": null,
       "isLocked": false,
@@ -41,7 +41,7 @@
             {
               "type": "named",
               "data": {
-                "name": "Intake"
+                "name": "IntakeUntilNoteDetectedNoAutoCentering"
               }
             }
           ]

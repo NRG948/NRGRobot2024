@@ -1,6 +1,6 @@
 {
-  "robotWidth": 0.76,
-  "robotLength": 0.83,
+  "robotWidth": 0.889,
+  "robotLength": 0.97,
   "holonomicMode": true,
   "pathFolders": [
     "Amp Sweep",

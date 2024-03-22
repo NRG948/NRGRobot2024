@@ -124,7 +124,7 @@
               {
                 "type": "named",
                 "data": {
-                  "name": "IntakeUntilNoteDetectedNoAutoCentering"
+                  "name": "IntakeUntilNoteDetected"
                 }
               }
             ]
@@ -138,12 +138,6 @@
                 "type": "named",
                 "data": {
                   "name": "SetArmAngleMidSpikeShot"
-                }
-              },
-              {
-                "type": "named",
-                "data": {
-                  "name": "SetShooterRPMMidSpikeShot"
                 }
               }
             ]
@@ -159,6 +153,12 @@
           "type": "path",
           "data": {
             "pathName": "Spike Sweep Drive Out"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "Drive Out Back"
           }
         }
       ]

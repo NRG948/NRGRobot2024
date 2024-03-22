@@ -166,6 +166,7 @@ public final class Autos {
     eventMaps.put("ShootSubwooferShot", shoot(subsystems, SUBWOOFER_SHOT_RPM));
     eventMaps.put("ShootAtCurrentRPM", NoteCommands.shootAtCurrentRPM(subsystems));
 
+    eventMaps.put("SetShooterContinous", setShooterContinous(subsystems));
     eventMaps.put("FeedIndexerFullPower", Commands.runOnce(() -> subsystems.indexer.feed()));
     eventMaps.put("StowArm", ArmCommands.stow(subsystems));
     eventMaps.put("Intake", NoteCommands.intake(subsystems));
@@ -260,6 +261,10 @@ public final class Autos {
     SwerveModuleState[] moduleStates =
         new SwerveModuleState[] {moduleState, moduleState, moduleState, moduleState};
     return Commands.runOnce(() -> swerveDrive.setModuleStates(moduleStates), swerveDrive);
+  }
+
+  public static Command setShooterContinous(Subsystems subsystems) {
+    return new SetShooterContinous(subsystems);
   }
 
   private Autos() {

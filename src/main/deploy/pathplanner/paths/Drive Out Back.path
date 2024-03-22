@@ -3,25 +3,41 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 2.7,
-        "y": 6.93
+        "x": 8.03,
+        "y": 4.06
       },
       "prevControl": null,
       "nextControl": {
-        "x": 2.4813766588848765,
-        "y": 6.516122253607076
+        "x": 7.380604788766697,
+        "y": 4.06
       },
       "isLocked": false,
       "linkedName": null
     },
     {
       "anchor": {
-        "x": 1.36,
-        "y": 5.6
+        "x": 5.06,
+        "y": 4.39
       },
       "prevControl": {
-        "x": 1.8983968489387892,
-        "y": 6.053262359505897
+        "x": 5.570148604463279,
+        "y": 4.050310571582251
+      },
+      "nextControl": {
+        "x": 4.061164356425405,
+        "y": 5.055088379896862
+      },
+      "isLocked": false,
+      "linkedName": null
+    },
+    {
+      "anchor": {
+        "x": 2.5,
+        "y": 5.54
+      },
+      "prevControl": {
+        "x": 2.9122806337215734,
+        "y": 5.37886470174976
       },
       "nextControl": null,
       "isLocked": false,
@@ -30,31 +46,7 @@
   ],
   "rotationTargets": [],
   "constraintZones": [],
-  "eventMarkers": [
-    {
-      "name": "Auto-Centering",
-      "waypointRelativePos": 0.0,
-      "command": {
-        "type": "sequential",
-        "data": {
-          "commands": [
-            {
-              "type": "named",
-              "data": {
-                "name": "AutoCenterNote"
-              }
-            },
-            {
-              "type": "named",
-              "data": {
-                "name": "SetSubwooferRPMAndWait"
-              }
-            }
-          ]
-        }
-      }
-    }
-  ],
+  "eventMarkers": [],
   "globalConstraints": {
     "maxVelocity": 3.0,
     "maxAcceleration": 3.0,
@@ -69,7 +61,7 @@
   "reversed": false,
   "folder": "Spike Sweep",
   "previewStartingState": {
-    "rotation": 16.254013682931564,
+    "rotation": 0,
     "velocity": 0
   },
   "useDefaultConstraints": true

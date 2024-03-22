@@ -26,12 +26,14 @@ public class SetShooterContinous extends Command {
   private record ShooterParams(double distance, double armAngleDegrees, int rpm) {}
 
   /** A array of shooter params sorted from nearest to farthest. */
-  private final ShooterParams[] shooterParams = { // TODO Determine accurate parameters
-    new ShooterParams(1.0, -11, 2200),
-    new ShooterParams(2.0, 4.5, 2500),
-    new ShooterParams(3.0, 13, 3100),
-    new ShooterParams(4.0, 22, 4100),
-    new ShooterParams(5.0, 24.5, 4700)
+  private final ShooterParams[] shooterParams = { // TODO: finish developing interpolation table
+    // new ShooterParams(1.0, -11, 2200),
+    new ShooterParams(2.0, 2.5, 3100),
+    new ShooterParams(2.5, 7, 3300),
+    new ShooterParams(3.0, 10.5, 3500),
+    new ShooterParams(4.0, 16, 3900),
+    new ShooterParams(5.0, 20, 4200),
+    // new ShooterParams(5.0, 24.5, 4700)
   };
 
   public SetShooterContinous(Subsystems subsystems) {

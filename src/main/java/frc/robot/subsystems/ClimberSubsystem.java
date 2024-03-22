@@ -10,6 +10,7 @@ import static frc.robot.Constants.RobotConstants.CAN.TalonFX.CLIMBER_LEFT_PORT;
 import static frc.robot.Constants.RobotConstants.CAN.TalonFX.CLIMBER_RIGHT_PORT;
 
 import com.ctre.phoenix6.hardware.TalonFX;
+import com.ctre.phoenix6.signals.NeutralModeValue;
 import com.nrg948.preferences.RobotPreferences;
 import com.nrg948.preferences.RobotPreferencesLayout;
 import com.nrg948.preferences.RobotPreferencesValue;
@@ -35,6 +36,15 @@ public class ClimberSubsystem extends SubsystemBase {
   /** Creates a new ClimberSubsystem. */
   public ClimberSubsystem() {
     winchLeftMotor.setInverted(true);
+    winchRightMotor.setInverted(false);
+    winchLeftMotor.setNeutralMode(NeutralModeValue.Brake);
+    winchRightMotor.setNeutralMode(NeutralModeValue.Brake);
+
+    // TalonFXConfiguration config = new TalonFXConfiguration();
+    // config.CurrentLimits =
+    //     new CurrentLimitsConfigs().withStatorCurrentLimitEnable(true).withStatorCurrentLimit(80);
+    // winchLeftMotor.getConfigurator().apply(config);
+    // winchRightMotor.getConfigurator().apply(config);
   }
 
   public void setVoltage(double voltage) {

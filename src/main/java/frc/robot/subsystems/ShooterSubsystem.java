@@ -21,8 +21,7 @@ import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
 import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.commands.NoteCommands;
-import frc.robot.motors.MotorAdapter;
-import frc.robot.motors.RelativeEncoderAdapter;
+import frc.robot.motors.MotorandEncoderAdapter;
 import frc.robot.parameters.ShooterParameters;
 import java.util.Map;
 import java.util.Set;
@@ -46,18 +45,15 @@ public class ShooterSubsystem extends SubsystemBase {
   public static final RobotPreferences.DoubleValue SPIN_FACTOR =
       new RobotPreferences.DoubleValue("Arm+Shooter", "Spin Factor", 0.85);
 
-  private static final double RPM_TOLERANCE = 50.0;
+  private static final double RPM_TOLERANCE = 100.0;
 
-  private final MotorAdapter leftMotor = PARAMETERS.getValue().createLeftMotor();
-  private final MotorAdapter rightMotor = PARAMETERS.getValue().createRightMotor();
+  private final MotorandEncoderAdapter leftMotor = PARAMETERS.getValue().createLeftMotor();
+  private final MotorandEncoderAdapter rightMotor = PARAMETERS.getValue().createRightMotor();
 
   private double currentLeftRPM;
   private double currentRightRPM;
 
   private Supplier<Rotation2d> orientationSupplier;
-
-  private final RelativeEncoderAdapter leftEncoder = leftMotor.getEncoder();
-  private final RelativeEncoderAdapter rightEncoder = rightMotor.getEncoder();
 
   private PIDController leftController =
       new PIDController(LEFT_KP.getValue(), 0, 0); // TODO assign value
@@ -86,8 +82,8 @@ public class ShooterSubsystem extends SubsystemBase {
     rightMotor.setBrakeMode(false);
     rightMotor.setInverted(false);
     double velocityConversionFactor = 1.0 / PARAMETERS.getValue().getGearRatio();
-    leftEncoder.setVelocityConversionFactor(velocityConversionFactor);
-    rightEncoder.setVelocityConversionFactor(velocityConversionFactor);
+    leftMotor.setVelocityConversionFactor(velocityConversionFactor);
+    rightMotor.setVelocityConversionFactor(velocityConversionFactor);
     leftController.setTolerance(RPM_TOLERANCE);
     rightController.setTolerance(RPM_TOLERANCE);
   }
@@ -153,8 +149,8 @@ public class ShooterSubsystem extends SubsystemBase {
   @Override
   public void periodic() {
 
-    currentLeftRPM = leftEncoder.getVelocity();
-    currentRightRPM = rightEncoder.getVelocity();
+    currentLeftRPM = leftMotor.getVelocity();
+    currentRightRPM = rightMotor.getVelocity();
 
     if (isEnabled) {
       double leftVoltage = feedforward.calculate(leftController.getSetpoint());

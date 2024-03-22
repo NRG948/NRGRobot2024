@@ -6,11 +6,12 @@
  */
 package frc.robot;
 
-import edu.wpi.first.math.geometry.Rotation3d;
+import com.nrg948.preferences.RobotPreferences;
+import com.nrg948.preferences.RobotPreferencesValue;
 import edu.wpi.first.math.geometry.Transform3d;
-import edu.wpi.first.math.geometry.Translation3d;
 import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj.util.Color8Bit;
+import frc.robot.parameters.VisionParameters;
 
 /**
  * The Constants class provides a convenient place for teams to hold robot-wide numerical or boolean
@@ -39,12 +40,12 @@ public final class Constants {
     }
 
     /** The total number of LEDs on the addressable LED string. */
-    public static final int LED_COUNT = 11;
+    public static final int LED_COUNT = 26;
 
     /** Defines sub-segments on the addressable LED string. */
     public static class LEDSegment {
       public static final int STATUS_FIRST_LED = 0;
-      public static final int STATUS_LED_COUNT = 11;
+      public static final int STATUS_LED_COUNT = 26;
     }
 
     /** Field of View of Camera in degrees. */
@@ -56,17 +57,13 @@ public final class Constants {
     /** Distance robot should be from amp to score. */
     public static final double SCORING_DISTANCE_FROM_AMP = Units.inchesToMeters(20);
 
-    /** 3d transforms that moves the camera to the center of the robot. */
-    public static final double APRILTAG_CAMERA_PITCH = Math.toRadians(-24);
-
-    public static final double APRILTAG_CAMERA_YAW = Math.toRadians(180);
-    public static final double APRILTAG_CAMERA_ROLL = Math.toRadians(0);
+    @RobotPreferencesValue
+    public static RobotPreferences.EnumValue<VisionParameters> PARAMETERS =
+        new RobotPreferences.EnumValue<VisionParameters>(
+            "AprilTag", "Robot Vision", VisionParameters.CompetitionBase2024);
 
     public static final Transform3d APRILTAG_ROBOT_TO_CAMERA =
-        new Transform3d(
-            new Translation3d(
-                Units.inchesToMeters(-11.25), Units.inchesToMeters(0), Units.inchesToMeters(13.75)),
-            new Rotation3d(APRILTAG_CAMERA_ROLL, APRILTAG_CAMERA_PITCH, APRILTAG_CAMERA_YAW));
+        PARAMETERS.getValue().getRobotToCamera();
 
     public static final Transform3d APRILTAG_CAMERA_TO_ROBOT = APRILTAG_ROBOT_TO_CAMERA.inverse();
 
@@ -84,15 +81,15 @@ public final class Constants {
     /** CAN Ids */
     public static class CAN {
       public static class TalonFX {
-        public static final int CLIMBER_LEFT_PORT = 63; // TODO: change id
-        public static final int CLIMBER_RIGHT_PORT = 62; // TODO: change id
+        public static final int CLIMBER_LEFT_PORT = 3;
+        public static final int CLIMBER_RIGHT_PORT = 17;
       }
 
       public static class SparkMax {
         public static final int INTAKE_PORT = 2;
         public static final int ARM_LEFT_PORT = 1;
         public static final int ARM_RIGHT_PORT = 11;
-        public static final int INDEXER_PORT = 3;
+        public static final int INDEXER_PORT = 16;
       }
     }
 

@@ -101,10 +101,8 @@ public class RobotContainer {
     driverController.x().onTrue(DriveCommands.autoOrientToNote(subsystems));
     driverController.x().onFalse(DriveCommands.disableAutoOrientation(subsystems));
     driverController.y().whileTrue(Pathfinding.pathFindToAmp2());
-    driverController.rightStick().onTrue(DriveCommands.autoOrientToSpeaker(subsystems));
-    driverController.rightStick().onFalse(DriveCommands.disableAutoOrientation(subsystems));
-    driverController.povUp().whileTrue(ClimberCommands.manualClimbChain(subsystems));
-    driverController.povDown().whileTrue(ClimberCommands.manualClimbDownChain(subsystems));
+    driverController.leftBumper().whileTrue(ClimberCommands.manualClimbChain(subsystems));
+    driverController.rightBumper().whileTrue(ClimberCommands.manualClimbDownChain(subsystems));
 
     // operatorController
     //     .start()
@@ -117,7 +115,9 @@ public class RobotContainer {
         .povUp()
         .whileTrue(NoteCommands.shootAtCurrentRPM(subsystems).finallyDo(shooter::disable));
     operatorController.povDown().whileTrue(NoteCommands.outtake(subsystems));
-    operatorController.povRight().whileTrue(NoteCommands.outakeToAmp(subsystems));
+    // operatorController.povRight().whileTrue(NoteCommands.outakeToAmp(subsystems));
+    operatorController.povRight().whileTrue(NoteCommands.shoot(subsystems, 800));
+    operatorController.povLeft().onTrue(ArmCommands.seekToAngle(subsystems, Math.toRadians(15)));
     operatorController.back().onTrue(new InterruptAll(subsystems));
     operatorController.b().whileTrue(new SetShooterContinous(subsystems));
     // operatorController.b().whileTrue(new SetShooterContinous(subsystems));
@@ -132,13 +132,13 @@ public class RobotContainer {
     operatorController.leftBumper().whileTrue(NoteCommands.intakeUntilNoteDetected(subsystems));
     operatorController.rightBumper().onTrue(NoteCommands.intakeAndAutoCenterNote(subsystems));
 
-    Trigger noteDetected = new Trigger(indexer::isNoteAtShootPosition);
+    Trigger noteDetected = new Trigger(indexer::isNoteBreakingEitherBeam);
     noteDetected.onTrue(
         Commands.sequence(LEDs.flashColor(statusLED, GREEN), LEDs.fillColor(statusLED, GREEN)));
     noteDetected.onFalse(LEDs.fillColor(statusLED, RED));
 
     Trigger shooterSpinning =
-        new Trigger(() -> shooter.atGoalRPM() && indexer.isNoteAtShootPosition());
+        new Trigger(() -> shooter.atGoalRPM() && indexer.isNoteBreakingEitherBeam());
     shooterSpinning.onTrue(
         Commands.sequence(LEDs.flashColor(statusLED, PINK), LEDs.fillColor(statusLED, PINK)));
   }
@@ -194,7 +194,7 @@ public class RobotContainer {
             .withProperties(Map.of("Number of columns", 1, "Number of rows", 1))
             .withPosition(6, 0)
             .withSize(2, 2);
-    statusLayout.addBoolean("Note Detected", subsystems.indexer::isNoteAtShootPosition);
+    statusLayout.addBoolean("Note Detected", subsystems.indexer::isNoteBreakingUpperBeam);
 
     RobotPreferences.addShuffleBoardTab();
 
