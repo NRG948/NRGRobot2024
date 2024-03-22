@@ -1,0 +1,92 @@
+{
+  "version": 1.0,
+  "waypoints": [
+    {
+      "anchor": {
+        "x": 0.74,
+        "y": 4.37
+      },
+      "prevControl": null,
+      "nextControl": {
+        "x": 1.1367330622701963,
+        "y": 2.955764486592587
+      },
+      "isLocked": false,
+      "linkedName": null
+    },
+    {
+      "anchor": {
+        "x": 5.147381694254483,
+        "y": 1.6293260067436164
+      },
+      "prevControl": {
+        "x": 3.5219561540185147,
+        "y": 1.6293260067436164
+      },
+      "nextControl": {
+        "x": 6.494708969061704,
+        "y": 1.6293260067436164
+      },
+      "isLocked": false,
+      "linkedName": null
+    },
+    {
+      "anchor": {
+        "x": 8.21,
+        "y": 2.4
+      },
+      "prevControl": {
+        "x": 7.654037089244662,
+        "y": 2.0157687134712696
+      },
+      "nextControl": null,
+      "isLocked": false,
+      "linkedName": null
+    }
+  ],
+  "rotationTargets": [
+    {
+      "waypointRelativePos": 1.1,
+      "rotationDegrees": 0.0,
+      "rotateFast": false
+    }
+  ],
+  "constraintZones": [],
+  "eventMarkers": [
+    {
+      "name": "Intake",
+      "waypointRelativePos": 0,
+      "command": {
+        "type": "sequential",
+        "data": {
+          "commands": [
+            {
+              "type": "named",
+              "data": {
+                "name": "IntakeUntilNoteDetectedNoAutoCentering"
+              }
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "globalConstraints": {
+    "maxVelocity": 3.0,
+    "maxAcceleration": 3.0,
+    "maxAngularVelocity": 540.0,
+    "maxAngularAcceleration": 720.0
+  },
+  "goalEndState": {
+    "velocity": 0,
+    "rotation": 24.95645435977526,
+    "rotateFast": false
+  },
+  "reversed": false,
+  "folder": "Mid Source Sweep",
+  "previewStartingState": {
+    "rotation": -62.747370745004204,
+    "velocity": 0
+  },
+  "useDefaultConstraints": true
+}
