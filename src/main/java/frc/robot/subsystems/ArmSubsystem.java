@@ -241,7 +241,8 @@ public class ArmSubsystem extends SubsystemBase {
         disable();
       } else {
         double feedback = controller.calculate(currentAngle);
-        feedback = MathUtil.clamp(feedback, -2, 8);
+        double cosine = Math.cos(currentAngle);
+        feedback = MathUtil.clamp(feedback, 0.4 + -5.50 * cosine, -0.6 + 9.50 * cosine);
         State setpoint = controller.getSetpoint();
         trapezoidStatePositionLog.append(setpoint.position);
         trapezoidStateVelocityLog.append(setpoint.velocity);
