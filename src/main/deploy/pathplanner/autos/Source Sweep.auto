@@ -53,25 +53,32 @@
           "data": {
             "commands": [
               {
-                "type": "named",
-                "data": {
-                  "name": "DisableAutoOrientationMode"
-                }
-              },
-              {
-                "type": "race",
+                "type": "parallel",
                 "data": {
                   "commands": [
                     {
                       "type": "named",
                       "data": {
-                        "name": "SetShooterContinuous"
+                        "name": "AutoOrientToSpeaker"
                       }
                     },
                     {
-                      "type": "wait",
+                      "type": "race",
                       "data": {
-                        "waitTime": 2.0
+                        "commands": [
+                          {
+                            "type": "named",
+                            "data": {
+                              "name": "SetShooterContinuous"
+                            }
+                          },
+                          {
+                            "type": "wait",
+                            "data": {
+                              "waitTime": 2.0
+                            }
+                          }
+                        ]
                       }
                     }
                   ]
@@ -94,6 +101,12 @@
                       }
                     }
                   ]
+                }
+              },
+              {
+                "type": "named",
+                "data": {
+                  "name": "DisableAutoOrientationMode"
                 }
               }
             ]
