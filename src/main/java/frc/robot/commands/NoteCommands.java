@@ -134,12 +134,10 @@ public class NoteCommands {
                     () -> indexer.intake(IndexerSubsystem.AUTO_CENTER_VELOCITY.getValue()), indexer)
                 .until(() -> indexer.isNoteBreakingUpperBeam()),
             Commands.idle(indexer).withTimeout(initialIntakeSeconds),
-            Commands.runOnce(() -> System.out.println("BEFORE")), //
             Commands.run(
                     () -> indexer.outtake(IndexerSubsystem.AUTO_CENTER_VELOCITY.getValue()),
                     indexer)
                 .until(() -> !indexer.isNoteBreakingUpperBeam()),
-            Commands.runOnce(() -> System.out.println("AFTER")), //
             Commands.runOnce(
                 () -> indexer.intake(IndexerSubsystem.AUTO_CENTER_VELOCITY.getValue()),
                 indexer), //
@@ -147,7 +145,6 @@ public class NoteCommands {
         .finallyDo(
             () -> {
               indexer.disable();
-              System.out.println("DISABLE");
             });
   }
 
