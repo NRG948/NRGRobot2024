@@ -276,6 +276,12 @@ public class ArmSubsystem extends SubsystemBase {
     infolayout.add("KV", KV).withPosition(0, 2).withSize(1, 1);
     infolayout.add("KA", KA).withPosition(1, 2).withSize(1, 1);
     infolayout.add("KG", KG).withPosition(2, 2).withSize(1, 1);
+    infolayout
+        .addDouble(
+            "Winch Position",
+            () ->
+                subsystems.climber.isPresent() ? subsystems.climber.get().getCurrentPosition() : 0)
+        .withPosition(2, 3);
 
     ShuffleboardLayout controlLayout =
         tab.getLayout("Arm Control", BuiltInLayouts.kList).withPosition(2, 0).withSize(2, 4);
