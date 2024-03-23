@@ -179,6 +179,8 @@ public final class Autos {
 
     eventMaps.put("AutoOrientToSpeaker", DriveCommands.autoOrientToSpeaker(subsystems));
     eventMaps.put("DisableAutoOrientation", DriveCommands.disableAutoOrientation(subsystems));
+    eventMaps.put("EnablePoseEstimation", DriveCommands.enablePoseEstimation(subsystems, true));
+    eventMaps.put("DisablePoseEstimation", DriveCommands.enablePoseEstimation(subsystems, false));
 
     return eventMaps;
   }

@@ -95,13 +95,23 @@ public final class DriveCommands {
     return Commands.select(
         Map.of(
             Alliance.Blue,
-                Commands.runOnce(() -> drivetrain.resetOrientation(new Rotation2d()), drivetrain),
+            Commands.runOnce(() -> drivetrain.resetOrientation(new Rotation2d()), drivetrain),
             Alliance.Red,
-                Commands.runOnce(
-                    () -> drivetrain.resetOrientation(Rotation2d.fromDegrees(180)), drivetrain)),
+            Commands.runOnce(
+                () -> drivetrain.resetOrientation(Rotation2d.fromDegrees(180)), drivetrain)),
         () -> {
           Optional<Alliance> alliance = DriverStation.getAlliance();
           return alliance.orElse(Alliance.Blue);
+        });
+  }
+
+  public static Command enablePoseEstimation(Subsystems subsystems, boolean enable) {
+    Optional<AprilTagSubsystem> aprilTag = subsystems.aprilTag;
+    return Commands.runOnce(
+        () -> {
+          if (aprilTag.isPresent()) {
+            Subsystems.ENABLE_POSE_ESTIMATION.setValue(enable);
+          }
         });
   }
 
