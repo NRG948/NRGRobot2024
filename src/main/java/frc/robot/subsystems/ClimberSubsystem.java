@@ -9,6 +9,7 @@ package frc.robot.subsystems;
 import static frc.robot.Constants.RobotConstants.CAN.TalonFX.CLIMBER_LEFT_PORT;
 import static frc.robot.Constants.RobotConstants.CAN.TalonFX.CLIMBER_RIGHT_PORT;
 
+import com.ctre.phoenix6.StatusSignal;
 import com.ctre.phoenix6.hardware.TalonFX;
 import com.ctre.phoenix6.signals.NeutralModeValue;
 import com.nrg948.preferences.RobotPreferences;
@@ -32,6 +33,9 @@ public class ClimberSubsystem extends SubsystemBase {
 
   private final TalonFX winchLeftMotor = new TalonFX(CLIMBER_LEFT_PORT);
   private final TalonFX winchRightMotor = new TalonFX(CLIMBER_RIGHT_PORT);
+
+  private final StatusSignal<Double> rightEncoder = winchRightMotor.getPosition();
+  private double currentPosition;
 
   /** Creates a new ClimberSubsystem. */
   public ClimberSubsystem() {
@@ -65,8 +69,13 @@ public class ClimberSubsystem extends SubsystemBase {
     winchRightMotor.stopMotor();
   }
 
+  public double getCurrentPosition() {
+    return currentPosition;
+  }
+
   @Override
   public void periodic() {
     // This method will be called once per scheduler run
+    currentPosition = rightEncoder.refresh().getValueAsDouble();
   }
 }
