@@ -266,8 +266,8 @@ public class AprilTagSubsystem extends PhotonVisionSubsystemBase {
 
     VideoSource video =
         new HttpCamera(
-            "photonvision_Port_1184_Output_MJPEG_Server",
-            "http://photonvision.local:1184/?action=stream",
+            "photonvision_Port_1182_Output_MJPEG_Server",
+            "http://photonvision.local:1182/?action=stream",
             HttpCameraKind.kMJPGStreamer);
     visionTab
         .add("April Tag", video)
