@@ -14,7 +14,7 @@ import edu.wpi.first.math.util.Units;
 /** Add your docs here. */
 public enum VisionParameters {
   PracticeBase2024(-11.25, 0, 13.75, 0, -24, 180),
-  CompetitionBase2024(-11.25, 0, 23.25, 0, -19, 180);
+  CompetitionBase2024(-11.375, 0, 23.625, 0, -21.5, 180);
 
   private double x;
   private double y;
