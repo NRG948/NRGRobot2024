@@ -54,11 +54,11 @@ public class ArmSubsystem extends SubsystemBase {
 
   @RobotPreferencesValue(column = 0, row = 1)
   public static final RobotPreferences.DoubleValue KP =
-      new RobotPreferences.DoubleValue("Arm+Shooter", "kP", 10.0);
+      new RobotPreferences.DoubleValue("Arm+Shooter", "kP", 23.0);
 
   @RobotPreferencesValue(column = 0, row = 2)
   public static final RobotPreferences.DoubleValue KI =
-      new RobotPreferences.DoubleValue("Arm+Shooter", "kI", 0.0);
+      new RobotPreferences.DoubleValue("Arm+Shooter", "kI", 25.0);
 
   @RobotPreferencesValue(column = 0, row = 3)
   public static final RobotPreferences.DoubleValue KD =
@@ -66,11 +66,11 @@ public class ArmSubsystem extends SubsystemBase {
 
   @RobotPreferencesValue(column = 0, row = 4)
   public static RobotPreferences.DoubleValue AMP_ANGLE =
-      new RobotPreferences.DoubleValue("Arm+Shooter", "Amp Angle", 40.0);
+      new RobotPreferences.DoubleValue("Arm+Shooter", "Amp Angle", 80.0);
 
   @RobotPreferencesValue(column = 1, row = 4)
   public static RobotPreferences.DoubleValue TRAP_ANGLE =
-      new RobotPreferences.DoubleValue("Arm+Shooter", "Trap Angle", 45);
+      new RobotPreferences.DoubleValue("Arm+Shooter", "Trap Angle", 70.0);
 
   @RobotPreferencesValue
   public static RobotPreferences.EnumValue<ArmParameters> PARAMETERS =
@@ -102,6 +102,7 @@ public class ArmSubsystem extends SubsystemBase {
   private static final double LOWER_ANGLE_LIMIT = STOWED_ANGLE;
   private static final double UPPER_ANGLE_LIMIT = Math.toRadians(85);
   private static final double ANGLE_TOLERANCE = Math.toRadians(1);
+  // private static final double LARGE_ANGLE_ERROR = Math.toRadians(20);
 
   private final CANSparkMax leftMotor =
       new CANSparkMax(RobotConstants.CAN.SparkMax.ARM_LEFT_PORT, MotorType.kBrushless);
@@ -243,6 +244,12 @@ public class ArmSubsystem extends SubsystemBase {
         double feedback = controller.calculate(currentAngle);
         double cosine = Math.cos(currentAngle);
         feedback = MathUtil.clamp(feedback, 0.4 + -5.50 * cosine, -0.6 + 9.50 * cosine);
+        // double error = controller.getPositionError();
+        // System.out.println("error: " + Math.toDegrees(error));
+        // if (Math.abs(error) < -LARGE_ANGLE_ERROR) {
+        //   feedback = 0.4 - 5.50 * Math.cos(LARGE_ANGLE_ERROR);
+        //   System.out.println("downward feedback: " + feedback);
+        // }
         State setpoint = controller.getSetpoint();
         trapezoidStatePositionLog.append(setpoint.position);
         trapezoidStateVelocityLog.append(setpoint.velocity);
