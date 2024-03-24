@@ -7,6 +7,7 @@
 package frc.robot.commands;
 
 import com.nrg948.autonomous.AutonomousCommandGenerator;
+import com.nrg948.autonomous.AutonomousCommandMethod;
 import com.nrg948.preferences.RobotPreferences;
 import com.nrg948.preferences.RobotPreferencesLayout;
 import com.nrg948.preferences.RobotPreferencesValue;
@@ -273,6 +274,11 @@ public final class Autos {
   public static Command autoSetShooter(Subsystems subsystems) {
     return setShooterContinous(subsystems)
         .until(() -> subsystems.arm.atGoalAngle() && subsystems.shooter.atGoalRPM());
+  }
+
+  @AutonomousCommandMethod(name = "No Auto")
+  public static Command noAuto(Subsystems subsystems) {
+    return Commands.none();
   }
 
   private Autos() {
