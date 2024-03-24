@@ -33,7 +33,7 @@ public class SetShooterContinous extends Command {
     new ShooterParams(2.0, 2.5, 3100),
     new ShooterParams(2.5, 7.2, 3300),
     new ShooterParams(3.0, 12.4, 3500),
-    new ShooterParams(3.5, 14, 3750),
+    new ShooterParams(3.5, 14.5, 3750),
     new ShooterParams(4.0, 17.2, 3900),
     new ShooterParams(5.0, 20.0, 4200),
     // new ShooterParams(5.0, 24.5, 4700)
