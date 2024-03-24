@@ -43,25 +43,6 @@
               "data": {
                 "name": "AutoCenterNote"
               }
-            },
-            {
-              "type": "parallel",
-              "data": {
-                "commands": [
-                  {
-                    "type": "named",
-                    "data": {
-                      "name": "SetArmAngleAmpFarShot"
-                    }
-                  },
-                  {
-                    "type": "named",
-                    "data": {
-                      "name": "SetShooterRPMAmpFarShot"
-                    }
-                  }
-                ]
-              }
             }
           ]
         }

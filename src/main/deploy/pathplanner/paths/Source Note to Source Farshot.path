@@ -72,7 +72,7 @@
     },
     {
       "name": "Prepare To Shoot",
-      "waypointRelativePos": 0.35,
+      "waypointRelativePos": 1.2,
       "command": {
         "type": "sequential",
         "data": {
@@ -96,7 +96,7 @@
   },
   "goalEndState": {
     "velocity": 0,
-    "rotation": -43.0,
+    "rotation": -47.0,
     "rotateFast": false
   },
   "reversed": false,
