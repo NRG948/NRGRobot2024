@@ -86,6 +86,23 @@
           ]
         }
       }
+    },
+    {
+      "name": "Auto Orienting",
+      "waypointRelativePos": 1.4,
+      "command": {
+        "type": "sequential",
+        "data": {
+          "commands": [
+            {
+              "type": "named",
+              "data": {
+                "name": "AutoOrientToSpeaker"
+              }
+            }
+          ]
+        }
+      }
     }
   ],
   "globalConstraints": {

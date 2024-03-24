@@ -53,32 +53,19 @@
           "data": {
             "commands": [
               {
-                "type": "parallel",
+                "type": "race",
                 "data": {
                   "commands": [
                     {
                       "type": "named",
                       "data": {
-                        "name": "AutoOrientToSpeaker"
+                        "name": "AutoSetShooter"
                       }
                     },
                     {
-                      "type": "race",
+                      "type": "wait",
                       "data": {
-                        "commands": [
-                          {
-                            "type": "named",
-                            "data": {
-                              "name": "SetShooterContinuous"
-                            }
-                          },
-                          {
-                            "type": "wait",
-                            "data": {
-                              "waitTime": 2.0
-                            }
-                          }
-                        ]
+                        "waitTime": 5.0
                       }
                     }
                   ]
@@ -106,7 +93,7 @@
               {
                 "type": "named",
                 "data": {
-                  "name": "DisableAutoOrientationMode"
+                  "name": "DisableAutoOrientation"
                 }
               }
             ]
@@ -144,13 +131,26 @@
           }
         },
         {
-          "type": "parallel",
+          "type": "sequential",
           "data": {
             "commands": [
               {
-                "type": "named",
+                "type": "race",
                 "data": {
-                  "name": "DisableAutoOrientationMode"
+                  "commands": [
+                    {
+                      "type": "named",
+                      "data": {
+                        "name": "AutoSetShooter"
+                      }
+                    },
+                    {
+                      "type": "wait",
+                      "data": {
+                        "waitTime": 2.0
+                      }
+                    }
+                  ]
                 }
               },
               {
@@ -170,6 +170,12 @@
                       }
                     }
                   ]
+                }
+              },
+              {
+                "type": "named",
+                "data": {
+                  "name": "DisableAutoOrientation"
                 }
               }
             ]
