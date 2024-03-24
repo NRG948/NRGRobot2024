@@ -179,7 +179,7 @@ public final class Autos {
 
     eventMaps.put("AutoOrientToSpeaker", DriveCommands.autoOrientToSpeaker(subsystems));
     eventMaps.put("DisableAutoOrientation", DriveCommands.disableAutoOrientation(subsystems));
-
+    eventMaps.put("AutoSetShooter", autoSetShooter(subsystems));
     return eventMaps;
   }
 
@@ -265,6 +265,11 @@ public final class Autos {
 
   public static Command setShooterContinous(Subsystems subsystems) {
     return new SetShooterContinous(subsystems);
+  }
+
+  public static Command autoSetShooter(Subsystems subsystems) {
+    return setShooterContinous(subsystems)
+        .until(() -> subsystems.arm.atGoalAngle() && subsystems.shooter.atGoalRPM());
   }
 
   private Autos() {
