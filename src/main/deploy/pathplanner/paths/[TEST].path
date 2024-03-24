@@ -3,25 +3,25 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 1.46,
-        "y": 1.49
+        "x": 1.4048307100172925,
+        "y": 5.589722591070332
       },
       "prevControl": null,
       "nextControl": {
-        "x": 1.8782852832933468,
-        "y": 2.099323893304277
+        "x": 1.7359292607078698,
+        "y": 5.112551150369205
       },
       "isLocked": false,
       "linkedName": null
     },
     {
       "anchor": {
-        "x": 2.7869478639772867,
-        "y": 4.0942038118172945
+        "x": 2.7000103347774913,
+        "y": 4.080302727627994
       },
       "prevControl": {
-        "x": 2.609393106832149,
-        "y": 3.8435382723182765
+        "x": 2.1644097380721457,
+        "y": 4.4600922416554205
       },
       "nextControl": null,
       "isLocked": false,
@@ -30,7 +30,31 @@
   ],
   "rotationTargets": [],
   "constraintZones": [],
-  "eventMarkers": [],
+  "eventMarkers": [
+    {
+      "name": "Auto Orienting and Set Shooter Continous",
+      "waypointRelativePos": 0.3,
+      "command": {
+        "type": "parallel",
+        "data": {
+          "commands": [
+            {
+              "type": "named",
+              "data": {
+                "name": "AutoOrientToSpeaker"
+              }
+            },
+            {
+              "type": "named",
+              "data": {
+                "name": "SetShooterContinuous"
+              }
+            }
+          ]
+        }
+      }
+    }
+  ],
   "globalConstraints": {
     "maxVelocity": 3.0,
     "maxAcceleration": 3.0,

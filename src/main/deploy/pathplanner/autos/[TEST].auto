@@ -2,8 +2,8 @@
   "version": 1.0,
   "startingPose": {
     "position": {
-      "x": 1.46,
-      "y": 1.49
+      "x": 1.4,
+      "y": 5.59
     },
     "rotation": 0
   },
@@ -15,6 +15,37 @@
           "type": "path",
           "data": {
             "pathName": "[TEST]"
+          }
+        },
+        {
+          "type": "race",
+          "data": {
+            "commands": [
+              {
+                "type": "wait",
+                "data": {
+                  "waitTime": 5.0
+                }
+              },
+              {
+                "type": "named",
+                "data": {
+                  "name": "AutoSetShooter"
+                }
+              }
+            ]
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "ShootAtCurrentRPM"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "DisableAutoOrientation"
           }
         }
       ]
