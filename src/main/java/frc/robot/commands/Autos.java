@@ -182,6 +182,7 @@ public final class Autos {
     eventMaps.put("EnablePoseEstimation", DriveCommands.enablePoseEstimation(subsystems, true));
     eventMaps.put("DisablePoseEstimation", DriveCommands.enablePoseEstimation(subsystems, false));
 
+    eventMaps.put("AutoSetShooter", autoSetShooter(subsystems));
     return eventMaps;
   }
 
@@ -267,6 +268,11 @@ public final class Autos {
 
   public static Command setShooterContinous(Subsystems subsystems) {
     return new SetShooterContinous(subsystems);
+  }
+
+  public static Command autoSetShooter(Subsystems subsystems) {
+    return setShooterContinous(subsystems)
+        .until(() -> subsystems.arm.atGoalAngle() && subsystems.shooter.atGoalRPM());
   }
 
   private Autos() {
