@@ -36,6 +36,7 @@ public class ClimberSubsystem extends SubsystemBase {
 
   private final StatusSignal<Double> rightEncoder = winchRightMotor.getPosition();
   private double currentPosition;
+  private double positionOffset;
 
   /** Creates a new ClimberSubsystem. */
   public ClimberSubsystem() {
@@ -43,6 +44,7 @@ public class ClimberSubsystem extends SubsystemBase {
     winchRightMotor.setInverted(false);
     winchLeftMotor.setNeutralMode(NeutralModeValue.Brake);
     winchRightMotor.setNeutralMode(NeutralModeValue.Brake);
+    resetCurrentPosition();
 
     // TalonFXConfiguration config = new TalonFXConfiguration();
     // config.CurrentLimits =
@@ -70,7 +72,11 @@ public class ClimberSubsystem extends SubsystemBase {
   }
 
   public double getCurrentPosition() {
-    return currentPosition;
+    return currentPosition - positionOffset;
+  }
+
+  public void resetCurrentPosition() {
+    positionOffset = rightEncoder.refresh().getValueAsDouble();
   }
 
   @Override
