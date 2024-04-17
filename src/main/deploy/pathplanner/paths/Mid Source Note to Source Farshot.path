@@ -66,7 +66,7 @@
     },
     {
       "name": "Prepare To Shoot",
-      "waypointRelativePos": 0.5,
+      "waypointRelativePos": 0.4,
       "command": {
         "type": "sequential",
         "data": {
@@ -75,6 +75,23 @@
               "type": "named",
               "data": {
                 "name": "SetShooterContinuous"
+              }
+            }
+          ]
+        }
+      }
+    },
+    {
+      "name": "Auto Orienting",
+      "waypointRelativePos": 1.4,
+      "command": {
+        "type": "sequential",
+        "data": {
+          "commands": [
+            {
+              "type": "named",
+              "data": {
+                "name": "AutoOrientToSpeaker"
               }
             }
           ]
