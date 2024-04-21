@@ -4,12 +4,12 @@
     {
       "anchor": {
         "x": 1.32,
-        "y": 5.68
+        "y": 5.6
       },
       "prevControl": null,
       "nextControl": {
         "x": 1.487800657606639,
-        "y": 6.351698506129932
+        "y": 6.2716985061299315
       },
       "isLocked": false,
       "linkedName": null
@@ -17,11 +17,11 @@
     {
       "anchor": {
         "x": 2.7,
-        "y": 6.93
+        "y": 7.08
       },
       "prevControl": {
         "x": 2.058990164297986,
-        "y": 6.551221460721537
+        "y": 6.701221460721538
       },
       "nextControl": null,
       "isLocked": false,
@@ -50,7 +50,7 @@
     }
   ],
   "globalConstraints": {
-    "maxVelocity": 5.5,
+    "maxVelocity": 5.0,
     "maxAcceleration": 7.0,
     "maxAngularVelocity": 600.0,
     "maxAngularAcceleration": 1260.0
@@ -58,7 +58,7 @@
   "goalEndState": {
     "velocity": 0,
     "rotation": 24.10223450116121,
-    "rotateFast": false
+    "rotateFast": true
   },
   "reversed": false,
   "folder": "Spike Sweep",

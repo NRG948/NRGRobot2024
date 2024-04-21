@@ -4,12 +4,12 @@
     {
       "anchor": {
         "x": 2.7,
-        "y": 6.93
+        "y": 7.08
       },
       "prevControl": null,
       "nextControl": {
-        "x": 2.4813766588848765,
-        "y": 6.516122253607076
+        "x": 2.481408686926725,
+        "y": 6.666105336965399
       },
       "isLocked": false,
       "linkedName": null
@@ -64,7 +64,7 @@
   "goalEndState": {
     "velocity": 0,
     "rotation": 0,
-    "rotateFast": false
+    "rotateFast": true
   },
   "reversed": false,
   "folder": "Spike Sweep",
