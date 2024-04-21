@@ -65,7 +65,7 @@
                     {
                       "type": "wait",
                       "data": {
-                        "waitTime": 5.0
+                        "waitTime": 3.0
                       }
                     }
                   ]
@@ -110,15 +110,15 @@
           "data": {
             "commands": [
               {
-                "type": "wait",
-                "data": {
-                  "waitTime": 2.0
-                }
-              },
-              {
                 "type": "named",
                 "data": {
                   "name": "IntakeUntilNoteDetectedNoAutoCentering"
+                }
+              },
+              {
+                "type": "wait",
+                "data": {
+                  "waitTime": 2.0
                 }
               }
             ]
