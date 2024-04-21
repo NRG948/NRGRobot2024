@@ -50,6 +50,27 @@ public class NoteCommands {
   }
 
   /**
+   * Returns a sequence of commands to intake the note slowly into the indexer until interrupted by
+   * another command.
+   *
+   * <p>This command should be bound to a button using {@link Trigger#whileTrue}.
+   *
+   * @param subsystems The subsystems container.
+   * @return The command sequence.
+   */
+  public static Command intakeSlow(Subsystems subsystems) {
+    IntakeSubsystem intake = subsystems.intake;
+    IndexerSubsystem indexer = subsystems.indexer;
+
+    return Commands.sequence(
+        Commands.parallel(
+            Commands.runOnce(intake::inSlow, intake), //
+            Commands.runOnce(indexer::intakeSlow, indexer)), //
+        Commands.idle(intake, indexer) // Supress default commands.
+        );
+  }
+
+  /**
    * Returns a sequence of commands to intake the note into the indexer until beam break is
    * triggered.
    *
@@ -77,8 +98,9 @@ public class NoteCommands {
     IntakeSubsystem intake = subsystems.intake;
     IndexerSubsystem indexer = subsystems.indexer;
 
-    return intake(subsystems)
-        .until(indexer::isNoteBreakingEitherBeam) //
+    return Commands.sequence(
+            intake(subsystems).until(indexer::isNoteBreakingLowerBeam),
+            intakeSlow(subsystems).until(indexer::isNoteBreakingUpperBeam))
         .finallyDo(
             () -> {
               intake.disable();

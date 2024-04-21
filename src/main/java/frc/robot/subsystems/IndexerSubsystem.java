@@ -133,6 +133,10 @@ public class IndexerSubsystem extends SubsystemBase {
     intake(IntakeSubsystem.INTAKE_VELOCITY.getValue());
   }
 
+  public void intakeSlow() {
+    intake(IntakeSubsystem.INTAKE_SLOW_VELOCITY.getValue());
+  }
+
   public void outtake() {
     outtake(IntakeSubsystem.INTAKE_VELOCITY.getValue());
   }

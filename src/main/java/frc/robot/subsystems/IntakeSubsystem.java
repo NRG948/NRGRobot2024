@@ -56,7 +56,11 @@ public class IntakeSubsystem extends SubsystemBase {
 
   @RobotPreferencesValue
   public static final RobotPreferences.DoubleValue INTAKE_VELOCITY =
-      new RobotPreferences.DoubleValue("Indexer+Intake", "Indexer Intake Velocity", 1.0);
+      new RobotPreferences.DoubleValue("Indexer+Intake", "Indexer Intake Velocity", 3.7);
+
+  @RobotPreferencesValue
+  public static final RobotPreferences.DoubleValue INTAKE_SLOW_VELOCITY =
+      new RobotPreferences.DoubleValue("Indexer+Intake", "Indexer Intake Slow Velocity", 1.0);
 
   private final SimpleMotorFeedforward feedforward = new SimpleMotorFeedforward(KS, KV, KA);
 
@@ -86,6 +90,12 @@ public class IntakeSubsystem extends SubsystemBase {
   public void in() {
     isEnabled = true;
     goalVelocity = IntakeSubsystem.INTAKE_VELOCITY.getValue();
+  }
+
+  /** Enable the intake inwards slowly. */
+  public void inSlow() {
+    isEnabled = true;
+    goalVelocity = IntakeSubsystem.INTAKE_SLOW_VELOCITY.getValue();
   }
 
   /** Enable the intake outward. */
