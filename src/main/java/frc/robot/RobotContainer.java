@@ -10,9 +10,13 @@ import static frc.robot.Constants.ColorConstants.GREEN;
 import static frc.robot.Constants.ColorConstants.PINK;
 import static frc.robot.Constants.ColorConstants.RED;
 
+import java.util.Map;
+
 import com.nrg948.preferences.RobotPreferences;
 import com.nrg948.preferences.RobotPreferencesLayout;
+
 import edu.wpi.first.wpilibj.DriverStation;
+import edu.wpi.first.wpilibj.GenericHID.RumbleType;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.shuffleboard.BuiltInLayouts;
 import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
@@ -38,7 +42,6 @@ import frc.robot.subsystems.IndexerSubsystem;
 import frc.robot.subsystems.ShooterSubsystem;
 import frc.robot.subsystems.StatusLEDSubsystem;
 import frc.robot.subsystems.Subsystems;
-import java.util.Map;
 
 /**
  * This class is where the bulk of the robot should be declared. Since Command-based is a
@@ -134,7 +137,9 @@ public class RobotContainer {
 
     Trigger noteDetected = new Trigger(indexer::isNoteBreakingEitherBeam);
     noteDetected.onTrue(
-        Commands.sequence(LEDs.flashColor(statusLED, GREEN), LEDs.fillColor(statusLED, GREEN)));
+        Commands.sequence(
+          Commands.parallel(LEDs.flashColor(statusLED, GREEN), Commands.runOnce(() -> driverController.getHID().setRumble(RumbleType.kBothRumble, 1.0))),
+          LEDs.fillColor(statusLED, GREEN)));
     noteDetected.onFalse(LEDs.fillColor(statusLED, RED));
 
     Trigger shooterSpinning =
