@@ -10,11 +10,8 @@ import static frc.robot.Constants.ColorConstants.GREEN;
 import static frc.robot.Constants.ColorConstants.PINK;
 import static frc.robot.Constants.ColorConstants.RED;
 
-import java.util.Map;
-
 import com.nrg948.preferences.RobotPreferences;
 import com.nrg948.preferences.RobotPreferencesLayout;
-
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.GenericHID.RumbleType;
 import edu.wpi.first.wpilibj.Timer;
@@ -42,14 +39,12 @@ import frc.robot.subsystems.IndexerSubsystem;
 import frc.robot.subsystems.ShooterSubsystem;
 import frc.robot.subsystems.StatusLEDSubsystem;
 import frc.robot.subsystems.Subsystems;
+import java.util.Map;
 
 /**
- * This class is where the bulk of the robot should be declared. Since
- * Command-based is a
- * "declarative" paradigm, very little robot logic should actually be handled in
- * the {@link Robot}
- * periodic methods (other than the scheduler calls). Instead, the structure of
- * the robot (including
+ * This class is where the bulk of the robot should be declared. Since Command-based is a
+ * "declarative" paradigm, very little robot logic should actually be handled in the {@link Robot}
+ * periodic methods (other than the scheduler calls). Instead, the structure of the robot (including
  * subsystems, commands, and trigger mappings) should be declared here.
  */
 @RobotPreferencesLayout(groupName = "Preferences", column = 0, row = 0, width = 1, height = 1)
@@ -61,16 +56,14 @@ public class RobotContainer {
   private final RobotAutonomous autonomous = new RobotAutonomous(subsystems);
 
   // Replace with CommandPS4Controller or CommandJoystick if needed
-  private final CommandXboxController driverController = new CommandXboxController(
-      OperatorConstants.XboxControllerPort.DRIVER);
-  private final CommandXboxController operatorController = new CommandXboxController(
-      OperatorConstants.XboxControllerPort.MANIPULATOR);
+  private final CommandXboxController driverController =
+      new CommandXboxController(OperatorConstants.XboxControllerPort.DRIVER);
+  private final CommandXboxController operatorController =
+      new CommandXboxController(OperatorConstants.XboxControllerPort.MANIPULATOR);
 
   private Timer coastModeTimer = new Timer();
 
-  /**
-   * The container for the robot. Contains subsystems, OI devices, and commands.
-   */
+  /** The container for the robot. Contains subsystems, OI devices, and commands. */
   public RobotContainer() {
     DriverStation.silenceJoystickConnectionWarning(true);
 
@@ -90,17 +83,12 @@ public class RobotContainer {
   }
 
   /**
-   * Use this method to define your trigger->command mappings. Triggers can be
-   * created via the
-   * {@link Trigger#Trigger(java.util.function.BooleanSupplier)} constructor with
-   * an arbitrary
+   * Use this method to define your trigger->command mappings. Triggers can be created via the
+   * {@link Trigger#Trigger(java.util.function.BooleanSupplier)} constructor with an arbitrary
    * predicate, or via the named factories in {@link
-   * edu.wpi.first.wpilibj2.command.button.CommandGenericHID}'s subclasses for
-   * {@link
-   * CommandXboxController
-   * Xbox}/{@link edu.wpi.first.wpilibj2.command.button.CommandPS4Controller
-   * PS4} controllers or
-   * {@link edu.wpi.first.wpilibj2.command.button.CommandJoystick Flight
+   * edu.wpi.first.wpilibj2.command.button.CommandGenericHID}'s subclasses for {@link
+   * CommandXboxController Xbox}/{@link edu.wpi.first.wpilibj2.command.button.CommandPS4Controller
+   * PS4} controllers or {@link edu.wpi.first.wpilibj2.command.button.CommandJoystick Flight
    * joysticks}.
    */
   private void configureBindings() {
@@ -150,12 +138,16 @@ public class RobotContainer {
     Trigger noteDetected = new Trigger(indexer::isNoteBreakingEitherBeam);
     noteDetected.onTrue(
         Commands.sequence(
-            Commands.parallel(LEDs.flashColor(statusLED, GREEN),
-                Commands.runOnce(() -> driverController.getHID().setRumble(RumbleType.kBothRumble, 1.0))),
+            Commands.parallel(
+                LEDs.flashColor(statusLED, GREEN),
+                Commands.runOnce(
+                    () -> driverController.getHID().setRumble(RumbleType.kBothRumble, 1.0))),
+            Commands.runOnce(() -> driverController.getHID().setRumble(RumbleType.kBothRumble, 0)),
             LEDs.fillColor(statusLED, GREEN)));
     noteDetected.onFalse(LEDs.fillColor(statusLED, RED));
 
-    Trigger shooterSpinning = new Trigger(() -> shooter.atGoalRPM() && indexer.isNoteBreakingEitherBeam());
+    Trigger shooterSpinning =
+        new Trigger(() -> shooter.atGoalRPM() && indexer.isNoteBreakingEitherBeam());
     shooterSpinning.onTrue(
         Commands.sequence(LEDs.flashColor(statusLED, PINK), LEDs.fillColor(statusLED, PINK)));
   }
@@ -205,11 +197,12 @@ public class RobotContainer {
     ShuffleboardTab operatorTab = Shuffleboard.getTab("Operator");
 
     autonomous.addShuffleboardLayout(operatorTab);
-    ShuffleboardLayout statusLayout = operatorTab
-        .getLayout("Status", BuiltInLayouts.kGrid)
-        .withProperties(Map.of("Number of columns", 1, "Number of rows", 1))
-        .withPosition(6, 0)
-        .withSize(2, 2);
+    ShuffleboardLayout statusLayout =
+        operatorTab
+            .getLayout("Status", BuiltInLayouts.kGrid)
+            .withProperties(Map.of("Number of columns", 1, "Number of rows", 1))
+            .withPosition(6, 0)
+            .withSize(2, 2);
     statusLayout.addBoolean("Note Detected", subsystems.indexer::isNoteBreakingUpperBeam);
 
     RobotPreferences.addShuffleBoardTab();
