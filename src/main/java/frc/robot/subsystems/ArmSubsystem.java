@@ -32,8 +32,8 @@ public class ArmSubsystem extends SubsystemBase {
   public static final RobotPreferences.BooleanValue ENABLE_TAB = new RobotPreferences.BooleanValue(
       "Arm+Shooter", "Enable Tab", false);
 
-  public static final double GEAR_RATIO = 168.0;
-  public static final double MASS = 0.5; // TODO determine actual arm mass
+  public static final double GEAR_RATIO = 1;
+  public static final double MASS = 6.55088578738;
   public static final double RADIANS_PER_REVOLUTION = (2 * Math.PI) / GEAR_RATIO;
   public static final MotorParameters MOTOR = MotorParameters.NeoV1_1;
   public static final double MAX_ANGULAR_SPEED = MOTOR.getFreeSpeedRPM() * RADIANS_PER_REVOLUTION / 60.0;
@@ -44,9 +44,9 @@ public class ArmSubsystem extends SubsystemBase {
   public static final double KV = (RobotConstants.MAX_BATTERY_VOLTAGE - KS) / MAX_ANGULAR_SPEED;
   public static final double KA = (RobotConstants.MAX_BATTERY_VOLTAGE - KS) / MAX_ANGULAR_ACCELERATION;
   public static final double KG = 0; // KA * 9.81;
-  public static final double STOWED_ANGLE = -31.3;
+  public static final double STOWED_ANGLE = -26;
   public static final double ARM_RADIANS_PER_MOTOR_ROTATION = (2 * Math.PI) / GEAR_RATIO;
-  private static final double LOWER_ANGLE_LIMIT = Math.toRadians(-27);
+  private static final double LOWER_ANGLE_LIMIT = Math.toRadians(-22);
   private static final double UPPER_ANGLE_LIMIT = Math.toRadians(80);
 
   private final CANSparkMax leftMotor = new CANSparkMax(RobotConstants.CAN.SparkMax.ARM_LEFT_PORT,
