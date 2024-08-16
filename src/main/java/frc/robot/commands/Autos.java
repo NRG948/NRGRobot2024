@@ -48,18 +48,15 @@ public final class Autos {
 
   @RobotPreferencesValue(column = 1, row = 0)
   public static RobotPreferences.DoubleValue SOURCE_FARSHOT_ANGLE =
-      new RobotPreferences.DoubleValue(
-          "Autonomous", "Source Far Shot Angle", 22.5); // TODO: Angle needs to be tested.
+      new RobotPreferences.DoubleValue("Autonomous", "Source Far Shot Angle", 22.5);
 
   @RobotPreferencesValue(column = 0, row = 1)
   public static RobotPreferences.DoubleValue AMP_FARSHOT_RPM =
-      new RobotPreferences.DoubleValue(
-          "Autonomous", "Amp Far Shot RPM", 3425); // TODO: RPM needs to be tested
+      new RobotPreferences.DoubleValue("Autonomous", "Amp Far Shot RPM", 3425);
 
   @RobotPreferencesValue(column = 1, row = 1)
   public static RobotPreferences.DoubleValue AMP_FARSHOT_ANGLE =
-      new RobotPreferences.DoubleValue(
-          "Autonomous", "Amp Far Shot Angle", 20); // TODO: Angle needs to be tested.
+      new RobotPreferences.DoubleValue("Autonomous", "Amp Far Shot Angle", 20);
 
   @RobotPreferencesValue(column = 0, row = 2)
   public static RobotPreferences.DoubleValue SPIKE_SHOT_RPM =
@@ -88,8 +85,7 @@ public final class Autos {
 
   @RobotPreferencesValue(column = 1, row = 4)
   public static RobotPreferences.DoubleValue SUBWOOFER_SIDE_SHOT_ANGLE =
-      new RobotPreferences.DoubleValue(
-          "Autonomous", "Subwoofer Side Shot Angle", -11); // TODO: Angle needs to be tested.
+      new RobotPreferences.DoubleValue("Autonomous", "Subwoofer Side Shot Angle", -11);
 
   @RobotPreferencesValue(column = 0, row = 5)
   public static RobotPreferences.DoubleValue SUBWOOFER_SHOT_RPM =
@@ -98,8 +94,7 @@ public final class Autos {
 
   @RobotPreferencesValue(column = 1, row = 5)
   public static RobotPreferences.DoubleValue SUBWOOFER_SHOT_ANGLE =
-      new RobotPreferences.DoubleValue(
-          "Autonomous", "Subwoofer Shot Angle", -11); // TODO: Angle needs to be tested.
+      new RobotPreferences.DoubleValue("Autonomous", "Subwoofer Shot Angle", -11);
 
   /**
    * Returns the collection of PathPlanner auto commands.
@@ -178,12 +173,12 @@ public final class Autos {
     eventMaps.put(
         "IntakeUntilNoteDetectedNoAutoCentering", NoteCommands.intakeUntilNoteDetected(subsystems));
 
-    eventMaps.put("AutoOrientToSpeaker", DriveCommands.autoOrientToSpeaker(subsystems));
-    eventMaps.put("DisableAutoOrientation", DriveCommands.disableAutoOrientation(subsystems));
-    eventMaps.put("EnablePoseEstimation", DriveCommands.enablePoseEstimation(subsystems, true));
-    eventMaps.put("DisablePoseEstimation", DriveCommands.enablePoseEstimation(subsystems, false));
-
-    eventMaps.put("AutoSetShooter", autoSetShooter(subsystems));
+        eventMaps.put("AutoOrientToSpeaker", DriveCommands.autoOrientToSpeaker(subsystems));
+        eventMaps.put("DisableAutoOrientation", DriveCommands.disableAutoOrientation(subsystems));
+        eventMaps.put("EnablePoseEstimation", DriveCommands.enablePoseEstimation(subsystems, true));
+        eventMaps.put("DisablePoseEstimation", DriveCommands.enablePoseEstimation(subsystems, false));
+    
+        eventMaps.put("AutoSetShooter", autoSetShooter(subsystems));
     return eventMaps;
   }
 
@@ -266,7 +261,7 @@ public final class Autos {
         new SwerveModuleState[] {moduleState, moduleState, moduleState, moduleState};
     return Commands.runOnce(() -> swerveDrive.setModuleStates(moduleStates), swerveDrive);
   }
-
+  
   public static Command setShooterContinous(Subsystems subsystems) {
     return new SetShooterContinous(subsystems);
   }
