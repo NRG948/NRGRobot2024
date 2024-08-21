@@ -55,4 +55,12 @@ public enum ArmParameters {
         return MOTOR;
     }
 
+    public double getMaxAngularSpeed(){
+        return MOTOR.getFreeSpeedRPM() * (2 * Math.PI) / GEAR_RATIO / 60.0;
+    }
+    
+    public double getMaxAngularAcceleration(){
+        return (2 * MOTOR.getStallTorque() * GEAR_RATIO) / MASS;
+    }
+
 }

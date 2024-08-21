@@ -24,6 +24,7 @@ import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
 import frc.robot.Constants.RobotConstants;
+import frc.robot.parameters.ArmParameters;
 import frc.robot.parameters.MotorParameters;
 
 @RobotPreferencesLayout(groupName = "Arm+Shooter", row = 0, column = 6, width = 2, height = 4)
@@ -31,21 +32,20 @@ public class ArmSubsystem extends SubsystemBase {
   @RobotPreferencesValue
   public static final RobotPreferences.BooleanValue ENABLE_TAB = new RobotPreferences.BooleanValue(
       "Arm+Shooter", "Enable Tab", false);
+  @RobotPreferencesValue
+  public static final RobotPreferences.EnumValue<ArmParameters> PAREMETERS= new RobotPreferences.EnumValue(
+    "Arm+Shooter", "Type", ArmParameters.ArmRedesign
+  );
 
-  public static final double GEAR_RATIO = 1;
-  public static final double MASS = 6.55088578738;
-  public static final double RADIANS_PER_REVOLUTION = (2 * Math.PI) / GEAR_RATIO;
-  public static final MotorParameters MOTOR = MotorParameters.NeoV1_1;
-  public static final double MAX_ANGULAR_SPEED = MOTOR.getFreeSpeedRPM() * RADIANS_PER_REVOLUTION / 60.0;
-  public static final double MAX_ANGULAR_ACCELERATION = (2 * MOTOR.getStallTorque() * GEAR_RATIO) / MASS;
+ 
   public static final TrapezoidProfile.Constraints CONSTRAINTS = new TrapezoidProfile.Constraints(
-      MAX_ANGULAR_SPEED * 0.5, MAX_ANGULAR_ACCELERATION);
+      PAREMETERS.getValue().getMaxAngularSpeed() * 0.5, PAREMETERS.getValue().getMaxAngularAcceleration());
   public static final double KS = 3.0;
-  public static final double KV = (RobotConstants.MAX_BATTERY_VOLTAGE - KS) / MAX_ANGULAR_SPEED;
-  public static final double KA = (RobotConstants.MAX_BATTERY_VOLTAGE - KS) / MAX_ANGULAR_ACCELERATION;
+  public static final double KV = (RobotConstants.MAX_BATTERY_VOLTAGE - KS) / PAREMETERS.getValue().getMaxAngularSpeed();
+  public static final double KA = (RobotConstants.MAX_BATTERY_VOLTAGE - KS) / PAREMETERS.getValue().getMaxAngularAcceleration();
   public static final double KG = 0; // KA * 9.81;
   public static final double STOWED_ANGLE = -26;
-  public static final double ARM_RADIANS_PER_MOTOR_ROTATION = (2 * Math.PI) / GEAR_RATIO;
+  public static final double ARM_RADIANS_PER_MOTOR_ROTATION = (2 * Math.PI) / PAREMETERS.getValue().getGearRatio();
   private static final double LOWER_ANGLE_LIMIT = Math.toRadians(-22);
   private static final double UPPER_ANGLE_LIMIT = Math.toRadians(80);
 
@@ -77,8 +77,8 @@ public class ArmSubsystem extends SubsystemBase {
     absoluteEncoder.setDistancePerRotation(2 * Math.PI);
     controller.enableContinuousInput(-Math.PI, Math.PI);
 
-    System.out.println("Arm max velocity: " + Math.toDegrees(MAX_ANGULAR_SPEED));
-    System.out.println("Arm max accel: " + Math.toDegrees(MAX_ANGULAR_ACCELERATION));
+    System.out.println("Arm max velocity: " + Math.toDegrees(PAREMETERS.getValue().getMaxAngularSpeed()));
+    System.out.println("Arm max accel: " + Math.toDegrees(PAREMETERS.getValue().getMaxAngularAcceleration()));
   }
 
   /**
