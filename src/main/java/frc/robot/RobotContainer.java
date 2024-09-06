@@ -32,7 +32,6 @@ import frc.robot.commands.InterruptAll;
 import frc.robot.commands.LEDs;
 import frc.robot.commands.NoteCommands;
 import frc.robot.commands.Pathfinding;
-import frc.robot.commands.SetShooterContinous;
 import frc.robot.subsystems.ArmSubsystem;
 import frc.robot.subsystems.IndexerSubsystem;
 import frc.robot.subsystems.ShooterSubsystem;
@@ -119,7 +118,9 @@ public class RobotContainer {
     operatorController.povRight().whileTrue(NoteCommands.shoot(subsystems, 800));
     operatorController.povLeft().onTrue(ArmCommands.seekToAngle(subsystems, Math.toRadians(15)));
     operatorController.back().onTrue(new InterruptAll(subsystems));
-    operatorController.b().whileTrue(new SetShooterContinous(subsystems));
+    operatorController.b().whileTrue(Commands.runOnce(() -> shooter.setGoalRPM(4000)));
+    // operatorController.b().whileTrue(new SetShooterContinous(subsystems));
+
     // operatorController.b().whileTrue(new SetShooterContinous(subsystems));
     operatorController
         .start()
