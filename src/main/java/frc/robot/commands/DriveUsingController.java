@@ -19,6 +19,7 @@ import java.util.Optional;
 
 public class DriveUsingController extends Command {
   private static final double DEADBAND = 0.08;
+  private static final double SPEED_FACTOR = 0.5;
 
   @RobotPreferencesValue(column = 0, row = 1)
   public static final RobotPreferences.DoubleValue AUTO_ORIENT_KP =
@@ -70,8 +71,8 @@ public class DriveUsingController extends Command {
 
     // Applies deadbands to x and y joystick values and multiples all
     // values with inputScalar which allows finer driving control.
-    xSpeed = MathUtil.applyDeadband(xSpeed, DEADBAND) * inputScalar;
-    ySpeed = MathUtil.applyDeadband(ySpeed, DEADBAND) * inputScalar;
+    xSpeed = MathUtil.applyDeadband(xSpeed, DEADBAND) * inputScalar * SPEED_FACTOR;
+    ySpeed = MathUtil.applyDeadband(ySpeed, DEADBAND) * inputScalar * SPEED_FACTOR;
 
     Optional<Rotation2d> targetOrientation = drivetrain.getTargetOrientation();
 
