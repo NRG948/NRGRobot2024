@@ -89,7 +89,7 @@ public final class Constants {
         public static final int INTAKE_PORT = 2;
         public static final int ARM_LEFT_PORT = 1;
         public static final int ARM_RIGHT_PORT = 11;
-        public static final int INDEXER_PORT = 16;
+        public static final int INDEXER_PORT = 3;
       }
     }
 
