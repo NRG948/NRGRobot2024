@@ -132,13 +132,13 @@ public class RobotContainer {
     operatorController.leftBumper().whileTrue(NoteCommands.intakeUntilNoteDetected(subsystems));
     operatorController.rightBumper().onTrue(NoteCommands.intakeAndAutoCenterNote(subsystems));
 
-    Trigger noteDetected = new Trigger(indexer::isNoteBreakingEitherBeam);
+    Trigger noteDetected = new Trigger(indexer::isNoteBreakingPracticeBeam);
     noteDetected.onTrue(
         Commands.sequence(LEDs.flashColor(statusLED, GREEN), LEDs.fillColor(statusLED, GREEN)));
     noteDetected.onFalse(LEDs.fillColor(statusLED, RED));
 
     Trigger shooterSpinning =
-        new Trigger(() -> shooter.atGoalRPM() && indexer.isNoteBreakingEitherBeam());
+        new Trigger(() -> shooter.atGoalRPM() && indexer.isNoteBreakingPracticeBeam());
     shooterSpinning.onTrue(
         Commands.sequence(LEDs.flashColor(statusLED, PINK), LEDs.fillColor(statusLED, PINK)));
   }
@@ -194,7 +194,7 @@ public class RobotContainer {
             .withProperties(Map.of("Number of columns", 1, "Number of rows", 1))
             .withPosition(6, 0)
             .withSize(2, 2);
-    statusLayout.addBoolean("Note Detected", subsystems.indexer::isNoteBreakingUpperBeam);
+    statusLayout.addBoolean("Note Detected", subsystems.indexer::isNoteBreakingPracticeBeam);
 
     RobotPreferences.addShuffleBoardTab();
 

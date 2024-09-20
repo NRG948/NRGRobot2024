@@ -78,7 +78,7 @@ public class NoteCommands {
     IndexerSubsystem indexer = subsystems.indexer;
 
     return intake(subsystems)
-        .until(indexer::isNoteBreakingUpperBeam) //
+        .until(indexer::isNoteBreakingPracticeBeam) //
         .finallyDo(
             () -> {
               intake.disable();
@@ -131,12 +131,12 @@ public class NoteCommands {
     IndexerSubsystem indexer = subsystems.indexer;
     return Commands.sequence(
             Commands.runOnce(
-                    () -> indexer.intake(IndexerSubsystem.AUTO_CENTER_VELOCITY.getValue()), indexer),
+                () -> indexer.intake(IndexerSubsystem.AUTO_CENTER_VELOCITY.getValue()), indexer),
             Commands.idle(indexer).withTimeout(initialIntakeSeconds),
             Commands.run(
                     () -> indexer.outtake(IndexerSubsystem.AUTO_CENTER_VELOCITY.getValue()),
                     indexer)
-                .until(() -> !indexer.isNoteBreakingUpperBeam()),
+                .until(() -> !indexer.isNoteBreakingPracticeBeam()),
             Commands.runOnce(
                 () -> indexer.intake(IndexerSubsystem.AUTO_CENTER_VELOCITY.getValue()),
                 indexer), //
@@ -204,7 +204,7 @@ public class NoteCommands {
                 ShooterCommands.setAndWaitForRPM(subsystems, rpm), //
                 Commands.runOnce(indexer::feed, indexer), //
                 Commands.idle(shooter, indexer) // Suppress default commands
-                    .until(() -> !indexer.isNoteBreakingUpperBeam()),
+                    .until(() -> !indexer.isNoteBreakingPracticeBeam()),
                 Commands.idle(shooter, indexer) // Suppress default commands
                     .withTimeout(EXTRA_SHOT_DELAY))
             .finallyDo(
@@ -213,7 +213,7 @@ public class NoteCommands {
                   indexer.disable();
                 }), //
         Commands.none(), //
-        indexer::isNoteBreakingEitherBeam);
+        indexer::isNoteBreakingPracticeBeam);
   }
 
   /***
@@ -228,7 +228,7 @@ public class NoteCommands {
         Commands.sequence( //
                 Commands.runOnce(indexer::feed, indexer), //
                 Commands.idle(indexer, shooter) // Suppress default commands
-                    .until(() -> !indexer.isNoteBreakingUpperBeam()),
+                    .until(() -> !indexer.isNoteBreakingPracticeBeam()),
                 Commands.idle(indexer, shooter) // Suppress default commands
                     .withTimeout(EXTRA_SHOT_DELAY))
             .finallyDo(
@@ -237,7 +237,7 @@ public class NoteCommands {
                   shooter.disable();
                 }), //
         Commands.none(), //
-        indexer::isNoteBreakingEitherBeam);
+        indexer::isNoteBreakingPracticeBeam);
   }
 
   /**
