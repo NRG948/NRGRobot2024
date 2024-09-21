@@ -160,6 +160,12 @@
           "data": {
             "pathName": "Spike Sweep Drive Out"
           }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "Drive Out Back"
+          }
         }
       ]
     }

@@ -139,6 +139,12 @@
                 "data": {
                   "name": "SetArmAngleMidSpikeShot"
                 }
+              },
+              {
+                "type": "named",
+                "data": {
+                  "name": "SetShooterRPMMidSpikeShot"
+                }
               }
             ]
           }
