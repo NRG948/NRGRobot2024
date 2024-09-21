@@ -73,8 +73,7 @@ public class IndexerSubsystem extends SubsystemBase {
   public static final RobotPreferences.BooleanValue HAS_LOWER_BEAM_BREAK =
       new RobotPreferences.BooleanValue("Indexer+Intake", "Has Lower Beam Break", true);
 
-  private boolean noteBreakingUpperBeam = false;
-  private boolean noteBreakingLowerBeam = false;
+  private boolean noteBreakingPracticeBeam = false;
   private boolean isEnabled = false;
   private double goalVelocity = 0;
   private double currentVelocity = 0;
@@ -108,22 +107,22 @@ public class IndexerSubsystem extends SubsystemBase {
    *
    * @return
    */
-  public boolean isNoteBreakingUpperBeam() {
-    return noteBreakingUpperBeam;
+  public boolean isNoteBreakingPracticeBeam() {
+    return noteBreakingPracticeBeam;
   }
 
-  /**
-   * Returns whether the note is at the entry of the indexer (lower beam break is broken).
-   *
-   * @return
-   */
-  public boolean isNoteBreakingLowerBeam() {
-    return noteBreakingLowerBeam;
-  }
+  // /**
+  //  * Returns whether the note is at the entry of the indexer (lower beam break is broken).
+  //  *
+  //  * @return
+  //  */
+  // public boolean isNoteBreakingLowerBeam() {
+  //   return noteBreakingLowerBeam;
+  // }
 
-  public boolean isNoteBreakingEitherBeam() {
-    return noteBreakingUpperBeam || noteBreakingLowerBeam;
-  }
+  // public boolean isNoteBreakingEitherBeam() {
+  //   return noteBreakingUpperBeam || noteBreakingLowerBeam;
+  // }
 
   public void feed() {
     intake(FEED_VELOCITY.getValue());
@@ -167,16 +166,16 @@ public class IndexerSubsystem extends SubsystemBase {
   public void periodic() {
     // This method will be called once per scheduler run
     boolean noteBreakingUpperBeam = upperBeamBreak.isPressed();
-    if (this.noteBreakingUpperBeam != noteBreakingUpperBeam) {
+    if (this.noteBreakingPracticeBeam != noteBreakingUpperBeam) {
       noteAtShootPositionLogger.append(noteBreakingUpperBeam);
-      this.noteBreakingUpperBeam = noteBreakingUpperBeam;
+      this.noteBreakingPracticeBeam = noteBreakingUpperBeam;
     }
 
-    boolean noteBreakingLowerBeam = lowerBeamBreak.isPressed();
-    if (this.noteBreakingLowerBeam != noteBreakingLowerBeam) {
-      noteAtEntryLogger.append(noteBreakingLowerBeam);
-      this.noteBreakingLowerBeam = noteBreakingLowerBeam;
-    }
+    // boolean noteBreakingLowerBeam = lowerBeamBreak.isPressed();
+    // if (this.noteBreakingLowerBeam != noteBreakingLowerBeam) {
+    //   noteAtEntryLogger.append(noteBreakingLowerBeam);
+    //   this.noteBreakingLowerBeam = noteBreakingLowerBeam;
+    // }
 
     currentVelocity = encoder.getVelocity();
 
@@ -204,7 +203,7 @@ public class IndexerSubsystem extends SubsystemBase {
     layout.addDouble("Goal Velocity", () -> goalVelocity);
     layout.addDouble("Current Velocity", () -> currentVelocity);
     layout.addBoolean("Enabled", () -> isEnabled);
-    layout.addBoolean("Upper Note Detected", () -> noteBreakingUpperBeam);
-    layout.addBoolean("Lower Note Detected", () -> noteBreakingLowerBeam);
+    layout.addBoolean("Note Detected", () -> noteBreakingPracticeBeam);
+    // layout.addBoolean("Lower Note Detected", () -> noteBreakingLowerBeam);
   }
 }
