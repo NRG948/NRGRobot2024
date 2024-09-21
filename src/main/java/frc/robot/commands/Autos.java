@@ -173,12 +173,12 @@ public final class Autos {
     eventMaps.put(
         "IntakeUntilNoteDetectedNoAutoCentering", NoteCommands.intakeUntilNoteDetected(subsystems));
 
-        eventMaps.put("AutoOrientToSpeaker", DriveCommands.autoOrientToSpeaker(subsystems));
-        eventMaps.put("DisableAutoOrientation", DriveCommands.disableAutoOrientation(subsystems));
-        eventMaps.put("EnablePoseEstimation", DriveCommands.enablePoseEstimation(subsystems, true));
-        eventMaps.put("DisablePoseEstimation", DriveCommands.enablePoseEstimation(subsystems, false));
-    
-        eventMaps.put("AutoSetShooter", autoSetShooter(subsystems));
+    eventMaps.put("AutoOrientToSpeaker", DriveCommands.autoOrientToSpeaker(subsystems));
+    eventMaps.put("DisableAutoOrientation", DriveCommands.disableAutoOrientation(subsystems));
+    eventMaps.put("EnablePoseEstimation", DriveCommands.enablePoseEstimation(subsystems, true));
+    eventMaps.put("DisablePoseEstimation", DriveCommands.enablePoseEstimation(subsystems, false));
+
+    eventMaps.put("AutoSetShooter", autoSetShooter(subsystems));
     return eventMaps;
   }
 
@@ -261,7 +261,7 @@ public final class Autos {
         new SwerveModuleState[] {moduleState, moduleState, moduleState, moduleState};
     return Commands.runOnce(() -> swerveDrive.setModuleStates(moduleStates), swerveDrive);
   }
-  
+
   public static Command setShooterContinous(Subsystems subsystems) {
     return new SetShooterContinous(subsystems);
   }
