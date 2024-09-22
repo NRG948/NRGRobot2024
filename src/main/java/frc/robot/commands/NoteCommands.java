@@ -85,7 +85,8 @@ public class NoteCommands {
               if (disableIndexer) {
                 indexer.disable();
               }
-            });
+            })
+        .handleInterrupt(indexer::disable);
   }
 
   /**

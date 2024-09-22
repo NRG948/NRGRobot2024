@@ -130,7 +130,7 @@ public class RobotContainer {
     operatorController.y().onTrue(ArmCommands.seekToTrap(subsystems));
     operatorController.a().onTrue(ArmCommands.stow(subsystems));
     operatorController.leftBumper().whileTrue(NoteCommands.intakeUntilNoteDetected(subsystems));
-    operatorController.rightBumper().onTrue(NoteCommands.intakeAndAutoCenterNote(subsystems));
+    operatorController.rightBumper().whileTrue(NoteCommands.intakeAndAutoCenterNote(subsystems));
 
     Trigger noteDetected = new Trigger(indexer::isNoteBreakingEitherBeam);
     noteDetected.onTrue(
