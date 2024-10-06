@@ -2,10 +2,10 @@
   "version": 1.0,
   "startingPose": {
     "position": {
-      "x": 1.49,
-      "y": 1.46
+      "x": 0.75,
+      "y": 4.37
     },
-    "rotation": 0
+    "rotation": -60.15999999999997
   },
   "command": {
     "type": "sequential",
@@ -14,7 +14,7 @@
         {
           "type": "path",
           "data": {
-            "pathName": "Drive Out"
+            "pathName": "Source Drive Out"
           }
         }
       ]

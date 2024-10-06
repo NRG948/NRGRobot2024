@@ -131,28 +131,21 @@
           }
         },
         {
-          "type": "parallel",
+          "type": "path",
           "data": {
-            "commands": [
-              {
-                "type": "named",
-                "data": {
-                  "name": "SetArmAngleMidSpikeShot"
-                }
-              },
-              {
-                "type": "named",
-                "data": {
-                  "name": "SetShooterRPMMidSpikeShot"
-                }
-              }
-            ]
+            "pathName": "Mid Spike to Subwoofer"
           }
         },
         {
           "type": "named",
           "data": {
-            "name": "ShootMidSPikeShot"
+            "name": "ShootSubwooferShot"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "Subwoofer to mid Spike"
           }
         },
         {

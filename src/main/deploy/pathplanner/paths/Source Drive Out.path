@@ -3,41 +3,25 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 1.4874634233617796,
-        "y": 1.46
+        "x": 0.7529593763712814,
+        "y": 4.370521607059185
       },
       "prevControl": null,
       "nextControl": {
-        "x": 2.196113450522866,
-        "y": 2.59531568390491
+        "x": 1.0006222674379686,
+        "y": 2.9428178820865187
       },
       "isLocked": false,
       "linkedName": null
     },
     {
       "anchor": {
-        "x": 3.328112844566497,
-        "y": 3.1383072631616122
+        "x": 6.500195289654111,
+        "y": 0.7211360651647657
       },
       "prevControl": {
-        "x": 3.334439832448797,
-        "y": 3.1201079520628143
-      },
-      "nextControl": {
-        "x": 3.321785856684197,
-        "y": 3.1565065742604097
-      },
-      "isLocked": false,
-      "linkedName": null
-    },
-    {
-      "anchor": {
-        "x": 3.1900641379758103,
-        "y": 0.46016235530228833
-      },
-      "prevControl": {
-        "x": 2.8403407479460703,
-        "y": 2.171966317026805
+        "x": 4.132829419163719,
+        "y": 0.670146646415742
       },
       "nextControl": null,
       "isLocked": false,
@@ -46,7 +30,7 @@
   ],
   "rotationTargets": [
     {
-      "waypointRelativePos": 1,
+      "waypointRelativePos": 0.5,
       "rotationDegrees": -34.65512114576691,
       "rotateFast": false
     }
@@ -67,7 +51,7 @@
   "reversed": false,
   "folder": "Drive Out",
   "previewStartingState": {
-    "rotation": 0,
+    "rotation": -59.534455080540084,
     "velocity": 0
   },
   "useDefaultConstraints": true
