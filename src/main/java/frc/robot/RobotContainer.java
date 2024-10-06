@@ -23,7 +23,6 @@ import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
 import frc.robot.Constants.RobotConstants.OperatorConstants;
-import frc.robot.commands.ArmCommands;
 import frc.robot.commands.Autos;
 import frc.robot.commands.ClimberCommands;
 import frc.robot.commands.DriveCommands;
@@ -32,7 +31,6 @@ import frc.robot.commands.InterruptAll;
 import frc.robot.commands.LEDs;
 import frc.robot.commands.NoteCommands;
 import frc.robot.commands.Pathfinding;
-import frc.robot.commands.SetShooterContinous;
 import frc.robot.subsystems.ArmSubsystem;
 import frc.robot.subsystems.IndexerSubsystem;
 import frc.robot.subsystems.ShooterSubsystem;
@@ -117,18 +115,18 @@ public class RobotContainer {
     operatorController.povDown().whileTrue(NoteCommands.outtake(subsystems));
     // operatorController.povRight().whileTrue(NoteCommands.outakeToAmp(subsystems));
     operatorController.povRight().whileTrue(NoteCommands.shoot(subsystems, 800));
-    operatorController.povLeft().onTrue(ArmCommands.seekToAngle(subsystems, Math.toRadians(15)));
+    // operatorController.povLeft().onTrue(ArmCommands.seekToAngle(subsystems, Math.toRadians(15)));
     operatorController.back().onTrue(new InterruptAll(subsystems));
-    operatorController.b().whileTrue(new SetShooterContinous(subsystems));
+    // operatorController.b().whileTrue(new SetShooterContinous(subsystems));
     // operatorController.b().whileTrue(new SetShooterContinous(subsystems));
     operatorController
         .start()
         .onTrue(
             NoteCommands.prepareToShoot(
                 subsystems, Autos.SUBWOOFER_SHOT_RPM.getValue(), ArmSubsystem.STOWED_ANGLE));
-    operatorController.x().onTrue(ArmCommands.seekToAmp(subsystems));
-    operatorController.y().onTrue(ArmCommands.seekToTrap(subsystems));
-    operatorController.a().onTrue(ArmCommands.stow(subsystems));
+    // operatorController.x().onTrue(ArmCommands.seekToAmp(subsystems));
+    // operatorController.y().onTrue(ArmCommands.seekToTrap(subsystems));
+    // operatorController.a().onTrue(ArmCommands.stow(subsystems));
     operatorController.leftBumper().whileTrue(NoteCommands.intakeUntilNoteDetected(subsystems));
     operatorController.rightBumper().onTrue(NoteCommands.intakeAndAutoCenterNote(subsystems));
 

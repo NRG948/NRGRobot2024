@@ -22,7 +22,8 @@ public class ArmCommands {
    * @return A command to move the arm to to stowed position.
    */
   public static Command stow(Subsystems subsystems) {
-    return seekToAngle(subsystems, ArmSubsystem.STOWED_ANGLE);
+    return Commands.none();
+    // return seekToAngle(subsystems, ArmSubsystem.STOWED_ANGLE);
   }
 
   /**
@@ -56,9 +57,10 @@ public class ArmCommands {
   public static Command seekToAngle(Subsystems subsystems, double angle) {
     ArmSubsystem arm = subsystems.arm;
 
-    return Commands.sequence(
-        Commands.runOnce(() -> arm.setGoalAngle(angle), arm), //
-        Commands.idle(arm)); // Suppress default command
+    return Commands.none();
+    // return Commands.sequence(
+    //     Commands.runOnce(() -> arm.setGoalAngle(angle), arm), //
+    //     Commands.idle(arm)); // Suppress default command
   }
 
   /**

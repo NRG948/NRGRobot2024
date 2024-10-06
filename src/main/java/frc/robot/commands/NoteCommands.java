@@ -256,7 +256,7 @@ public class NoteCommands {
 
     return Commands.sequence(
         Commands.parallel(
-            ArmCommands.seekToAngle(subsystems, goalAngle).until(arm::atGoalAngle),
+            // ArmCommands.seekToAngle(subsystems, goalAngle).until(arm::atGoalAngle),
             ShooterCommands.setRPM(subsystems, rpm)),
         Commands.idle(arm, shooter) // Suppress default commands
         );
