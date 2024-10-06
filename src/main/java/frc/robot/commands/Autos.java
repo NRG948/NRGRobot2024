@@ -121,14 +121,19 @@ public final class Autos {
    * @return The PathPlanner auto command.
    */
   public static Command getPathPlannerAuto(Subsystems subsystems, String name) {
-    SwerveSubsystem driveTrain = subsystems.drivetrain;
-    Pose2d startPose = PathPlannerAuto.getStaringPoseFromAutoFile(name);
+    try {
+      SwerveSubsystem driveTrain = subsystems.drivetrain;
+      Pose2d startPose = PathPlannerAuto.getStaringPoseFromAutoFile(name);
 
-    NamedCommands.registerCommands(getPathplannerEventMap(subsystems, name));
+      NamedCommands.registerCommands(getPathplannerEventMap(subsystems, name));
 
-    return Commands.sequence(
-        Commands.runOnce(() -> driveTrain.resetPosition(startPose), driveTrain),
-        Commands.defer(() -> new PathPlannerAuto(name), Set.of(driveTrain)));
+      return Commands.sequence(
+          Commands.runOnce(() -> driveTrain.resetPosition(startPose), driveTrain),
+          Commands.defer(() -> new PathPlannerAuto(name), Set.of(driveTrain)));
+    } catch (Exception e) {
+      System.out.println("ERROR: Failed to load PathPlanner file " + name + ": " + e.getMessage());
+      return Commands.none();
+    }
   }
 
   private static Map<String, Command> getPathplannerEventMap(
