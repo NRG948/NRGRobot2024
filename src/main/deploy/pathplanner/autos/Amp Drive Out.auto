@@ -16,6 +16,12 @@
           "data": {
             "pathName": "Amp Drive Out"
           }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "IntakeUntilNoteDetected"
+          }
         }
       ]
     }
