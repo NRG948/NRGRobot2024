@@ -13,6 +13,7 @@ import static frc.robot.Constants.ColorConstants.RED;
 import com.nrg948.preferences.RobotPreferences;
 import com.nrg948.preferences.RobotPreferencesLayout;
 import edu.wpi.first.wpilibj.DriverStation;
+import edu.wpi.first.wpilibj.GenericHID.RumbleType;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.shuffleboard.BuiltInLayouts;
 import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
@@ -67,10 +68,12 @@ public class RobotContainer {
     DriverStation.silenceJoystickConnectionWarning(true);
 
     subsystems.drivetrain.setDefaultCommand(new DriveUsingController(subsystems, driverController));
-    // subsystems.arm.setDefaultCommand(new ManualArmController(subsystems, operatorController));
+    // subsystems.arm.setDefaultCommand(new ManualArmController(subsystems,
+    // operatorController));
     // subsystems.intake.setDefaultCommand(new IntakeUsingController(subsystems,
     // operatorController));
-    // subsystems.shooter.setDefaultCommand(new ShootUsingController(subsystems.shooter,
+    // subsystems.shooter.setDefaultCommand(new
+    // ShootUsingController(subsystems.shooter,
     // operatorController));
 
     // Configure the trigger bindings
@@ -105,12 +108,12 @@ public class RobotContainer {
     driverController.rightBumper().whileTrue(ClimberCommands.manualClimbDownChain(subsystems));
 
     // operatorController
-    //     .start()
-    //     .onTrue(
-    //         NoteCommands.prepareToShoot(
-    //             subsystems,
-    //             Autos.SPIKE_SHOT_RPM.getValue(),
-    //             Math.toRadians(Autos.SPIKE_SHOT_ANGLE.getValue())));
+    // .start()
+    // .onTrue(
+    // NoteCommands.prepareToShoot(
+    // subsystems,
+    // Autos.SPIKE_SHOT_RPM.getValue(),
+    // Math.toRadians(Autos.SPIKE_SHOT_ANGLE.getValue())));
     operatorController
         .povUp()
         .whileTrue(NoteCommands.shootAtCurrentRPM(subsystems).finallyDo(shooter::disable));
@@ -134,7 +137,13 @@ public class RobotContainer {
 
     Trigger noteDetected = new Trigger(indexer::isNoteBreakingEitherBeam);
     noteDetected.onTrue(
-        Commands.sequence(LEDs.flashColor(statusLED, GREEN), LEDs.fillColor(statusLED, GREEN)));
+        Commands.sequence(
+            Commands.parallel(
+                LEDs.flashColor(statusLED, GREEN),
+                Commands.runOnce(
+                    () -> driverController.getHID().setRumble(RumbleType.kBothRumble, 1.0))),
+            Commands.runOnce(() -> driverController.getHID().setRumble(RumbleType.kBothRumble, 0)),
+            LEDs.fillColor(statusLED, GREEN)));
     noteDetected.onFalse(LEDs.fillColor(statusLED, RED));
 
     Trigger shooterSpinning =
